@@ -16,8 +16,6 @@ class THEGUSTOFSUMMERWIND_API USW_UIBase : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="properties")
-	int rowDialog=0;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="DataTable")
 	TObjectPtr<UDataTable>dialogDataTable;

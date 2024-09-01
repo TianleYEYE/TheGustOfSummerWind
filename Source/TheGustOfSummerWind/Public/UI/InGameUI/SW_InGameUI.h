@@ -11,6 +11,7 @@
 #include "UI/Button/BTN_ButtonInMenu/BTN_SaveOrRead.h"
 #include "TimerManager.h"
 #include "Components/CanvasPanelSlot.h"
+#include "Game/SW_GameInstance.h"
 #include "SW_InGameUI.generated.h"
 
 
@@ -82,6 +83,9 @@ public:
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="AudioPlayer")
 	TObjectPtr<AAudioPlayer>AudioPlayer;
+
+	UPROPERTY()
+	TObjectPtr<USW_GameInstance>SW_GameInstance;
 
 
 	UPROPERTY()

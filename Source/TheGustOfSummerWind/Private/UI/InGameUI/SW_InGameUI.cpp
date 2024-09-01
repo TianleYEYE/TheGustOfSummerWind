@@ -14,9 +14,11 @@
 
 void USW_InGameUI::NativeConstruct()
 {
-	Super::NativeConstruct(); 
+	Super::NativeConstruct();
+	SW_GameInstance=Cast<USW_GameInstance>(GetGameInstance());
 	Delegated();
 	ReadDialog();
+	
 	
 	BindToAnimationFinished(CancelDisplaysInGameMenu,CancelInGameMenuUIEvent);
 }
@@ -31,16 +33,16 @@ void USW_InGameUI::Delegated()
 void USW_InGameUI::PressBTN_NEXT(uint32& InRow)
 {
 	ReadDialog();
-	InRow = rowDialog;
+	InRow = SW_GameInstance->GlobalVariablesManger->rowDialog;
 }
 
 void USW_InGameUI::ReadDialog()
 {
-	GetDialogStruct(rowDialog);
+	GetDialogStruct(SW_GameInstance->GlobalVariablesManger->rowDialog);
 	
-	if (rowDialog>=1)
+	if (SW_GameInstance->GlobalVariablesManger->rowDialog>=1)
 	{
-		PreviousDialogRow =dialogDataTable->FindRow<FDialogStruct>(dialogDataTable->GetRowNames()[rowDialog-1],TEXT("1"));
+		PreviousDialogRow =dialogDataTable->FindRow<FDialogStruct>(dialogDataTable->GetRowNames()[SW_GameInstance->GlobalVariablesManger->rowDialog-1],TEXT("1"));
 	}
 	
 	SetName(DialogRow);
@@ -55,7 +57,7 @@ void USW_InGameUI::ReadDialog()
 	
 	SetConversationalVoice(DialogRow);
 	
-	rowDialog++;
+	SW_GameInstance->GlobalVariablesManger->rowDialog++;
 
 	CurrentIndex=0;
 }

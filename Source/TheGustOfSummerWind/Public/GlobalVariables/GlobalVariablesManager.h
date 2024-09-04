@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
+#include "DataStruct\DialogStruct.h"
 #include "GlobalVariablesManager.generated.h"
 
 /**
@@ -17,4 +17,6 @@ class THEGUSTOFSUMMERWIND_API UGlobalVariablesManager : public UObject
 public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="properties")
 	int rowDialog=0;
+	
+	FDialogStruct *GetDialogStruct(UDataTable *dialogDataTable,int row);
 };

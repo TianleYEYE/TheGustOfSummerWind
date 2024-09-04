@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "TheGustOfSummerWind\Public\DataStruct\DialogStruct.h"
 #include "SW_UIBase.generated.h"
 
 /**
@@ -17,14 +16,7 @@ class THEGUSTOFSUMMERWIND_API USW_UIBase : public UUserWidget
 
 public:
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="DataTable")
-	TObjectPtr<UDataTable>dialogDataTable;
+
 	
-	UFUNCTION(BlueprintType,BlueprintCallable)
-	FDialogStruct GetDialogStruct(int row);
 	
-	FTimerHandle UpdataTextHandle;
-	
-	FDialogStruct dialogStruct;
-	FDialogStruct *DialogRow;
 };

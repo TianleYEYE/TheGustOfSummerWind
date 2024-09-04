@@ -15,12 +15,14 @@
 void USW_InGameUI::NativeConstruct()
 {
 	Super::NativeConstruct();
+	//获取游戏实例，方便调用游戏实例中的全局函数
 	SW_GameInstance=Cast<USW_GameInstance>(GetGameInstance());
+	//委托绑定
 	Delegated();
+	//初始化
 	ReadDialog();
 	
 	
-	BindToAnimationFinished(CancelDisplaysInGameMenu,CancelInGameMenuUIEvent);
 }
 
 void USW_InGameUI::Delegated()
@@ -28,37 +30,34 @@ void USW_InGameUI::Delegated()
 	//下一段对话按钮绑定函数
 	BP_NextDialog->EntrustDelegated.AddUObject(this,&USW_InGameUI::PressBTN_NEXT);
 	CancelInGameMenuUIEvent.BindDynamic(this,&USW_InGameUI::CancelInGameMenuUIImplement);
+	BindToAnimationFinished(CancelDisplaysInGameMenu,CancelInGameMenuUIEvent);
 }
 
 void USW_InGameUI::PressBTN_NEXT(uint32& InRow)
 {
 	ReadDialog();
-	InRow = SW_GameInstance->GlobalVariablesManger->rowDialog;
+	InRow = row;
 }
 
 void USW_InGameUI::ReadDialog()
 {
-	GetDialogStruct(SW_GameInstance->GlobalVariablesManger->rowDialog);
+	row=SW_GameInstance->GlobalVariablesManger->rowDialog;
+	
+	DialogStruct=SW_GameInstance->GlobalVariablesManger->GetDialogStruct(DialogDataTable,row);
 	
 	if (SW_GameInstance->GlobalVariablesManger->rowDialog>=1)
 	{
-		PreviousDialogRow =dialogDataTable->FindRow<FDialogStruct>(dialogDataTable->GetRowNames()[SW_GameInstance->GlobalVariablesManger->rowDialog-1],TEXT("1"));
+		PreviousDialogRow =SW_GameInstance->GlobalVariablesManger->GetDialogStruct(DialogDataTable,row-1);
 	}
 	
-	SetName(DialogRow);
-	
+	SetName(DialogStruct);
 	SetDialog();
+	SetCharacterPortraits(DialogStruct);
+	SetBackground(DialogStruct);
+	SetMusic(DialogStruct);
+	SetConversationalVoice(DialogStruct);
 	
-	SetCharacterPortraits(DialogRow);
-
-	SetBackground(DialogRow);
-	
-	SetMusic(DialogRow);
-	
-	SetConversationalVoice(DialogRow);
-	
-	SW_GameInstance->GlobalVariablesManger->rowDialog++;
-
+	row++;
 	CurrentIndex=0;
 }
 
@@ -70,12 +69,12 @@ void USW_InGameUI::SetDialog()
 void USW_InGameUI::UpdateText()
 {
 	
-	MessageCharactArray=UKismetStringLibrary::GetCharacterArrayFromString(DialogRow->Dialog.ToString());
+	MessageCharactArray=UKismetStringLibrary::GetCharacterArrayFromString(DialogStruct->Dialog.ToString());
 	
 	if (CurrentIndex < MessageCharactArray.Num())
     {
         // 获取当前要显示的文本
-        FText CurrentText = FText::FromString(DialogRow->Dialog.ToString().Left(CurrentIndex + 1));
+        FText CurrentText = FText::FromString(DialogStruct->Dialog.ToString().Left(CurrentIndex + 1));
         
         // 设置 TextBlock 的文本
         if (BP_DialogBox->Textblock_Dialog)

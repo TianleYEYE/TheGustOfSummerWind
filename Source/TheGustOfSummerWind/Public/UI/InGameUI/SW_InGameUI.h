@@ -147,6 +147,13 @@ public:
 
 	TArray<FString>MessageCharactArray;
 	int CurrentIndex = 0;
-	
+
+public:
+	int row ;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Dialog Data")
+	TObjectPtr<UDataTable>DialogDataTable;
+
+	FDialogStruct *DialogStruct;
 	
 };

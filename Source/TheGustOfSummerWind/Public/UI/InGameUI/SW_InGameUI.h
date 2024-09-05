@@ -45,8 +45,6 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<UImage>TEX_CharacterPortraits_3;
 	
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
-	TObjectPtr<UImage>GameCG;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<USW_DialogBox>BP_DialogBox;
@@ -56,30 +54,20 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<UBorder>NameBoxBackground;
-
-	// UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
-	// TObjectPtr<UBorder>ScreenWhite;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<UBorder>InGameMenuUI;
 
 	UPROPERTY(Transient,EditAnywhere,BlueprintReadWrite,meta=(BindWidgetAnim))
 	TObjectPtr<UWidgetAnimation>DisplaysInGameMenu;
-	
 	UPROPERTY(Transient,EditAnywhere,BlueprintReadWrite,meta=(BindWidgetAnim))
 	TObjectPtr<UWidgetAnimation>CancelDisplaysInGameMenu;
-	
 	UPROPERTY(Transient,EditAnywhere,BlueprintReadWrite,meta=(BindWidgetAnim))
 	TObjectPtr<UWidgetAnimation>One;
-
 	UPROPERTY(Transient,EditAnywhere,BlueprintReadWrite,meta=(BindWidgetAnim))
 	TObjectPtr<UWidgetAnimation>Two;
-
 	UPROPERTY(Transient,EditAnywhere,BlueprintReadWrite,meta=(BindWidgetAnim))
 	TObjectPtr<UWidgetAnimation>Three;
-	
-	// UPROPERTY(Transient,EditAnywhere,BlueprintReadWrite,meta=(BindWidgetAnim))
-	// TObjectPtr<UWidgetAnimation>ScreenToWhite;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="AudioPlayer")
 	TObjectPtr<AAudioPlayer>AudioPlayer;
@@ -91,21 +79,17 @@ public:
 	UPROPERTY()
 	TObjectPtr<UCanvasPanelSlot>ScreenWhiteSlot;
 	UPROPERTY()
-	TObjectPtr<UCanvasPanelSlot>GameCGSlot;
-	UPROPERTY()
 	TObjectPtr<UCanvasPanelSlot>inGameMenuUISlot;
 
 	FWidgetAnimationDynamicEvent CancelInGameMenuUIEvent;
 	FWidgetAnimationDynamicEvent SwitchCG;
-	FWidgetAnimationDynamicEvent DialogAnimationSwitch;
+
 	
 	UFUNCTION()
-	void Delegated();
+	void InitializeGame();
 	
 	UFUNCTION()
 	void PressBTN_NEXT(uint32& InRow);
-	UFUNCTION()
-	// void UpdateRowDialog();
 	
 	void ReadDialog();
 	

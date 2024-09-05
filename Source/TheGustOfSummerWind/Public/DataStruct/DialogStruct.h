@@ -25,9 +25,6 @@ struct THEGUSTOFSUMMERWIND_API FDialogStruct:public FTableRowBase
 	TObjectPtr<UTexture2D>Background;
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
-	TObjectPtr<UTexture2D>GameCG;
-
-	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	TObjectPtr<USoundBase>BackgroundSound;
 	
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)

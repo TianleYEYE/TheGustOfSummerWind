@@ -15,22 +15,24 @@
 void USW_InGameUI::NativeConstruct()
 {
 	Super::NativeConstruct();
-	//获取游戏实例，方便调用游戏实例中的全局函数
-	SW_GameInstance=Cast<USW_GameInstance>(GetGameInstance());
-	//委托绑定
-	Delegated();
+	
 	//初始化
-	ReadDialog();
-	
-	
+	InitializeGame();
 }
 
-void USW_InGameUI::Delegated()
+void USW_InGameUI::InitializeGame()
 {
+	//获取游戏实例，方便调用游戏实例中的全局函数
+	SW_GameInstance=Cast<USW_GameInstance>(GetGameInstance());
 	//下一段对话按钮绑定函数
 	BP_NextDialog->EntrustDelegated.AddUObject(this,&USW_InGameUI::PressBTN_NEXT);
 	CancelInGameMenuUIEvent.BindDynamic(this,&USW_InGameUI::CancelInGameMenuUIImplement);
 	BindToAnimationFinished(CancelDisplaysInGameMenu,CancelInGameMenuUIEvent);
+	//获取对话行数
+	row=SW_GameInstance->GlobalVariablesManger->rowDialog;
+	
+	//开始游戏时读取一次对话
+	ReadDialog();
 }
 
 void USW_InGameUI::PressBTN_NEXT(uint32& InRow)
@@ -41,7 +43,6 @@ void USW_InGameUI::PressBTN_NEXT(uint32& InRow)
 
 void USW_InGameUI::ReadDialog()
 {
-	row=SW_GameInstance->GlobalVariablesManger->rowDialog;
 	
 	DialogStruct=SW_GameInstance->GlobalVariablesManger->GetDialogStruct(DialogDataTable,row);
 	
@@ -93,7 +94,6 @@ void USW_InGameUI::UpdateText()
     }
 }
 
-
 void USW_InGameUI::SetName(FDialogStruct *dialogRow)
 {
 	if (dialogRow->Name.IsEmpty())
@@ -108,6 +108,7 @@ void USW_InGameUI::SetName(FDialogStruct *dialogRow)
 		TextBlock_Name->SetText(dialogRow->Name);
 	}
 }
+
 void USW_InGameUI::SetCharacterPortraits(FDialogStruct *dialogRow)
 {
 	TEX_CharacterPortraits_1->SetBrushFromTexture(dialogRow->CharacterPortraits_1,true);
@@ -187,41 +188,6 @@ void USW_InGameUI::SetConversationalVoice(FDialogStruct *dialogRow)
 		AudioPlayer->ConversationalVoicePlayer->Play();
 	}
 }
-
-// void USW_InGameUI::SetGameCG(FDialogStruct* dialogRow,int row)
-// {
-// 	GameCGSlot=Cast<UCanvasPanelSlot>(GameCG->Slot);
-// 	ScreenWhiteSlot=Cast<UCanvasPanelSlot>(ScreenWhite->Slot);
-// 	//当游戏开始时播放一次白屏渐变
-// 	if (row==0 )
-// 	{
-// 		ScreenWhiteSlot->SetZOrder(10);
-// 		
-// 		PlayAnimation(ScreenToWhite);
-// 		bIsWhiteOver =false;
-// 	}
-// 	//当游戏有cg有CG且上段对话没有cg时播放一次白屏渐变
-// 	else if (dialogRow->GameCG!=nullptr && PreviousDialogRow->GameCG ==nullptr)
-// 	{
-// 		ScreenWhiteSlot->SetZOrder(10);
-// 		
-// 		GameCGSlot->SetZOrder(3);
-// 		
-// 		PlayAnimation(ScreenToWhite);
-// 		bIsWhiteOver =false;
-// 	}
-// 	//当游戏有cg且上段对话也有cg时
-// 	else if (dialogRow->GameCG!=nullptr && PreviousDialogRow->GameCG !=nullptr)
-// 	{
-// 		GameCGSlot->SetZOrder(3);
-// 	}
-// 	//当游戏没有CG时将CG放置在游戏底部以免遮挡
-// 	else if ( dialogRow->GameCG==nullptr)
-// 	{
-// 		GameCGSlot->SetZOrder(1);
-// 	}
-// 	GameCG->SetBrushFromTexture(dialogRow->GameCG);
-// }
 
 void USW_InGameUI::GetCGOrStart()
 {

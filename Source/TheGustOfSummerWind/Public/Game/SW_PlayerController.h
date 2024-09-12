@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "SW_HUD.h"
 #include "GameFramework/PlayerController.h"
-#include "UI/InGameUI/SW_InGameUI.h"
 #include "UI/QuitGameUI/SW_QuitGameUI.h"
 #include "SW_PlayerController.generated.h"
 
@@ -23,7 +22,8 @@ public:
 public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Widget")
 	TSubclassOf<USW_QuitGameUI>BP_QuitGameUIClass;
-	
+	UPROPERTY()
+	TObjectPtr<ASW_HUD>HUD;
 
 	bool bIsInGameMenuUIExist =false;
 

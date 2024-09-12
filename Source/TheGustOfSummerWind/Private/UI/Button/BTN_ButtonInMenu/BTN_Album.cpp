@@ -7,9 +7,24 @@ void UBTN_Album::NativeConstruct()
 {
 	Super::NativeConstruct();
 	BTN_Album->OnClicked.AddDynamic(this,&UBTN_Album::DelegatedAgent);
+	Flashing.BindDynamic(this,&UBTN_Album::FlashingOver);
+	BindToAnimationFinished(flashing,Flashing);
 }
 
 void UBTN_Album::DelegatedAgent()
 {
 	Album.Broadcast();
+}
+
+void UBTN_Album::SetParentSwitcher(UWidgetSwitcher* InSwitcher)
+{
+	ParentSwitcher=InSwitcher;
+}
+
+void UBTN_Album::FlashingOver()
+{
+	if (ParentSwitcher)
+	{
+		ParentSwitcher->SetActiveWidgetIndex(3); // Set the index to the desired widget
+	}
 }

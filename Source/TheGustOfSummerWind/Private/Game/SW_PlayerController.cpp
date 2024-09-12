@@ -3,9 +3,6 @@
 
 #include "TheGustOfSummerWind\Public\Game\SW_PlayerController.h"
 
-#include "Blueprint/GameViewportSubsystem.h"
-
-
 
 void ASW_PlayerController::SetupInputComponent()
 {
@@ -24,32 +21,15 @@ void ASW_PlayerController::ReturnOrOpenInGameMenuUI()
 {
 	if (CanPressKey())
 	{
-		ASW_HUD *HUD=Cast<ASW_HUD>(GetHUD());
-		USW_InGameUI *InGameUI=HUD->InGameUI;
-	
-		int InGameUIZOrder=HUD->Subsystem->GetWidgetSlot(InGameUI).ZOrder;
-
-		if (InGameUIZOrder==1 && !bIsInGameMenuUIExist)
-		{
-			InGameUI->GetInGameMenuUI();
-			bIsInGameMenuUIExist =true;
-			bIsOnCooldown = true;
-			LastKeyPressTime = GetWorld()->GetTimeSeconds();
-		}
-		else if (InGameUIZOrder==1 && bIsInGameMenuUIExist)
-		{
-			
-			InGameUI->CancelInGameMenuUI();
-			bIsInGameMenuUIExist =false;
-			bIsOnCooldown = true;
-			LastKeyPressTime = GetWorld()->GetTimeSeconds();
-		}
-	
-		GetWorld()->GetTimerManager().SetTimerForNextTick([this]
-		{
-			bIsOnCooldown = false;
-		});
-	}
+	// 	HUD=Cast<ASW_HUD>(GetHUD());
+	// 	HUD->widgetIndex=HUD->UICollection->UISwitcher->GetActiveWidgetIndex();
+	// 	if (HUD->widgetIndex>0)
+	// 	{
+	// 		GEngine->AddOnScreenDebugMessage(-1,5.0f,FColor::Cyan,FString::Printf(TEXT("Widget Index = %d"),HUD->widgetIndex));
+	// 		//HUD->widgetIndex=0;
+	// 		HUD->UICollection->UISwitcher->SetActiveWidgetIndex(0);
+	// 	}
+	 }
 	
 }
 bool ASW_PlayerController::CanPressKey() const

@@ -6,27 +6,19 @@
 #include "Components/Button.h"
 #include "Components/WidgetSwitcher.h"
 #include "UI/Button/BTN_ButtonBase.h"
-#include "BTN_NewGame.generated.h"
+#include "BTN_AlbumReturn.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FEntrustNewGame)
-
-
+DECLARE_MULTICAST_DELEGATE(FEntrustAlbumReturn)
+/**
+ * 
+ */
 UCLASS()
-class THEGUSTOFSUMMERWIND_API UBTN_NewGame : public UBTN_ButtonBase
+class THEGUSTOFSUMMERWIND_API UBTN_AlbumReturn : public UBTN_ButtonBase
 {
 	GENERATED_BODY()
 public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
-	TObjectPtr<UButton>BTN_NewGame;
-
-	UPROPERTY(Transient,EditAnywhere,BlueprintReadWrite,meta=(BindWidgetAnim))
-	TObjectPtr<UWidgetAnimation>flashing;
-	
-
-	FWidgetAnimationDynamicEvent Flashing;
-	FEntrustNewGame NewGame;
-
-	virtual void NativeConstruct() override;
+	TObjectPtr<UButton>BTN_AlbumReturn;
 
 	UPROPERTY()
 	TObjectPtr<UWidgetSwitcher> ParentSwitcher;
@@ -34,8 +26,11 @@ public:
 	// Function to set the reference to the parent widget
 	void SetParentSwitcher(UWidgetSwitcher* InSwitcher);
 	
+	virtual void NativeConstruct() override;
+
+	//创建委托实例
+	FEntrustAlbumReturn AlbumReturn;
+	//多播委托代理
 	UFUNCTION()
 	void DelegatedAgent();
-	UFUNCTION()
-	void FlashingOver();
 };

@@ -3,6 +3,8 @@
 
 #include "UI/AlbumUI/SW_AlbumUI.h"
 
+
+
 void USW_AlbumUI::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -11,6 +13,7 @@ void USW_AlbumUI::NativeConstruct()
 	
 	BP_Next->Next.AddUObject(this,&USW_AlbumUI::SwitchToNextPage_2);
 	BP_Previous->Previous.AddUObject(this,&USW_AlbumUI::SwitchToNextPage_1);
+	BP_Return->AlbumReturn.AddUObject(this,&USW_AlbumUI::OnReturnButtonClicked);
 }
 
 void USW_AlbumUI::SwitchToNextPage_2()
@@ -23,4 +26,16 @@ void USW_AlbumUI::SwitchToNextPage_1()
 	PageSwitcher->SetActiveWidgetIndex(0);
 }
 
+void USW_AlbumUI::SetParentSwitcher(UWidgetSwitcher* InSwitcher)
+{
+	ParentSwitcher=InSwitcher;
+}
+
+void USW_AlbumUI::OnReturnButtonClicked()
+{
+	if (ParentSwitcher)
+	{
+		ParentSwitcher->SetActiveWidgetIndex(0); // Set the index to the desired widget
+	}
+}
 

@@ -17,6 +17,8 @@ class THEGUSTOFSUMMERWIND_API UGlobalVariablesManager : public UObject
 public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="properties")
 	int rowDialog=0;
+
+	
 	
 	FDialogStruct *GetDialogStruct(UDataTable *dialogDataTable,int row);
 };

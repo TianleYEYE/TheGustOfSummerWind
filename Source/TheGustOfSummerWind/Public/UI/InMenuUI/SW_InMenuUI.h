@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/Border.h"
-#include "Components/CanvasPanel.h"
+//#include "Components/CanvasPanel.h"
 #include "UI/SW_UIBase.h"
 #include "UI/Button/BTN_ButtonInMenu/BTN_ButtonOfInMenu.h"
 #include "SW_InMenuUI.generated.h"
@@ -27,7 +27,7 @@ public:
 	UPROPERTY(Transient,EditAnywhere,BlueprintReadWrite,meta=(BindWidgetAnim))
 	TObjectPtr<UWidgetAnimation>FullScreenBlack;
 
-
+	//FWidgetAnimationDynamicEvent
 	
 	virtual void NativeConstruct() override;
 	UFUNCTION()

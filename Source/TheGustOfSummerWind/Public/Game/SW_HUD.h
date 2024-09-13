@@ -17,8 +17,6 @@ class THEGUSTOFSUMMERWIND_API ASW_HUD : public AHUD
 public:
 	
 	virtual void BeginPlay() override;
-	
-	void Init();
 
 	UPROPERTY()
 	TObjectPtr<USW_UICollection>UICollection;

@@ -26,8 +26,14 @@ void USW_InGameUI::InitializeGame()
 	SW_GameInstance=Cast<USW_GameInstance>(GetGameInstance());
 	//下一段对话按钮绑定函数
 	BP_NextDialog->EntrustDelegated.AddUObject(this,&USW_InGameUI::PressBTN_NEXT);
+
+	//绑定菜单开始动画时间，动画开始时，执行
+	InGameMenuUIEvent.BindDynamic(this,&USW_InGameUI::USW_InGameUI::GetInGameMenuUI);
+	BindToAnimationStarted(DisplaysInGameMenu,InGameMenuUIEvent);
+	//绑定菜单开始动画时间，动画结束后，执行
 	CancelInGameMenuUIEvent.BindDynamic(this,&USW_InGameUI::CancelInGameMenuUIImplement);
 	BindToAnimationFinished(CancelDisplaysInGameMenu,CancelInGameMenuUIEvent);
+	
 	//获取对话行数
 	row=SW_GameInstance->GlobalVariablesManger->rowDialog;
 	
@@ -62,11 +68,11 @@ void USW_InGameUI::ReadDialog()
 	CurrentIndex=0;
 }
 
-
 void USW_InGameUI::SetDialog()
 {
 	GetWorld()->GetTimerManager().SetTimer(BP_DialogBox->UpdataTextHandle, this, &USW_InGameUI::UpdateText, 0.05f, true);
 }
+
 void USW_InGameUI::UpdateText()
 {
 	
@@ -202,13 +208,6 @@ void USW_InGameUI::GetInGameMenuUI()
 {
 	inGameMenuUISlot=Cast<UCanvasPanelSlot>(InGameMenuUI->Slot);
 	inGameMenuUISlot->SetZOrder(9);
-
-	PlayAnimation(DisplaysInGameMenu);
-}
-
-void USW_InGameUI::CancelInGameMenuUI()
-{
-	PlayAnimation(CancelDisplaysInGameMenu);
 }
 
 void USW_InGameUI::CancelInGameMenuUIImplement()

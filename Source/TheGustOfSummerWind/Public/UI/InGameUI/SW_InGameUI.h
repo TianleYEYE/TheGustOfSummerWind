@@ -82,7 +82,7 @@ public:
 	TObjectPtr<UCanvasPanelSlot>inGameMenuUISlot;
 
 	FWidgetAnimationDynamicEvent CancelInGameMenuUIEvent;
-	FWidgetAnimationDynamicEvent SwitchCG;
+	FWidgetAnimationDynamicEvent InGameMenuUIEvent;
 
 	
 	UFUNCTION()
@@ -113,8 +113,8 @@ public:
 	// //设置CG
 	// void SetGameCG(FDialogStruct *dialogRow,int row);
 	//设置游戏内菜单
+	UFUNCTION()
 	void GetInGameMenuUI();
-	void CancelInGameMenuUI();
 	UFUNCTION()
 	void CancelInGameMenuUIImplement();
 	

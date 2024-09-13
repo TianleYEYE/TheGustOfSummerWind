@@ -25,8 +25,6 @@ void USW_DialogBox::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 
 void USW_DialogBox::UpdateVisibility()
 {
-
-
 	if (GetWorld()->GetTimerManager().IsTimerActive(UpdataTextHandle))
 	{
 		Throbber_1->SetVisibility(ESlateVisibility::Visible);

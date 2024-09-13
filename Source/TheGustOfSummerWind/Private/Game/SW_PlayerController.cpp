@@ -21,15 +21,22 @@ void ASW_PlayerController::ReturnOrOpenInGameMenuUI()
 {
 	if (CanPressKey())
 	{
-	// 	HUD=Cast<ASW_HUD>(GetHUD());
-	// 	HUD->widgetIndex=HUD->UICollection->UISwitcher->GetActiveWidgetIndex();
-	// 	if (HUD->widgetIndex>0)
-	// 	{
-	// 		GEngine->AddOnScreenDebugMessage(-1,5.0f,FColor::Cyan,FString::Printf(TEXT("Widget Index = %d"),HUD->widgetIndex));
-	// 		//HUD->widgetIndex=0;
-	// 		HUD->UICollection->UISwitcher->SetActiveWidgetIndex(0);
-	// 	}
-	 }
+		HUD=Cast<ASW_HUD>(GetHUD());
+		if (HUD->UICollection->UISwitcher->GetActiveWidgetIndex()>1)
+		{
+			HUD->UICollection->UISwitcher->SetActiveWidgetIndex(0);
+		}
+		else if (HUD->UICollection->UISwitcher->GetActiveWidgetIndex()==1 && !bIsInGameMenuUIExist)
+		{
+			HUD->UICollection->BP_InGameUI->PlayAnimation(HUD->UICollection->BP_InGameUI->DisplaysInGameMenu);
+			bIsInGameMenuUIExist=true;
+		}
+		else if (HUD->UICollection->UISwitcher->GetActiveWidgetIndex()==1 && bIsInGameMenuUIExist)
+		{
+			HUD->UICollection->BP_InGameUI->PlayAnimation(HUD->UICollection->BP_InGameUI->CancelDisplaysInGameMenu);
+			bIsInGameMenuUIExist=false;
+		}
+	}
 	
 }
 bool ASW_PlayerController::CanPressKey() const

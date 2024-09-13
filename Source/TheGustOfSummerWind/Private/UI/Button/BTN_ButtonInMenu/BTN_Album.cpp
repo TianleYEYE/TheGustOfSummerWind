@@ -6,14 +6,15 @@
 void UBTN_Album::NativeConstruct()
 {
 	Super::NativeConstruct();
-	BTN_Album->OnClicked.AddDynamic(this,&UBTN_Album::DelegatedAgent);
+	BTN_Album->OnClicked.AddDynamic(this,&UBTN_Album::DelegatedAgentAndPlayAnimation);
 	Flashing.BindDynamic(this,&UBTN_Album::FlashingOver);
 	BindToAnimationFinished(flashing,Flashing);
 }
 
-void UBTN_Album::DelegatedAgent()
+void UBTN_Album::DelegatedAgentAndPlayAnimation()
 {
 	Album.Broadcast();
+	PlayAnimation(flashing);
 }
 
 void UBTN_Album::SetParentSwitcher(UWidgetSwitcher* InSwitcher)

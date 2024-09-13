@@ -27,7 +27,7 @@ public:
 	UPROPERTY(Transient,EditAnywhere,BlueprintReadWrite,meta=(BindWidgetAnim))
 	TObjectPtr<UWidgetAnimation>FullScreenBlack;
 
-	//FWidgetAnimationDynamicEvent
+	FWidgetAnimationDynamicEvent TurnBlack;
 	
 	virtual void NativeConstruct() override;
 	UFUNCTION()
@@ -38,7 +38,8 @@ public:
 	void PressBTN_Continue();
 	UFUNCTION()
 	void PressBTN_Setting();
-	
+	UFUNCTION()
+	void FlashingOver();
 
 	void PlayATapSound();
 	

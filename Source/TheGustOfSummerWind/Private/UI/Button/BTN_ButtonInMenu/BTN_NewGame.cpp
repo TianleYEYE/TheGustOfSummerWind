@@ -7,7 +7,7 @@ void UBTN_NewGame::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	BTN_NewGame->OnClicked.AddDynamic(this,&UBTN_NewGame::DelegatedAgent);
+	BTN_NewGame->OnClicked.AddDynamic(this,&UBTN_NewGame::DelegatedAgentAndPlayAnimation);
 	Flashing.BindDynamic(this,&UBTN_NewGame::FlashingOver);
 	BindToAnimationFinished(flashing,Flashing);
 	
@@ -18,9 +18,10 @@ void UBTN_NewGame::SetParentSwitcher(UWidgetSwitcher* InSwitcher)
 	ParentSwitcher=InSwitcher;
 }
 
-void UBTN_NewGame::DelegatedAgent()
+void UBTN_NewGame::DelegatedAgentAndPlayAnimation()
 {
 	NewGame.Broadcast();
+	PlayAnimation(flashing);
 }
 
 void UBTN_NewGame::FlashingOver()
@@ -30,4 +31,3 @@ void UBTN_NewGame::FlashingOver()
 		ParentSwitcher->SetActiveWidgetIndex(1); // Set the index to the desired widget
 	}
 }
-

@@ -9,6 +9,8 @@
 void USW_InMenuUI::NativeConstruct()
 {
 	Super::NativeConstruct();
+	TurnBlack.BindDynamic(this,&USW_InMenuUI::FlashingOver);
+	BindToAnimationFinished(FullScreenBlack,TurnBlack);
 	BP_ButtonOfInMenu->BP_NewGame->NewGame.AddUObject(this,&USW_InMenuUI::PressBTN_NewGame);
 	BP_ButtonOfInMenu->BP_Album->Album.AddUObject(this,&USW_InMenuUI::PressBTN_Album);
 	BP_ButtonOfInMenu->BP_Continue->Continue.AddUObject(this,&USW_InMenuUI::PressBTN_Continue);
@@ -24,7 +26,7 @@ void USW_InMenuUI::PressBTN_NewGame()
 	BP_ButtonOfInMenu->BP_NewGame->PlayAnimation(BP_ButtonOfInMenu->BP_NewGame->flashing);
 
 	//设置黑屏的显示层级为1，遮挡按钮且防止触发其他键
-	SetScreenBlackZOrder(1);
+	SetScreenBlackZOrder(3);
 	//播放黑屏动画
 	PlayAnimation(FullScreenBlack);
 }
@@ -37,7 +39,7 @@ void USW_InMenuUI::PressBTN_Album()
 	BP_ButtonOfInMenu->BP_Album->PlayAnimation(BP_ButtonOfInMenu->BP_Album->flashing);
 	
 	//设置黑屏的显示层级为1，遮挡按钮且防止触发其他键
-	SetScreenBlackZOrder(1);
+	SetScreenBlackZOrder(3);
 	//播放黑屏动画
 	PlayAnimation(FullScreenBlack);
 }
@@ -51,7 +53,7 @@ void USW_InMenuUI::PressBTN_Continue()
 	BP_ButtonOfInMenu->BP_Continue->PlayAnimation(BP_ButtonOfInMenu->BP_Continue->flashing);
 	
 	//设置黑屏的显示层级为1，遮挡按钮且防止触发其他键
-	SetScreenBlackZOrder(1);
+	SetScreenBlackZOrder(3);
 	//播放黑屏动画
 	PlayAnimation(FullScreenBlack);
 }
@@ -65,9 +67,15 @@ void USW_InMenuUI::PressBTN_Setting()
 	BP_ButtonOfInMenu->BP_Setting->PlayAnimation(BP_ButtonOfInMenu->BP_Setting->flashing);
 	
 	//设置黑屏的显示层级为1，遮挡按钮且防止触发其他键
-	SetScreenBlackZOrder(1);
+	SetScreenBlackZOrder(3);
 	//播放黑屏动画
 	PlayAnimation(FullScreenBlack);
+}
+
+void USW_InMenuUI::FlashingOver()
+{
+	UCanvasPanelSlot *slot=Cast<UCanvasPanelSlot>(ScreenBlack->Slot);
+	slot->SetZOrder(0);
 }
 
 void USW_InMenuUI::PlayATapSound()

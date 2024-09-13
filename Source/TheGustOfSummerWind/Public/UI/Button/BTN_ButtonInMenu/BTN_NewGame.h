@@ -34,8 +34,10 @@ public:
 	// Function to set the reference to the parent widget
 	void SetParentSwitcher(UWidgetSwitcher* InSwitcher);
 	
+	
 	UFUNCTION()
-	void DelegatedAgent();
+	virtual void DelegatedAgentAndPlayAnimation()override;
+	
 	UFUNCTION()
 	void FlashingOver();
 };

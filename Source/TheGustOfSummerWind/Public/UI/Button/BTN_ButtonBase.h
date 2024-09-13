@@ -13,4 +13,6 @@ UCLASS()
 class THEGUSTOFSUMMERWIND_API UBTN_ButtonBase : public USW_UIBase
 {
 	GENERATED_BODY()
+public:
+	virtual void DelegatedAgentAndPlayAnimation();
 };

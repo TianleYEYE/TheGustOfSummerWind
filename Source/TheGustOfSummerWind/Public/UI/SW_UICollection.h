@@ -43,30 +43,8 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void SetupWidgets();
-
-	UFUNCTION()
-	void SwitchToNewGame();
-	UFUNCTION()
-	void SwitchToAlbum();
-	UFUNCTION()
-	void SwitchToSetting();
-	UFUNCTION()
-	void SwitchToContinue();
-	UFUNCTION()
-	void CreateInMenuUIWidget();
-	// UFUNCTION()
-	// void CreateInGameUIWidget();
-	// UFUNCTION()
-	// void CreateAlbumUIWidget();
-	// UFUNCTION()
-	// void CreateSettingUIWidget();
-	// UFUNCTION()
-	// void CreateContinueUIWidget();
 	
-
 	int32 widgetIndex;
 	
 	FTimerHandle TimerHandle;
-
-	
 };

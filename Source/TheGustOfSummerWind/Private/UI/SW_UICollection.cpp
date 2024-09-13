@@ -6,65 +6,23 @@
 void USW_UICollection::NativeConstruct()
 {
 	Super::NativeConstruct();
-
-	CreateInMenuUIWidget();
 	SetupWidgets();
-	BP_MenuUI->BP_ButtonOfInMenu->BP_NewGame->BTN_NewGame->OnClicked.AddDynamic(this,&USW_UICollection::SwitchToNewGame);
-	BP_MenuUI->BP_ButtonOfInMenu->BP_Continue->BTN_Continue->OnClicked.AddDynamic(this,&USW_UICollection::SwitchToContinue);
-	BP_MenuUI->BP_ButtonOfInMenu->BP_Album->BTN_Album->OnClicked.AddDynamic(this,&USW_UICollection::SwitchToAlbum);
-	BP_MenuUI->BP_ButtonOfInMenu->BP_Setting->BTN_Setting->OnClicked.AddDynamic(this,&USW_UICollection::SwitchToSetting);
 }
 
 void USW_UICollection::SetupWidgets()
 {
 	if (UISwitcher)
 	{
-		BP_MenuUI->BP_ButtonOfInMenu->BP_Album->SetParentSwitcher(UISwitcher);
+		//设置BP_NewGame的父级switcher，用来跳转到InGameUI
 		BP_MenuUI->BP_ButtonOfInMenu->BP_NewGame->SetParentSwitcher(UISwitcher);
+		//设置BP_Continue的父级switcher，用来跳转到ContinueUI
+		BP_MenuUI->BP_ButtonOfInMenu->BP_Continue->SetParentSwitcher(UISwitcher);
+		//设置BP_Album的父级switcher，用来跳转到AlbumUI
+		BP_MenuUI->BP_ButtonOfInMenu->BP_Album->SetParentSwitcher(UISwitcher);
+		//设置BP_Setting的父级switcher，用来跳转到SettingUI
+		BP_MenuUI->BP_ButtonOfInMenu->BP_Setting->SetParentSwitcher(UISwitcher);
+		//设置AlbumUI的父级swicher，给AlbumUI中的return按钮调用
 		BP_AlbumUI->SetParentSwitcher(UISwitcher);
 	}
-	
 }
 
-void USW_UICollection::SwitchToNewGame()
-{
-	PlayAnimation(BP_MenuUI->BP_ButtonOfInMenu->BP_NewGame->flashing);
-}
-
-void USW_UICollection::SwitchToAlbum()
-{
-	PlayAnimation(BP_MenuUI->BP_ButtonOfInMenu->BP_Album->flashing);
-}
-
-void USW_UICollection::SwitchToSetting()
-{
-}
-
-void USW_UICollection::SwitchToContinue()
-{
-}
-
-void USW_UICollection::CreateInMenuUIWidget()
-{
-	UISwitcher->SetActiveWidgetIndex(0);
-}
-
-// void USW_UICollection::CreateInGameUIWidget()
-// {
-// 	UISwitcher->SetActiveWidgetIndex(1);
-// }
-//
-// void USW_UICollection::CreateContinueUIWidget()
-// {
-// 	UISwitcher->SetActiveWidgetIndex(2);
-// }
-//
-// void USW_UICollection::CreateAlbumUIWidget()
-// {
-// 	UISwitcher->SetActiveWidgetIndex(3);
-// }
-//
-// void USW_UICollection::CreateSettingUIWidget()
-// {
-// 	UISwitcher->SetActiveWidgetIndex(4);
-// }

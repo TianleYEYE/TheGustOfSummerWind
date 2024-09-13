@@ -37,5 +37,5 @@ public:
 	virtual void NativeConstruct() override;
 
 	UFUNCTION()
-	void DelegatedAgent();
+	virtual void DelegatedAgentAndPlayAnimation()override;
 };

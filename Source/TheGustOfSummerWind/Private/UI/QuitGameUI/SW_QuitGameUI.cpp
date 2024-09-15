@@ -2,17 +2,15 @@
 
 
 #include "UI/QuitGameUI/SW_QuitGameUI.h"
-
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
-#include "Music/AudioPlayer.h"
 
 void USW_QuitGameUI::NativeConstruct()
 {
 	Super::NativeConstruct();
 
 	auto TempActor = UGameplayStatics::GetActorOfClass(GetWorld(),AudioPlayer->StaticClass());
-	AudioPlayer = Cast<AAudioPlayer>(TempActor);
+	AudioPlayer = Cast<ASW_ScriptManager>(TempActor);
 	
 	BP_Yes->Yes.AddUObject(this,&USW_QuitGameUI::QuitGame);
 	BP_No->No.AddUObject(this, &USW_QuitGameUI::ReturnGame);

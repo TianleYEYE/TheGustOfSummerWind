@@ -38,13 +38,12 @@ public:
 	TObjectPtr<USW_InMenuUI>BP_MenuUI;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<USW_AlbumUI>BP_AlbumUI;
+	
 
 	virtual void NativeConstruct() override;
 	
 	UFUNCTION(BlueprintCallable)
 	void SetupWidgets();
-	
-	int32 widgetIndex;
 	
 	FTimerHandle TimerHandle;
 };

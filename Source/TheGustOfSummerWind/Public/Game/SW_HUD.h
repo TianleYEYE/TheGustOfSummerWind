@@ -18,7 +18,7 @@ public:
 	
 	virtual void BeginPlay() override;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Widget")
 	TObjectPtr<USW_UICollection>UICollection;
 
 	UPROPERTY(EditAnywhere,Category="Widget Class")

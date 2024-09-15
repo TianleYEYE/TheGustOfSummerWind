@@ -9,14 +9,12 @@
 #include "UI/Button/BTN_ButtonInGame/BTN_Button0fInGameUI.h"
 #include "UI/Button/BTN_ButtonInGame/BTN_NextDialog.h"
 #include "UI/Button/BTN_ButtonInMenu/BTN_SaveOrRead.h"
+#include "DataStruct\DialogStruct.h"
 #include "TimerManager.h"
 #include "Components/CanvasPanelSlot.h"
 #include "Game/SW_GameInstance.h"
+#include "Game/SW_ScriptManager.h"
 #include "SW_InGameUI.generated.h"
-
-
-
-class AAudioPlayer;
 
 
 UCLASS()
@@ -70,7 +68,7 @@ public:
 	TObjectPtr<UWidgetAnimation>Three;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="AudioPlayer")
-	TObjectPtr<AAudioPlayer>AudioPlayer;
+	TObjectPtr<ASW_ScriptManager>ScriptManager;
 
 	UPROPERTY()
 	TObjectPtr<USW_GameInstance>SW_GameInstance;
@@ -89,17 +87,13 @@ public:
 	void InitializeGame();
 	
 	UFUNCTION()
-	void PressBTN_NEXT(uint32& InRow);
+	void PressBTN_NEXT(int InRow);
 	
 	void ReadDialog();
 	
 	UFUNCTION()
 	void GetCGOrStart();
 	
-	
-	//设置对话
-	void SetDialog();
-	void UpdateText();
 	//设置对话角色姓名
 	void SetName(FDialogStruct *dialogRow);
 	//设置立绘
@@ -122,15 +116,12 @@ public:
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="properties")
 	int maxRow=10;
-	
+	int CurrentIndex;
 	int Num_nextDialogButtonClicked=0;
 
 	bool bIsWhiteOver=false;
-
 	bool bIsAllAnimationsPlayOver=false;
 
-	TArray<FString>MessageCharactArray;
-	int CurrentIndex = 0;
 
 public:
 	int row ;

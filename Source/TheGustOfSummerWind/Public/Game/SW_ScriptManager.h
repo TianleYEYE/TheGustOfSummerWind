@@ -1,17 +1,20 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
-#include "AudioPlayer.generated.h"
+#include "Components/AudioComponent.h"
+#include "SW_ScriptManager.generated.h"
+
 
 UCLASS()
-class THEGUSTOFSUMMERWIND_API AAudioPlayer : public AActor
+class THEGUSTOFSUMMERWIND_API ASW_ScriptManager : public AActor
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this actor's properties
-	AAudioPlayer();
+	ASW_ScriptManager();
 
 protected:
 	// Called when the game starts or when spawned
@@ -21,19 +24,18 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Audio")
-	TObjectPtr<UAudioComponent>audioPlayer;
+	TObjectPtr<UAudioComponent>AudioPlayer;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Audio")
 	TObjectPtr<UAudioComponent>ConversationalVoicePlayer;
 
 	UPROPERTY( BlueprintReadOnly, Category = "MySceneComponent")
 	TObjectPtr<USceneComponent>SceneComponent;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly, Category = "Chapter DataTable")
+	TObjectPtr<UDataTable>DataTable;
 	
 	void MenuMusicPlay();
-
-
-	
-	bool menuMusicIsPlay=false;
-	
 };

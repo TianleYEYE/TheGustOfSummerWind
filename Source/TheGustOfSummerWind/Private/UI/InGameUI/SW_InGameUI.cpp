@@ -7,9 +7,6 @@
 #include "Components/AudioComponent.h"
 #include "Components/CanvasPanelSlot.h"
 #include "Kismet/GameplayStatics.h"
-#include "Kismet/KismetStringLibrary.h"
-#include "Music/AudioPlayer.h"
-
 
 
 void USW_InGameUI::NativeConstruct()
@@ -24,80 +21,52 @@ void USW_InGameUI::InitializeGame()
 {
 	//获取游戏实例，方便调用游戏实例中的全局函数
 	SW_GameInstance=Cast<USW_GameInstance>(GetGameInstance());
+	//获取场景中的ScriptManager
+	auto TempActor = UGameplayStatics::GetActorOfClass(GetWorld(),ScriptManager->StaticClass());
+	ScriptManager= Cast<ASW_ScriptManager>(TempActor);
 	//下一段对话按钮绑定函数
-	BP_NextDialog->EntrustDelegated.AddUObject(this,&USW_InGameUI::PressBTN_NEXT);
-
+	BP_NextDialog->EntrustDelegated.AddDynamic(this,&USW_InGameUI::PressBTN_NEXT);
 	//绑定菜单开始动画时间，动画开始时，执行
 	InGameMenuUIEvent.BindDynamic(this,&USW_InGameUI::USW_InGameUI::GetInGameMenuUI);
 	BindToAnimationStarted(DisplaysInGameMenu,InGameMenuUIEvent);
 	//绑定菜单开始动画时间，动画结束后，执行
 	CancelInGameMenuUIEvent.BindDynamic(this,&USW_InGameUI::CancelInGameMenuUIImplement);
 	BindToAnimationFinished(CancelDisplaysInGameMenu,CancelInGameMenuUIEvent);
-	
 	//获取对话行数
-	row=SW_GameInstance->GlobalVariablesManger->rowDialog;
-	
-	//开始游戏时读取一次对话
+	row=SW_GameInstance->rowDialog;
 	ReadDialog();
 }
 
-void USW_InGameUI::PressBTN_NEXT(uint32& InRow)
+void USW_InGameUI::PressBTN_NEXT(int32 InRow)
 {
 	ReadDialog();
-	InRow = row;
 }
 
 void USW_InGameUI::ReadDialog()
 {
+	//设置游戏实例的DialogStruct
+	SW_GameInstance->SetDialogStruct(ScriptManager->DataTable);
+	//从游戏实例获取到DialogStruct
+	DialogStruct=SW_GameInstance->GetDialogStruct();
+	//将UI获取的DilaogStruct给DialogBox
+	BP_DialogBox->SetDialogStructAndCurrentIndex(DialogStruct,CurrentIndex);
 	
-	DialogStruct=SW_GameInstance->GlobalVariablesManger->GetDialogStruct(DialogDataTable,row);
-	
-	if (SW_GameInstance->GlobalVariablesManger->rowDialog>=1)
+	if (SW_GameInstance->rowDialog>=1)
 	{
-		PreviousDialogRow =SW_GameInstance->GlobalVariablesManger->GetDialogStruct(DialogDataTable,row-1);
+		PreviousDialogRow =SW_GameInstance->SetDialogStruct(DialogDataTable);
 	}
 	
+	BP_DialogBox->SetDialog();
 	SetName(DialogStruct);
-	SetDialog();
 	SetCharacterPortraits(DialogStruct);
 	SetBackground(DialogStruct);
 	SetMusic(DialogStruct);
 	SetConversationalVoice(DialogStruct);
-	
-	row++;
 	CurrentIndex=0;
-}
-
-void USW_InGameUI::SetDialog()
-{
-	GetWorld()->GetTimerManager().SetTimer(BP_DialogBox->UpdataTextHandle, this, &USW_InGameUI::UpdateText, 0.05f, true);
-}
-
-void USW_InGameUI::UpdateText()
-{
+	SW_GameInstance->SetDialogIndex(row);
+	GEngine->AddOnScreenDebugMessage(-1,5.0f,FColor::Cyan,FString::Printf(TEXT("RowDialog : %d"),SW_GameInstance->rowDialog));
+	row++;
 	
-	MessageCharactArray=UKismetStringLibrary::GetCharacterArrayFromString(DialogStruct->Dialog.ToString());
-	
-	if (CurrentIndex < MessageCharactArray.Num())
-    {
-        // 获取当前要显示的文本
-        FText CurrentText = FText::FromString(DialogStruct->Dialog.ToString().Left(CurrentIndex + 1));
-        
-        // 设置 TextBlock 的文本
-        if (BP_DialogBox->Textblock_Dialog)
-        {
-           BP_DialogBox->Textblock_Dialog->SetText(CurrentText);
-        }
-        
-        // 增加索引
-        CurrentIndex++;
-    }
-    else
-    {
-    	  
-        // 停止定时器
-        GetWorld()->GetTimerManager().ClearTimer(BP_DialogBox->UpdataTextHandle);
-    }
 }
 
 void USW_InGameUI::SetName(FDialogStruct *dialogRow)
@@ -160,7 +129,6 @@ void USW_InGameUI::SetCharacterPortraits(FDialogStruct *dialogRow)
 			PlayAnimationReverse(Two);
 		}
 	}
-	
 }
 
 void USW_InGameUI::SetBackground(FDialogStruct *dialogRow)
@@ -170,36 +138,30 @@ void USW_InGameUI::SetBackground(FDialogStruct *dialogRow)
 
 void USW_InGameUI::SetMusic(FDialogStruct *dialogRow)
 {
-	auto TempActor = UGameplayStatics::GetActorOfClass(GetWorld(),AudioPlayer->StaticClass());
-	AudioPlayer = Cast<AAudioPlayer>(TempActor);
 	if (dialogRow->BackgroundSound!=nullptr)
 	{
-		AudioPlayer->audioPlayer->Stop();
-		AudioPlayer->audioPlayer->SetSound(dialogRow->BackgroundSound);
-		AudioPlayer->audioPlayer->Play();
+		ScriptManager->AudioPlayer->Stop();
+		ScriptManager->AudioPlayer->SetSound(dialogRow->BackgroundSound);
+		ScriptManager->AudioPlayer->Play();
 	}
 }
 
 void USW_InGameUI::SetConversationalVoice(FDialogStruct *dialogRow)
 {
-	auto TempActor = UGameplayStatics::GetActorOfClass(GetWorld(),AudioPlayer->StaticClass());
-	AudioPlayer = Cast<AAudioPlayer>(TempActor);
 	if (dialogRow->ConversationalVoice!=nullptr)
 	{
-		if (AudioPlayer->ConversationalVoicePlayer!=nullptr)
+		if (ScriptManager->ConversationalVoicePlayer!=nullptr)
 		{
-			AudioPlayer->ConversationalVoicePlayer->Stop();
+			ScriptManager->ConversationalVoicePlayer->Stop();
 		}
-		AudioPlayer->ConversationalVoicePlayer->SetSound(dialogRow->ConversationalVoice);
-		AudioPlayer->ConversationalVoicePlayer->Play();
+		ScriptManager->ConversationalVoicePlayer->SetSound(dialogRow->ConversationalVoice);
+		ScriptManager->ConversationalVoicePlayer->Play();
 	}
 }
 
 void USW_InGameUI::GetCGOrStart()
 {
 	ScreenWhiteSlot->SetZOrder(1);
-
-	SetDialog();
 	
 	bIsWhiteOver =true;
 }

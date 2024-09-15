@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Music/AudioPlayer.h"
+#include "Game/SW_ScriptManager.h"
 #include "UI/SW_UIBase.h"
 #include "UI/Button/BTN_ButtonInQuitGame/BTN_No.h"
 #include "UI/Button/BTN_ButtonInQuitGame/BTN_Yes.h"
@@ -24,7 +24,7 @@ public:
 	TObjectPtr<UWidgetAnimation>Fade;
 
 	UPROPERTY()
-	TObjectPtr<AAudioPlayer>AudioPlayer;
+	TObjectPtr<ASW_ScriptManager>AudioPlayer;
 
 	FTimerHandle PlayFade;
 	

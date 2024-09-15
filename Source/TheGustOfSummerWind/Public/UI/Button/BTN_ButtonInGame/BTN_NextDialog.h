@@ -5,7 +5,7 @@
 #include "UI/Button/BTN_ButtonBase.h"
 #include "BTN_NextDialog.generated.h"
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FEntrustNextDialog,uint32&)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEntrustNextDialog,int,NewDialogRow);
 
 
 UCLASS()
@@ -17,8 +17,8 @@ public:
 	TObjectPtr<UButton>BTN_NextDialog;
 
 	virtual void NativeConstruct() override;
-	
-	//创建委托实例
+
+	UPROPERTY(BlueprintAssignable,Category="Button Event")
 	FEntrustNextDialog EntrustDelegated;
 	//多播委托代理
 	UFUNCTION()

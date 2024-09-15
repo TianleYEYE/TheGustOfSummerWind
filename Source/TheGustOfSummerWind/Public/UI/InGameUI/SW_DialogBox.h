@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/CircularThrobber.h"
 #include "Components/TextBlock.h"
-#include "Components/Throbber.h"
+#include "Game/SW_GameInstance.h"
 #include "UI/SW_UIBase.h"
 #include "SW_DialogBox.generated.h"
 
@@ -28,6 +28,16 @@ public:
 
 	UPROPERTY(Transient,EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<UCircularThrobber>Throbber_1;
+
+	TArray<FString>MessageCharactArray;
+
+	FDialogStruct *DialogRow;
+	
+	void SetDialogStructAndCurrentIndex(FDialogStruct * ParentsDialogStruct,int Index);
+	
+	void SetDialog();
+	
+	void UpdateText();
 	
 	virtual void NativeConstruct() override;
 
@@ -36,4 +46,6 @@ public:
 	FTimerHandle UpdataTextHandle;
 
 	void UpdateVisibility();
+
+	int CurrentIndex = 0;
 };

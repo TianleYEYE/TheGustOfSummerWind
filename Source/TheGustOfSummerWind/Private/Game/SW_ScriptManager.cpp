@@ -34,9 +34,32 @@ void ASW_ScriptManager::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+
+
+int ASW_ScriptManager::GetMaxDialogIndex()
+{
+	if (DataTable)
+	{
+		MaxDialogIndex = DataTable->GetRowMap().Num();
+	}
+	return MaxDialogIndex;
+}
+
 void ASW_ScriptManager::MenuMusicPlay()
 {
 	 USoundBase *menuSound=LoadObject<USoundBase>(this,TEXT("/Game/Assets/Audio/01_Irreplaceable_memories_-Main_theme-_Cue.01_Irreplaceable_memories_-Main_theme-_Cue"));
 	 AudioPlayer->SetSound(menuSound);
 	 AudioPlayer->Play();
 }
+
+FDialogStruct* ASW_ScriptManager::SetDialogStruct()
+{
+	if (rowDialog<=GetMaxDialogIndex())
+	{
+		DialogStruct = DataTable->FindRow<FDialogStruct>(DataTable->GetRowNames()[rowDialog],TEXT(""));
+		return DialogStruct;
+	}
+	return DialogStruct;
+}
+
+

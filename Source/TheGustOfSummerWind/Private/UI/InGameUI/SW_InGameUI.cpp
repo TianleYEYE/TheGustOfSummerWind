@@ -21,9 +21,12 @@ void USW_InGameUI::InitializeGame()
 {
 	//获取游戏实例，方便调用游戏实例中的全局函数
 	SW_GameInstance=Cast<USW_GameInstance>(GetGameInstance());
+	
 	//获取场景中的ScriptManager
 	auto TempActor = UGameplayStatics::GetActorOfClass(GetWorld(),ScriptManager->StaticClass());
 	ScriptManager= Cast<ASW_ScriptManager>(TempActor);
+
+	
 	//下一段对话按钮绑定函数
 	BP_NextDialog->EntrustDelegated.AddDynamic(this,&USW_InGameUI::PressBTN_NEXT);
 	//绑定菜单开始动画时间，动画开始时，执行
@@ -32,8 +35,7 @@ void USW_InGameUI::InitializeGame()
 	//绑定菜单开始动画时间，动画结束后，执行
 	CancelInGameMenuUIEvent.BindDynamic(this,&USW_InGameUI::CancelInGameMenuUIImplement);
 	BindToAnimationFinished(CancelDisplaysInGameMenu,CancelInGameMenuUIEvent);
-	//获取对话行数
-	row=SW_GameInstance->rowDialog;
+	
 	ReadDialog();
 }
 
@@ -44,16 +46,16 @@ void USW_InGameUI::PressBTN_NEXT(int32 InRow)
 
 void USW_InGameUI::ReadDialog()
 {
-	//设置游戏实例的DialogStruct
-	SW_GameInstance->SetDialogStruct(ScriptManager->DataTable);
-	//从游戏实例获取到DialogStruct
-	DialogStruct=SW_GameInstance->GetDialogStruct();
-	//将UI获取的DilaogStruct给DialogBox
+	// //设置游戏实例的DialogStruct
+	// SW_GameInstance->SetDialogStruct(ScriptManager->DataTable,ScriptManager->GetMaxDialogIndex());
+	// //从游戏实例获取到DialogStruct
+	DialogStruct=ScriptManager->SetDialogStruct();
+	// //将ScriptManager获取的DilaogStruct给DialogBox
 	BP_DialogBox->SetDialogStructAndCurrentIndex(DialogStruct,CurrentIndex);
 	
-	if (SW_GameInstance->rowDialog>=1)
+	if (ScriptManager->rowDialog>=1)
 	{
-		PreviousDialogRow =SW_GameInstance->SetDialogStruct(DialogDataTable);
+		PreviousDialogRow =ScriptManager->SetDialogStruct();
 	}
 	
 	BP_DialogBox->SetDialog();
@@ -63,9 +65,8 @@ void USW_InGameUI::ReadDialog()
 	SetMusic(DialogStruct);
 	SetConversationalVoice(DialogStruct);
 	CurrentIndex=0;
-	SW_GameInstance->SetDialogIndex(row);
-	GEngine->AddOnScreenDebugMessage(-1,5.0f,FColor::Cyan,FString::Printf(TEXT("RowDialog : %d"),SW_GameInstance->rowDialog));
-	row++;
+	GEngine->AddOnScreenDebugMessage(-1,5.0f,FColor::Cyan,FString::Printf(TEXT("RowDialog : %d"),ScriptManager->rowDialog));
+	ScriptManager->rowDialog++;
 	
 }
 

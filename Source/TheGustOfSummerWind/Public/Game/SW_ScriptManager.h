@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/AudioComponent.h"
+#include "DataStruct\DialogStruct.h"
 #include "SW_ScriptManager.generated.h"
 
 
@@ -36,6 +37,17 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly, Category = "Chapter DataTable")
 	TObjectPtr<UDataTable>DataTable;
+
+	
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="properties")
+	int rowDialog=0;
+	int MaxDialogIndex;
+	
+	int GetMaxDialogIndex();
 	
 	void MenuMusicPlay();
+
+	FDialogStruct *SetDialogStruct();
+	
+	FDialogStruct *DialogStruct;
 };

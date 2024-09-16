@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/CircularThrobber.h"
 #include "Components/TextBlock.h"
-#include "Game/SW_GameInstance.h"
+#include "DataStruct\DialogStruct.h"
 #include "UI/SW_UIBase.h"
 #include "SW_DialogBox.generated.h"
 

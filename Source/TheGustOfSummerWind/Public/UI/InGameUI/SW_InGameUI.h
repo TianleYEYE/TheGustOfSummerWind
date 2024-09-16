@@ -114,8 +114,6 @@ public:
 	
 	FDialogStruct *PreviousDialogRow;
 	
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="properties")
-	int maxRow=10;
 	int CurrentIndex;
 	int Num_nextDialogButtonClicked=0;
 

@@ -21,7 +21,7 @@ void UBTN_Continue::SetParentSwitcher(UWidgetSwitcher* InSwitcher)
 void UBTN_Continue::DelegatedAgentAndPlayAnimation()
 {
 	Continue.Broadcast();
-	PlayAnimation(flashing);
+ 	PlayAnimation(flashing);
 }
 
 void UBTN_Continue::FlashingOver()

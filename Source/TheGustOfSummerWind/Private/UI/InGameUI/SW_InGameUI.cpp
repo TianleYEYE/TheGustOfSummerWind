@@ -6,6 +6,7 @@
 #include "Animation/WidgetAnimation.h"
 #include "Components/AudioComponent.h"
 #include "Components/CanvasPanelSlot.h"
+#include "Game/SW_HUD.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -19,24 +20,27 @@ void USW_InGameUI::NativeConstruct()
 
 void USW_InGameUI::InitializeGame()
 {
-	//获取游戏实例，方便调用游戏实例中的全局函数
-	SW_GameInstance=Cast<USW_GameInstance>(GetGameInstance());
-	
 	//获取场景中的ScriptManager
 	auto TempActor = UGameplayStatics::GetActorOfClass(GetWorld(),ScriptManager->StaticClass());
-	ScriptManager= Cast<ASW_ScriptManager>(TempActor);
-
+	if (TempActor)
+	{
+		ScriptManager= Cast<ASW_ScriptManager>(TempActor);
+	}
 	
 	//下一段对话按钮绑定函数
 	BP_NextDialog->EntrustDelegated.AddDynamic(this,&USW_InGameUI::PressBTN_NEXT);
 	//绑定菜单开始动画时间，动画开始时，执行
-	InGameMenuUIEvent.BindDynamic(this,&USW_InGameUI::USW_InGameUI::GetInGameMenuUI);
+	InGameMenuUIEvent.BindDynamic(this,&USW_InGameUI::GetInGameMenuUI);
 	BindToAnimationStarted(DisplaysInGameMenu,InGameMenuUIEvent);
 	//绑定菜单开始动画时间，动画结束后，执行
 	CancelInGameMenuUIEvent.BindDynamic(this,&USW_InGameUI::CancelInGameMenuUIImplement);
 	BindToAnimationFinished(CancelDisplaysInGameMenu,CancelInGameMenuUIEvent);
+
+	if (ScriptManager)
+	{
+		ReadDialog();
+	}
 	
-	ReadDialog();
 }
 
 void USW_InGameUI::PressBTN_NEXT(int32 InRow)
@@ -46,8 +50,6 @@ void USW_InGameUI::PressBTN_NEXT(int32 InRow)
 
 void USW_InGameUI::ReadDialog()
 {
-	// //设置游戏实例的DialogStruct
-	// SW_GameInstance->SetDialogStruct(ScriptManager->DataTable,ScriptManager->GetMaxDialogIndex());
 	// //从游戏实例获取到DialogStruct
 	DialogStruct=ScriptManager->SetDialogStruct();
 	// //将ScriptManager获取的DilaogStruct给DialogBox

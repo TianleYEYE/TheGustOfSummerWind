@@ -41,11 +41,7 @@ public:
 	
 	virtual void NativeConstruct() override;
 
-	void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
-
 	FTimerHandle UpdataTextHandle;
-
-	void UpdateVisibility();
 
 	int CurrentIndex = 0;
 };

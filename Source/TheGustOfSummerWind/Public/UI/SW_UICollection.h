@@ -44,6 +44,9 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void SetupWidgets();
+
+	void CancelMenu();
+	
 	
 	FTimerHandle TimerHandle;
 };

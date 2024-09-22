@@ -7,6 +7,8 @@ void USW_UICollection::NativeConstruct()
 {
 	Super::NativeConstruct();
 	SetupWidgets();
+
+	CancelMenu();
 }
 
 void USW_UICollection::SetupWidgets()
@@ -23,6 +25,23 @@ void USW_UICollection::SetupWidgets()
 		BP_MenuUI->BP_ButtonOfInMenu->BP_Setting->SetParentSwitcher(UISwitcher);
 		//设置AlbumUI的父级swicher，给AlbumUI中的return按钮调用
 		BP_AlbumUI->SetParentSwitcher(UISwitcher);
+	}
+}
+
+void USW_UICollection::CancelMenu()
+{
+	if (GetWorld()->GetFName()==FName(*FString(TEXT("MasterMenu"))))
+	{
+		UISwitcher->SetActiveWidgetIndex(0);
+	}
+	else if (GetWorld()->GetFName()==FName(*FString(TEXT("Chapter_1"))))
+	{
+		UISwitcher->SetActiveWidgetIndex(1);
+	}
+	else if (GetWorld()->GetFName()==FName(*FString(TEXT("Chapter_2"))))
+	{
+		GEngine->AddOnScreenDebugMessage(-1,5.0f,FColor::Cyan,FString::Printf(TEXT("Set GameUI")));
+		UISwitcher->SetActiveWidgetIndex(1);
 	}
 }
 

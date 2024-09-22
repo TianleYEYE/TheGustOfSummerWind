@@ -3,6 +3,8 @@
 
 #include "Game/SW_ScriptManager.h"
 
+#include "Kismet/GameplayStatics.h"
+#include "Game/SW_HUD.h"
 
 
 // Sets default values
@@ -25,6 +27,12 @@ void ASW_ScriptManager::BeginPlay()
 {
 	Super::BeginPlay();
 
+	ASW_HUD* MyHUD = Cast<ASW_HUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
+	if (MyHUD)
+	{
+		MyHUD->OnUICollectionInitialized.AddDynamic(this, &ASW_ScriptManager::OnUICollectionInitialized);
+	}
+	
 	MenuMusicPlay();
 }
 
@@ -33,8 +41,6 @@ void ASW_ScriptManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
-
-
 
 int ASW_ScriptManager::GetMaxDialogIndex()
 {
@@ -52,14 +58,32 @@ void ASW_ScriptManager::MenuMusicPlay()
 	 AudioPlayer->Play();
 }
 
+void ASW_ScriptManager::OnUICollectionInitialized()
+{
+	ASW_HUD* MyHUD = Cast<ASW_HUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
+	if (MyHUD)
+	{
+		BTN_NextDialog= MyHUD->UICollection->BP_InGameUI->BP_NextDialog;
+		BTN_NextDialog->EntrustDelegated.AddDynamic(this,&ASW_ScriptManager::ChapterSwitch);
+	}
+}
+
 FDialogStruct* ASW_ScriptManager::SetDialogStruct()
 {
-	if (rowDialog<=GetMaxDialogIndex())
+	if (rowDialog<GetMaxDialogIndex())
 	{
 		DialogStruct = DataTable->FindRow<FDialogStruct>(DataTable->GetRowNames()[rowDialog],TEXT(""));
 		return DialogStruct;
 	}
 	return DialogStruct;
 }
+
+void ASW_ScriptManager::ChapterSwitch(int32 InRow)
+{
+	if (rowDialog==MaxDialogIndex)
+	{
+	}
+}
+
 
 

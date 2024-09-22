@@ -26,36 +26,26 @@ public:
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<UBTN_Button0fInGameUI>BP_ButtonOfInGameUI;
-
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<UBTN_SaveOrRead>BP_SaveOrRead;
-	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<UTextBlock>TextBlock_Name;
-
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<UImage>TEX_Background;
-
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<UImage>TEX_CharacterPortraits_1;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<UImage>TEX_CharacterPortraits_2;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<UImage>TEX_CharacterPortraits_3;
-	
-
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<USW_DialogBox>BP_DialogBox;
-	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<UBTN_NextDialog>BP_NextDialog;
-
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<UBorder>NameBoxBackground;
-	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<UBorder>InGameMenuUI;
-
 	UPROPERTY(Transient,EditAnywhere,BlueprintReadWrite,meta=(BindWidgetAnim))
 	TObjectPtr<UWidgetAnimation>DisplaysInGameMenu;
 	UPROPERTY(Transient,EditAnywhere,BlueprintReadWrite,meta=(BindWidgetAnim))
@@ -66,13 +56,8 @@ public:
 	TObjectPtr<UWidgetAnimation>Two;
 	UPROPERTY(Transient,EditAnywhere,BlueprintReadWrite,meta=(BindWidgetAnim))
 	TObjectPtr<UWidgetAnimation>Three;
-	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="AudioPlayer")
 	TObjectPtr<ASW_ScriptManager>ScriptManager;
-
-	UPROPERTY()
-	TObjectPtr<USW_GameInstance>SW_GameInstance;
-
 
 	UPROPERTY()
 	TObjectPtr<UCanvasPanelSlot>ScreenWhiteSlot;
@@ -88,7 +73,8 @@ public:
 	
 	UFUNCTION()
 	void PressBTN_NEXT(int InRow);
-	
+
+	UFUNCTION()
 	void ReadDialog();
 	
 	UFUNCTION()
@@ -104,8 +90,6 @@ public:
 	void SetMusic(FDialogStruct *dialogRow);
 	//设置角色语音
 	void SetConversationalVoice(FDialogStruct *dialogRow);
-	// //设置CG
-	// void SetGameCG(FDialogStruct *dialogRow,int row);
 	//设置游戏内菜单
 	UFUNCTION()
 	void GetInGameMenuUI();
@@ -118,7 +102,6 @@ public:
 	int Num_nextDialogButtonClicked=0;
 
 	bool bIsWhiteOver=false;
-	bool bIsAllAnimationsPlayOver=false;
 
 
 public:

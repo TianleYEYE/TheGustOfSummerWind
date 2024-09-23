@@ -13,4 +13,10 @@ UCLASS()
 class THEGUSTOFSUMMERWIND_API UBTN_SaveOrRead : public UBTN_ButtonBase
 {
 	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
+	TObjectPtr<USW_UIBase>BP_SaveGame;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
+	TObjectPtr<USW_UIBase>BP_ReadGame;
 };

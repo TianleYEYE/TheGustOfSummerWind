@@ -3,7 +3,6 @@
 
 #include "UI/Button/BTN_ButtonInMenu/BTN_NewGame.h"
 
-#include "Kismet/GameplayStatics.h"
 
 void UBTN_NewGame::NativeConstruct()
 {

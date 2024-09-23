@@ -12,7 +12,6 @@
 #include "DataStruct\DialogStruct.h"
 #include "TimerManager.h"
 #include "Components/CanvasPanelSlot.h"
-#include "Game/SW_GameInstance.h"
 #include "Game/SW_ScriptManager.h"
 #include "SW_InGameUI.generated.h"
 
@@ -74,7 +73,7 @@ public:
 	UFUNCTION()
 	void PressBTN_NEXT(int InRow);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void ReadDialog();
 	
 	UFUNCTION()

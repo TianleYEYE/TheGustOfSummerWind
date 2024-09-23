@@ -25,7 +25,7 @@ public:
 	void InitializeUICollection();
 	
 
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Widget")
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Widget")
 	TObjectPtr<USW_UICollection>UICollection;
 
 	UPROPERTY(EditAnywhere,Category="Widget Class")

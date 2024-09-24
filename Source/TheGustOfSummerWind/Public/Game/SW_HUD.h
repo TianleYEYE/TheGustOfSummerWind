@@ -8,6 +8,7 @@
 #include "SW_HUD.generated.h"
 
 
+class UMVVM_LoadScreen;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnUICollectionInitialized);
 /**
  * 
@@ -23,12 +24,21 @@ public:
 	FOnUICollectionInitialized OnUICollectionInitialized;
 
 	void InitializeUICollection();
-	
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UMVVM_LoadScreen>LoadScreenViewModelClass;
+	UPROPERTY(BlueprintReadOnly)
+	TObjectPtr<UMVVM_LoadScreen>LoadScreenViewModel;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<USW_UIBase>ContinueUIClass;
+	UPROPERTY(BlueprintReadOnly)
+	TObjectPtr<USW_UIBase>ContinueUI;
+	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Widget")
 	TObjectPtr<USW_UICollection>UICollection;
 
-	UPROPERTY(EditAnywhere,Category="Widget Class")
+	UPROPERTY(EditAnywhere)
 	TSubclassOf<USW_UICollection>UICollectionClass;
 
 	

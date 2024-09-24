@@ -7,6 +7,7 @@
 #include "AlbumUI/SW_AlbumUI.h"
 #include "Components/CanvasPanel.h"
 #include "Components/WidgetSwitcher.h"
+#include "ContinueUI/SW_ContinueUI.h"
 #include "InGameUI/SW_InGameUI.h"
 #include "InMenuUI/SW_InMenuUI.h"
 #include "SW_UICollection.generated.h"
@@ -38,6 +39,8 @@ public:
 	TObjectPtr<USW_InMenuUI>BP_MenuUI;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<USW_AlbumUI>BP_AlbumUI;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
+	TObjectPtr<USW_UIBase>BP_ContinueUI;
 	
 
 	virtual void NativeConstruct() override;

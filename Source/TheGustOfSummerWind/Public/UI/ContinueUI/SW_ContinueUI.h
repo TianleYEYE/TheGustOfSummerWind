@@ -13,6 +13,5 @@ UCLASS()
 class THEGUSTOFSUMMERWIND_API USW_ContinueUI : public USW_UIBase
 {
 	GENERATED_BODY()
-public:
 
 };

@@ -6,6 +6,9 @@
 #include "GameFramework/GameMode.h"
 #include "SW_GameMode.generated.h"
 
+class USW_SaveGame;
+class USaveGame;
+class UMVVM_LoadSlot;
 /**
  * 
  */
@@ -13,5 +16,10 @@ UCLASS()
 class THEGUSTOFSUMMERWIND_API ASW_GameMode : public AGameMode
 {
 	GENERATED_BODY()
+public:
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<USaveGame>LoadScreenSaveGameClass;
 	
+	void SaveSlotData(UMVVM_LoadSlot* LoadSlot,int32 SlotIndex);
+	USW_SaveGame* GetSaveSlotData(const FString& SlotName,int32 SlotIndex) const;
 };

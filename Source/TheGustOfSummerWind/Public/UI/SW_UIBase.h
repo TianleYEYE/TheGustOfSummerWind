@@ -13,5 +13,9 @@ UCLASS()
 class THEGUSTOFSUMMERWIND_API USW_UIBase : public UUserWidget
 {
 	GENERATED_BODY()
+
+public:
 	
+	UFUNCTION(BlueprintImplementableEvent,BlueprintCallable)
+	void BlueprintInializeWidget();
 };

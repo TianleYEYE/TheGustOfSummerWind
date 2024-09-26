@@ -12,13 +12,17 @@ void ASW_HUD::BeginPlay()
 
 
 	LoadScreenViewModel = NewObject<UMVVM_LoadScreen>(this,LoadScreenViewModelClass);
+	LoadScreenViewModel->InitializeLoadSlots();
+	
 	UICollection=CreateWidget<USW_UICollection>(GetOwningPlayerController(),UICollectionClass);
+	UICollection->AddToViewport();
 	
 	ContinueUI = UICollection->BP_ContinueUI;
-	UICollection->AddToViewport();
-	InitializeUICollection();
+	ContinueUI->BlueprintInializeWidget();
 
+	LoadScreenViewModel->LoadData();
 	
+	InitializeUICollection();
 	
 }
 

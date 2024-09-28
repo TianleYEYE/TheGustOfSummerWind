@@ -42,6 +42,7 @@ void UMVVM_LoadScreen::SaveSlotButtonPressed(int32 Slot,UDataTable *EnterDataTab
 	ASW_GameMode *SW_GameMode = Cast<ASW_GameMode>(UGameplayStatics::GetGameMode(this));
 
 	LoadSlots[Slot]->SetDataTable(EnterDataTable);
+	LoadSlots[Slot]->SetChapterName(EnterDataTable->GetName());
 	LoadSlots[Slot]->SlotStatus = Load;
 	
 	SW_GameMode->SaveSlotData(LoadSlots[Slot],Slot);
@@ -50,7 +51,18 @@ void UMVVM_LoadScreen::SaveSlotButtonPressed(int32 Slot,UDataTable *EnterDataTab
 
 void UMVVM_LoadScreen::ReadSlotButtonPressed(int32 Slot)
 {
-	
+	SlotSelected.Broadcast();
+	for (const TTuple<int32,UMVVM_LoadSlot*> LoadSlot:LoadSlots)
+	{
+		if (LoadSlot.Key == Slot)
+		{
+			LoadSlot.Value->EnableSelectSlotButton.Broadcast(false);
+		}
+		else
+		{
+			LoadSlot.Value->EnableSelectSlotButton.Broadcast(true);
+		}
+	}
 }
 
 void UMVVM_LoadScreen::LoadData()
@@ -62,8 +74,10 @@ void UMVVM_LoadScreen::LoadData()
 
 	 	UDataTable *DataTable = SaveObject->DataTable;
 	 	TEnumAsByte<ESaveSlotStatus> SaveSlotStatus =SaveObject ->SaveSlotStatus;
+	 	FString ChapterName = SaveObject->ChapterName;
 
 	 	LoadSlot.Value->SlotStatus = SaveSlotStatus;
+	 	LoadSlot.Value->SetChapterName(ChapterName);
 	 	LoadSlot.Value->SetDataTable(DataTable);
 	 	LoadSlot.Value->InitializeSlot();
 	 }

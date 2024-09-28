@@ -18,3 +18,8 @@ void UMVVM_LoadSlot::SetDataTable(UDataTable* InDataTable)
 {
 	UE_MVVM_SET_PROPERTY_VALUE(DataTable,InDataTable);
 }
+
+void UMVVM_LoadSlot::SetChapterName(FString InChapterName)
+{
+	UE_MVVM_SET_PROPERTY_VALUE(ChapterName,InChapterName);
+}

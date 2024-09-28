@@ -21,7 +21,6 @@ void ASW_HUD::BeginPlay()
 	ContinueUI->BlueprintInializeWidget();
 
 	LoadScreenViewModel->LoadData();
-	
 	InitializeUICollection();
 	
 }

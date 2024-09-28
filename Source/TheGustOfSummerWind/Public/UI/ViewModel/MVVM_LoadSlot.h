@@ -9,6 +9,7 @@
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSetWidgetSwitcherIndex,int32,WidgetSwitcherIndex);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEnableSelectSlotButton,bool,bEnable);
 
 /**
  * 
@@ -23,16 +24,21 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FSetWidgetSwitcherIndex SetWidgetSwitcherIndex;
 
-	void InitializeSlot();
+	UPROPERTY(BlueprintAssignable)
+	FEnableSelectSlotButton EnableSelectSlotButton;
+	
+	void InitializeSlot() ;
 
 	UPROPERTY()
 	TEnumAsByte<ESaveSlotStatus> SlotStatus;
 
 	void SetLoadSlotName(FString InLoadSlotName);
 	void SetDataTable(UDataTable *InDataTable);
+	void SetChapterName(FString InChapterName);
 	
 	FString GetLoadSlotName() const {return LoadSlotName; }
 	UDataTable *GetDataTable() const {return DataTable; }
+	FString GetChapterName() const {return ChapterName; }
 
 private:
 	
@@ -41,6 +47,9 @@ private:
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,FieldNotify,Setter,Getter,meta=(AllowPrivateAccess="true"))
 	TObjectPtr<UDataTable>DataTable;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,FieldNotify,Setter,Getter,meta=(AllowPrivateAccess="true"))
+	FString ChapterName;
 
 	
 };

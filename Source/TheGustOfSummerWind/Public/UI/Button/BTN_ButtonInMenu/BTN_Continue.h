@@ -9,7 +9,7 @@
 #include "BTN_Continue.generated.h"
 
 
-DECLARE_MULTICAST_DELEGATE(FEntrustContinue)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FEntrustContinue);
 
 UCLASS()
 class THEGUSTOFSUMMERWIND_API UBTN_Continue : public UBTN_ButtonBase
@@ -23,11 +23,14 @@ public:
 	TObjectPtr<UWidgetAnimation>flashing;
 
 	FWidgetAnimationDynamicEvent Flashing;
+	
+	UPROPERTY(BlueprintAssignable)
 	FEntrustContinue Continue;
 
 	UPROPERTY()
 	TObjectPtr<UWidgetSwitcher> ParentSwitcher;
 
+	
 	// Function to set the reference to the parent widget
 	void SetParentSwitcher(UWidgetSwitcher* InSwitcher);
 

@@ -23,9 +23,7 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FSetWidgetSwitcherIndex SetWidgetSwitcherIndex;
-
-	UPROPERTY(BlueprintAssignable)
-	FEnableSelectSlotButton EnableSelectSlotButton;
+	
 	
 	void InitializeSlot() ;
 

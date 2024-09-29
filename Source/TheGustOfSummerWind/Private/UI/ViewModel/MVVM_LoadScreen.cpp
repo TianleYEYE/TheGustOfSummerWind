@@ -52,17 +52,6 @@ void UMVVM_LoadScreen::SaveSlotButtonPressed(int32 Slot,UDataTable *EnterDataTab
 void UMVVM_LoadScreen::ReadSlotButtonPressed(int32 Slot)
 {
 	SlotSelected.Broadcast();
-	for (const TTuple<int32,UMVVM_LoadSlot*> LoadSlot:LoadSlots)
-	{
-		if (LoadSlot.Key == Slot)
-		{
-			LoadSlot.Value->EnableSelectSlotButton.Broadcast(false);
-		}
-		else
-		{
-			LoadSlot.Value->EnableSelectSlotButton.Broadcast(true);
-		}
-	}
 }
 
 void UMVVM_LoadScreen::LoadData()

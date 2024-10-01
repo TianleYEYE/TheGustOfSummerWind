@@ -16,8 +16,9 @@ void ASW_GameMode::SaveSlotData(UMVVM_LoadSlot* LoadSlot, int32 SlotIndex)
 	USaveGame * SaveGameObject =UGameplayStatics::CreateSaveGameObject(LoadScreenSaveGameClass);
 	USW_SaveGame * LoadScreenSaveGame = Cast<USW_SaveGame>(SaveGameObject);
 	LoadScreenSaveGame -> DataTable = LoadSlot -> GetDataTable();
-	LoadScreenSaveGame ->ChapterName = LoadSlot ->GetChapterName();
-	LoadScreenSaveGame ->SaveSlotStatus= Load;
+	LoadScreenSaveGame -> ChapterName = LoadSlot ->GetChapterName();
+	LoadScreenSaveGame -> RowDialog = LoadSlot ->GetRowDialog();
+	LoadScreenSaveGame -> SaveSlotStatus= Load;
 
 	UGameplayStatics::SaveGameToSlot(LoadScreenSaveGame,LoadSlot->GetLoadSlotName(),SlotIndex);
 }

@@ -24,6 +24,8 @@ public:
 	TSubclassOf<USW_QuitGameUI>BP_QuitGameUIClass;
 	UPROPERTY()
 	TObjectPtr<ASW_HUD>HUD;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	TObjectPtr<ASW_ScriptManager>ScriptManager;
 
 	bool bIsInGameMenuUIExist =false;
 

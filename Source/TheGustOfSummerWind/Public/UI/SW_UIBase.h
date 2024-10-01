@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Game/SW_ScriptManager.h"
 #include "SW_UIBase.generated.h"
 
 /**
@@ -18,4 +19,9 @@ public:
 	
 	UFUNCTION(BlueprintImplementableEvent,BlueprintCallable)
 	void BlueprintInializeWidget();
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="AudioPlayer")
+	TObjectPtr<ASW_ScriptManager>ScriptManager;
+
+	ASW_ScriptManager* GetScriptManager();
 };

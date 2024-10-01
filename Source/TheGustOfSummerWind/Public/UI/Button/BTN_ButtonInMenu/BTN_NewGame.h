@@ -22,13 +22,14 @@ public:
 	UPROPERTY(Transient,EditAnywhere,BlueprintReadWrite,meta=(BindWidgetAnim))
 	TObjectPtr<UWidgetAnimation>flashing;
 	
-
+	//UPROPERTY(BlueprintReadWrite)
 	FWidgetAnimationDynamicEvent Flashing;
+	
 	FEntrustNewGame NewGame;
 
 	virtual void NativeConstruct() override;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite)
 	TObjectPtr<UWidgetSwitcher> ParentSwitcher;
 
 	// Function to set the reference to the parent widget
@@ -40,4 +41,5 @@ public:
 	
 	UFUNCTION()
 	void FlashingOver();
+	
 };

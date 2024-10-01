@@ -25,5 +25,7 @@ void  UBTN_Setting::DelegatedAgentAndPlayAnimation()
 void UBTN_Setting::FlashingOver()
 {
 	ParentSwitcher->SetActiveWidgetIndex(4);
+	ScriptManager =GetScriptManager();
+	ScriptManager->WidgetState = SettingUI;
 }
 

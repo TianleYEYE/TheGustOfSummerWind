@@ -8,8 +8,6 @@
 #include "BTN_NewGame.h"
 #include "BTN_Setting.h"
 #include "UI/Button/BTN_ButtonBase.h"
-#include "UI/Button/BTN_ButtonInGame/BTN_Read.h"
-#include "UI/Button/BTN_ButtonInGame/BTN_Skip.h"
 #include "BTN_ButtonOfInMenu.generated.h"
 
 /**
@@ -24,12 +22,12 @@ public:
 	UPROPERTY(meta=(BindWidget))
 	TObjectPtr<UBTN_Album>BP_Album;
 
-	UPROPERTY(meta=(BindWidget))
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<UBTN_NewGame>BP_NewGame;
 
 	UPROPERTY(meta=(BindWidget))
 	TObjectPtr<UBTN_Setting>BP_Setting;
 
-	UPROPERTY(meta=(BindWidget))
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<UBTN_Continue>BP_Continue;
 };

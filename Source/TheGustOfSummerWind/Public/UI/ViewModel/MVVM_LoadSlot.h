@@ -33,10 +33,12 @@ public:
 	void SetLoadSlotName(FString InLoadSlotName);
 	void SetDataTable(UDataTable *InDataTable);
 	void SetChapterName(FString InChapterName);
+	void SetRowDialog(int32 InRowDialog);
 	
 	FString GetLoadSlotName() const {return LoadSlotName; }
 	UDataTable *GetDataTable() const {return DataTable; }
 	FString GetChapterName() const {return ChapterName; }
+	int32 GetRowDialog() const {return RowDialog; }
 
 private:
 	
@@ -49,5 +51,7 @@ private:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,FieldNotify,Setter,Getter,meta=(AllowPrivateAccess="true"))
 	FString ChapterName;
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,FieldNotify,Setter,Getter,meta=(AllowPrivateAccess="true"))
+	int32 RowDialog;
 	
 };

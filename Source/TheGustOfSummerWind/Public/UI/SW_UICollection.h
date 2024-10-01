@@ -42,14 +42,11 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<USW_UIBase>BP_ContinueUI;
 	
-
+	
 	virtual void NativeConstruct() override;
 	
 	UFUNCTION(BlueprintCallable)
 	void SetupWidgets();
-
-	void CancelMenu();
-	
 	
 	FTimerHandle TimerHandle;
 };

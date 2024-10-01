@@ -42,6 +42,16 @@ void ASW_ScriptManager::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+void ASW_ScriptManager::SetDataTable(UDataTable* EnterDataTable)
+{
+	DataTable = EnterDataTable;
+}
+
+void ASW_ScriptManager::SetRowDialog(int EnterRowDialog)
+{
+	rowDialog = EnterRowDialog;
+}
+
 int ASW_ScriptManager::GetMaxDialogIndex()
 {
 	if (DataTable)
@@ -61,11 +71,6 @@ void ASW_ScriptManager::MenuMusicPlay()
 void ASW_ScriptManager::OnUICollectionInitialized()
 {
 	ASW_HUD* MyHUD = Cast<ASW_HUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
-	if (MyHUD)
-	{
-		BTN_NextDialog= MyHUD->UICollection->BP_InGameUI->BP_NextDialog;
-		BTN_NextDialog->EntrustDelegated.AddDynamic(this,&ASW_ScriptManager::ChapterSwitch);
-	}
 }
 
 FDialogStruct* ASW_ScriptManager::SetDialogStruct()
@@ -78,12 +83,6 @@ FDialogStruct* ASW_ScriptManager::SetDialogStruct()
 	return DialogStruct;
 }
 
-void ASW_ScriptManager::ChapterSwitch(int32 InRow)
-{
-	if (rowDialog==MaxDialogIndex)
-	{
-	}
-}
 
 
 

@@ -23,3 +23,8 @@ void UMVVM_LoadSlot::SetChapterName(FString InChapterName)
 {
 	UE_MVVM_SET_PROPERTY_VALUE(ChapterName,InChapterName);
 }
+
+void UMVVM_LoadSlot::SetRowDialog(int32 InRowDialog)
+{
+	UE_MVVM_SET_PROPERTY_VALUE(RowDialog,InRowDialog);
+}

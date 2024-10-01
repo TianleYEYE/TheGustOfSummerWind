@@ -13,7 +13,7 @@ void USW_InMenuUI::NativeConstruct()
 	BindToAnimationFinished(FullScreenBlack,TurnBlack);
 	BP_ButtonOfInMenu->BP_NewGame->NewGame.AddUObject(this,&USW_InMenuUI::PressBTN_NewGame);
 	BP_ButtonOfInMenu->BP_Album->Album.AddUObject(this,&USW_InMenuUI::PressBTN_Album);
-	BP_ButtonOfInMenu->BP_Continue->Continue.AddUObject(this,&USW_InMenuUI::PressBTN_Continue);
+	BP_ButtonOfInMenu->BP_Continue->Continue.AddDynamic(this,&USW_InMenuUI::PressBTN_Continue);
 	BP_ButtonOfInMenu->BP_Setting->Setting.AddUObject(this,&USW_InMenuUI::PressBTN_Setting);
 }
 

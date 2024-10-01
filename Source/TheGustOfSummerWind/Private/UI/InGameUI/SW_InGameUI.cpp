@@ -7,7 +7,7 @@
 #include "Components/AudioComponent.h"
 #include "Components/CanvasPanelSlot.h"
 #include "Game/SW_HUD.h"
-#include "Kismet/GameplayStatics.h"
+
 
 
 void USW_InGameUI::NativeConstruct()
@@ -21,11 +21,7 @@ void USW_InGameUI::NativeConstruct()
 void USW_InGameUI::InitializeGame()
 {
 	//获取场景中的ScriptManager
-	auto TempActor = UGameplayStatics::GetActorOfClass(GetWorld(),ScriptManager->StaticClass());
-	if (TempActor)
-	{
-		ScriptManager= Cast<ASW_ScriptManager>(TempActor);
-	}
+	ScriptManager = GetScriptManager();
 	
 	//下一段对话按钮绑定函数
 	BP_NextDialog->EntrustDelegated.AddDynamic(this,&USW_InGameUI::PressBTN_NEXT);
@@ -35,12 +31,6 @@ void USW_InGameUI::InitializeGame()
 	//绑定菜单开始动画时间，动画结束后，执行
 	CancelInGameMenuUIEvent.BindDynamic(this,&USW_InGameUI::CancelInGameMenuUIImplement);
 	BindToAnimationFinished(CancelDisplaysInGameMenu,CancelInGameMenuUIEvent);
-
-	if (ScriptManager)
-	{
-		ReadDialog();
-	}
-	
 }
 
 void USW_InGameUI::PressBTN_NEXT(int32 InRow)

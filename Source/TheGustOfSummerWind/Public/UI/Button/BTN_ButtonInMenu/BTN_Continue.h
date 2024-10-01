@@ -29,7 +29,6 @@ public:
 
 	UPROPERTY()
 	TObjectPtr<UWidgetSwitcher> ParentSwitcher;
-
 	
 	// Function to set the reference to the parent widget
 	void SetParentSwitcher(UWidgetSwitcher* InSwitcher);

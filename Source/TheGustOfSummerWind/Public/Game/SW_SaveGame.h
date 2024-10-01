@@ -32,6 +32,9 @@ public:
 	int32 SlotIndex=0;
 
 	UPROPERTY()
+	int32 RowDialog =0;
+
+	UPROPERTY()
 	FString ChapterName=FString("Default Chapter");
 	
 	UPROPERTY()

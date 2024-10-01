@@ -28,4 +28,6 @@ void UBTN_Album::FlashingOver()
 	{
 		ParentSwitcher->SetActiveWidgetIndex(3); // Set the index to the desired widget
 	}
+	ScriptManager = GetScriptManager();
+	ScriptManager ->WidgetState = AlbumUI;
 }

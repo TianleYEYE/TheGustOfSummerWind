@@ -55,8 +55,6 @@ public:
 	TObjectPtr<UWidgetAnimation>Two;
 	UPROPERTY(Transient,EditAnywhere,BlueprintReadWrite,meta=(BindWidgetAnim))
 	TObjectPtr<UWidgetAnimation>Three;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="AudioPlayer")
-	TObjectPtr<ASW_ScriptManager>ScriptManager;
 
 	UPROPERTY()
 	TObjectPtr<UCanvasPanelSlot>ScreenWhiteSlot;

@@ -18,5 +18,8 @@ public:
 	TObjectPtr<USW_UIBase>BP_SaveGame;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
-	TObjectPtr<USW_UIBase>BP_ReadGame;
+	TObjectPtr<USW_UIBase>BP_LoadGame;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
+	TObjectPtr<USW_UIBase>BP_InGameSetting;
 };

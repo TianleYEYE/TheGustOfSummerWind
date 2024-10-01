@@ -27,6 +27,8 @@ void UBTN_Continue::DelegatedAgentAndPlayAnimation()
 void UBTN_Continue::FlashingOver()
 {
 	ParentSwitcher->SetActiveWidgetIndex(2);
+	ScriptManager =GetScriptManager();
+	ScriptManager->WidgetState = SaveOrLoad;
 }
 
 

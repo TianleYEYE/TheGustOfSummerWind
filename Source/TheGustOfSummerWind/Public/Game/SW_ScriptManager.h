@@ -5,9 +5,18 @@
 #include "CoreMinimal.h"
 #include "Components/AudioComponent.h"
 #include "DataStruct\DialogStruct.h"
-#include "UI/Button/BTN_ButtonInGame/BTN_NextDialog.h"
 #include "SW_ScriptManager.generated.h"
 
+UENUM(BlueprintType)
+enum EWidgetStatus
+{
+	Menu,
+	InGame,
+	InGameSaveOrLoad,
+	SaveOrLoad,
+	AlbumUI,
+	SettingUI,
+};
 
 UCLASS()
 class THEGUSTOFSUMMERWIND_API ASW_ScriptManager : public AActor
@@ -38,20 +47,23 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "Chapter DataTable")
 	TObjectPtr<UDataTable>DataTable;
-
-	UPROPERTY()
-	TObjectPtr<UBTN_NextDialog> BTN_NextDialog;
+	
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="properties")
 	int rowDialog=0;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="properties")
 	int MaxDialogIndex;
+
+	void SetDataTable(UDataTable* EnterDataTable);
+	UDataTable* GetDataTable() const {return DataTable;}
+
+	void SetRowDialog(int EnterRowDialog);
+	
+	int GetRowDialog() const {return rowDialog ;}
 	
 	int GetMaxDialogIndex();
 	
 	void MenuMusicPlay();
-	UFUNCTION()
-	void ChapterSwitch(int32 InRow);
 
 	UFUNCTION()
 	void OnUICollectionInitialized();
@@ -59,4 +71,7 @@ public:
 	FDialogStruct *SetDialogStruct();
 	
 	FDialogStruct *DialogStruct;
+
+	UPROPERTY(BlueprintReadWrite)
+	TEnumAsByte<EWidgetStatus> WidgetState = Menu;
 };

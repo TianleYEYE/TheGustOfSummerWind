@@ -3,6 +3,8 @@
 
 #include "UI/Button/BTN_ButtonInMenu/BTN_NewGame.h"
 
+#include "Game/SW_HUD.h"
+
 
 void UBTN_NewGame::NativeConstruct()
 {
@@ -31,4 +33,8 @@ void UBTN_NewGame::FlashingOver()
 	{
 		ParentSwitcher->SetActiveWidgetIndex(1); // Set the index to the desired widget
 	}
+	ASW_HUD *HUD =Cast<ASW_HUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
+	ScriptManager = GetScriptManager();
+	ScriptManager->WidgetState = InGame;
+	HUD->UICollection->BP_InGameUI->ReadDialog();
 }

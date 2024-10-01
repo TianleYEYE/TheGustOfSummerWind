@@ -28,20 +28,3 @@ void USW_UICollection::SetupWidgets()
 	}
 }
 
-void USW_UICollection::CancelMenu()
-{
-	if (GetWorld()->GetFName()==FName(*FString(TEXT("MasterMenu"))))
-	{
-		UISwitcher->SetActiveWidgetIndex(0);
-	}
-	else if (GetWorld()->GetFName()==FName(*FString(TEXT("Chapter_1"))))
-	{
-		UISwitcher->SetActiveWidgetIndex(1);
-	}
-	else if (GetWorld()->GetFName()==FName(*FString(TEXT("Chapter_2"))))
-	{
-		GEngine->AddOnScreenDebugMessage(-1,5.0f,FColor::Cyan,FString::Printf(TEXT("Set GameUI")));
-		UISwitcher->SetActiveWidgetIndex(1);
-	}
-}
-

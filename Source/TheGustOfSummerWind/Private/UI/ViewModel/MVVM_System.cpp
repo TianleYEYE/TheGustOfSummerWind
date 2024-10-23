@@ -58,7 +58,6 @@ void UMVVM_System::LoadData()
 
 	for (const TPair<int32, UMVVM_CGSlot*>& CGSlotPair : CGSlots)
 	{
-		
 		UMVVM_CGSlot* CGSlot = CGSlotPair.Value;
 		if (CGSlot)
 		{

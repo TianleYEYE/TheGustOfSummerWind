@@ -71,7 +71,6 @@ void UMVVM_System::LoadData()
 	}
 }
 
-
 void UMVVM_System::SetNumLoadSlots(int32 InNumLoadSlots)
 {
 	UE_MVVM_SET_PROPERTY_VALUE(NumLoadSlots,InNumLoadSlots);

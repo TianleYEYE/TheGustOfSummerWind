@@ -39,6 +39,5 @@ public:
 private:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,FieldNotify,Setter,Getter,meta=(AllowPrivateAccess="true"))
 	FString CGSlotName;
-
 	
 };

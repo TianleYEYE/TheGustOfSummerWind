@@ -30,6 +30,7 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	TObjectPtr<USW_QuitGameUI>QuitGameUI;
 
+	
 	void BeginPlay() override;
 
 	// 冷却时间（秒）

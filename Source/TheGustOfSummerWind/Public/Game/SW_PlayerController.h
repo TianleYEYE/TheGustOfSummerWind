@@ -33,7 +33,7 @@ public:
 	void BeginPlay() override;
 
 	// 冷却时间（秒）
-	float CooldownTime=1.2f;
+	float CooldownTime=1.f;
 	// 上次按键时间
 	float LastKeyPressTime;
 	// 是否在冷却中

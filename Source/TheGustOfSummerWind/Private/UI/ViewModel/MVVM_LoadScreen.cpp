@@ -36,7 +36,7 @@ UMVVM_LoadSlot* UMVVM_LoadScreen::GetLoadSlotViewModelByIndex(int32 Index)
 	return LoadSlots.FindChecked(Index);
 }
 
-void UMVVM_LoadScreen::SaveSlotButtonPressed(int32 Slot,UDataTable *EnterDataTable,int32 EnterRowDialog)
+void UMVVM_LoadScreen::SaveSlotButtonPressed(int32 Slot,UDataTable *EnterDataTable,int32 EnterRowDialog,USoundBase *EnterBackgroundMusic)
 {
 	//LoadSlots[Slot]->SetWidgetSwitcherIndex.Broadcast(1);
 	ASW_GameMode *SW_GameMode = Cast<ASW_GameMode>(UGameplayStatics::GetGameMode(this));
@@ -44,6 +44,7 @@ void UMVVM_LoadScreen::SaveSlotButtonPressed(int32 Slot,UDataTable *EnterDataTab
 	LoadSlots[Slot]->SetDataTable(EnterDataTable);
 	LoadSlots[Slot]->SetChapterName(EnterDataTable->GetName());
 	LoadSlots[Slot]->SlotStatus = Load;
+	LoadSlots[Slot]->SetBackgroundMusic(EnterBackgroundMusic);
 	LoadSlots[Slot]->SetRowDialog(EnterRowDialog);
 	
 	SW_GameMode->SaveSlotData(LoadSlots[Slot],Slot);
@@ -63,6 +64,7 @@ void UMVVM_LoadScreen::LoadData()
 	 	USW_SaveGame* SaveObject=GameMode->GetSaveSlotData(LoadSlot.Value->GetLoadSlotName(),LoadSlot.Key);
 
 	 	UDataTable *DataTable = SaveObject->DataTable;
+	 	USoundBase *BackgroundMusic =SaveObject->BackgroundMusic;
 	 	TEnumAsByte<ESaveSlotStatus> SaveSlotStatus =SaveObject ->SaveSlotStatus;
 	 	int32 RowDialog =SaveObject ->RowDialog;
 	 	FString ChapterName = SaveObject->ChapterName;
@@ -71,6 +73,7 @@ void UMVVM_LoadScreen::LoadData()
 	 	LoadSlot.Value->SetChapterName(ChapterName);
 	 	LoadSlot.Value->SetDataTable(DataTable);
 	 	LoadSlot.Value->SetRowDialog(RowDialog);
+	 	LoadSlot.Value->SetBackgroundMusic(BackgroundMusic);
  	 	LoadSlot.Value->InitializeSlot();
 
 	 	//GEngine->AddOnScreenDebugMessage(-1,5.0f,FColor::Cyan,FString::Printf(TEXT("RowDialog : %d"),LoadSlot.Value->SlotStatus.GetValue()));
@@ -79,7 +82,7 @@ void UMVVM_LoadScreen::LoadData()
 
 void UMVVM_LoadScreen::PlayButtonPressed(int32 Slot)
 {
-	PlayButton.Broadcast(LoadSlots[Slot]->GetRowDialog(),LoadSlots[Slot]->GetDataTable());
+	PlayButton.Broadcast(LoadSlots[Slot]->GetRowDialog(),LoadSlots[Slot]->GetDataTable(),LoadSlots[Slot]->GetBackgroundMusic());
 }
 
 void UMVVM_LoadScreen::SetNumLoadSlots(int32 InNumLoadSlots)

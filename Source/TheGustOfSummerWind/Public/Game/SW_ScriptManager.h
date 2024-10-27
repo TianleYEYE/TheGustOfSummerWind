@@ -50,11 +50,15 @@ public:
 	TObjectPtr<UDataTable>DataTable;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "Chapter DataTable")
 	TObjectPtr<UDataTable>PreviousDataTable;
+
+	
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="properties")
 	int rowDialog=0;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="properties")
 	int MaxDialogIndex;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="properties")
+	TObjectPtr<USoundBase> BackgroundMusic;
 
 	void SetDataTable(UDataTable* EnterDataTable);
 	UDataTable* GetDataTable() const {return DataTable;}

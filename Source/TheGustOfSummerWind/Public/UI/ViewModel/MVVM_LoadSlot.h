@@ -31,11 +31,13 @@ public:
 	TEnumAsByte<ESaveSlotStatus> SlotStatus;
 
 	void SetLoadSlotName(FString InLoadSlotName);
+	void SetBackgroundMusic(USoundBase *InBackgroundMusic);
 	void SetDataTable(UDataTable *InDataTable);
 	void SetChapterName(FString InChapterName);
 	void SetRowDialog(int32 InRowDialog);
 	
 	FString GetLoadSlotName() const {return LoadSlotName; }
+	USoundBase *GetBackgroundMusic() const {return  BackgroundMusic;}
 	UDataTable *GetDataTable() const {return DataTable; }
 	FString GetChapterName() const {return ChapterName; }
 	int32 GetRowDialog() const {return RowDialog; }
@@ -44,6 +46,9 @@ private:
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,FieldNotify,Setter,Getter,meta=(AllowPrivateAccess="true"))
 	FString LoadSlotName;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,FieldNotify,Setter,Getter,meta=(AllowPrivateAccess="true"))
+	TObjectPtr<USoundBase> BackgroundMusic;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,FieldNotify,Setter,Getter,meta=(AllowPrivateAccess="true"))
 	TObjectPtr<UDataTable>DataTable;

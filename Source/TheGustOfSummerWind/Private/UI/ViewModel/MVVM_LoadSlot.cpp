@@ -14,6 +14,11 @@ void UMVVM_LoadSlot::SetLoadSlotName(FString InLoadSlotName)
 	UE_MVVM_SET_PROPERTY_VALUE(LoadSlotName,InLoadSlotName);
 }
 
+void UMVVM_LoadSlot::SetBackgroundMusic(USoundBase* InBackgroundMusic)
+{
+	UE_MVVM_SET_PROPERTY_VALUE(BackgroundMusic,InBackgroundMusic);
+}
+
 void UMVVM_LoadSlot::SetDataTable(UDataTable* InDataTable)
 {
 	UE_MVVM_SET_PROPERTY_VALUE(DataTable,InDataTable);

@@ -50,14 +50,12 @@ void ASW_PlayerController::ReturnOrOpenInGameMenuUI()
 		{
 			HUD->ContinueUI->PlayAnimation(HUD->ContinueUI->ContinueUIFade);
 		}
-		else if (ScriptManager->WidgetState == InGame && !HUD->InGameUI->bIsInGameMenuUIExist && !HUD->InGameUI->bIsPlayAnimation)
+		else if (ScriptManager->WidgetState == InGame && !HUD->InGameUI->bIsInGameMenuUIExist )
 		{
-			HUD->InGameUI->bIsPlayAnimation = true;
 			HUD->InGameUI->PlayAnimation(HUD->InGameUI->DisplaysInGameMenu);
 		}
-		else if (ScriptManager->WidgetState == InGame && HUD->InGameUI->bIsInGameMenuUIExist && !HUD->InGameUI->bIsPlayAnimation)
+		else if (ScriptManager->WidgetState == InGame && HUD->InGameUI->bIsInGameMenuUIExist )
 		{
-			HUD->InGameUI->bIsPlayAnimation = true;
 			HUD->InGameUI->PlayAnimation(HUD->InGameUI->CancelDisplaysInGameMenu);
 		}
 	}

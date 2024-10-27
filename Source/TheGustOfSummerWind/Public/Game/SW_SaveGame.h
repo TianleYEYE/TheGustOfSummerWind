@@ -26,6 +26,9 @@ public:
 	FString SlotName=FString();
 
 	UPROPERTY()
+	TObjectPtr<USoundBase> BackgroundMusic;
+	
+	UPROPERTY()
 	TObjectPtr<UDataTable>DataTable;
 
 	UPROPERTY()

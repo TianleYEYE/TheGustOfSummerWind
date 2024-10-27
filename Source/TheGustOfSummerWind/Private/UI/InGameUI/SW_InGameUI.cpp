@@ -87,10 +87,15 @@ void USW_InGameUI::SetMusic(FDialogStruct *dialogRow)
 {
 	if (dialogRow->BackgroundSound!=nullptr)
 	{
+		ScriptManager->BackgroundMusic = dialogRow->BackgroundSound;
+
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString(ScriptManager->BackgroundMusic->GetName()));
+		
 		ScriptManager->AudioPlayer->Stop();
 		ScriptManager->AudioPlayer->SetSound(dialogRow->BackgroundSound);
 		ScriptManager->AudioPlayer->Play();
 	}
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString(ScriptManager->BackgroundMusic->GetName()));
 }
 
 void USW_InGameUI::SetConversationalVoice(FDialogStruct *dialogRow)
@@ -111,13 +116,13 @@ void USW_InGameUI::GetInGameMenuUI()
 	inGameMenuUISlot=Cast<UCanvasPanelSlot>(InGameMenuUI->Slot);
 	inGameMenuUISlot->SetZOrder(9);
 	bIsInGameMenuUIExist=true;
-	bIsPlayAnimation = false;
 }
 
 void USW_InGameUI::CancelInGameMenuUIImplement()
 {
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("CancelInGameMenuUIImplement"));
+	GetScriptManager()->WidgetState = InGame;
 	inGameMenuUISlot=Cast<UCanvasPanelSlot>(InGameMenuUI->Slot);
 	inGameMenuUISlot->SetZOrder(0);
 	bIsInGameMenuUIExist=false;
-	bIsPlayAnimation = false;
 }

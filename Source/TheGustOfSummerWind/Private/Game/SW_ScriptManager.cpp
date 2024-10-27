@@ -55,7 +55,7 @@ int ASW_ScriptManager::GetMaxDialogIndex()
 
 void ASW_ScriptManager::MenuMusicPlay()
 {
-	 USoundBase *menuSound=LoadObject<USoundBase>(this,TEXT("/Game/Assets/Audio/01_Irreplaceable_memories_-Main_theme-_Cue.01_Irreplaceable_memories_-Main_theme-_Cue"));
+	 USoundBase *menuSound=LoadObject<USoundBase>(this,TEXT("/Game/Assets/Audio/TheCherryBlossoms.TheCherryBlossoms"));
 	 AudioPlayer->SetSound(menuSound);
 	 AudioPlayer->Play();
 }

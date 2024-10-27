@@ -4,9 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/SaveGame.h"
+#include "UI/ViewModel/MVVM_System.h"
 #include "SW_SystemData.generated.h"
 
-struct FCGSlotData;
+
 
 
 /**

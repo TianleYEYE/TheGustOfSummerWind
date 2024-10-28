@@ -95,7 +95,7 @@ void USW_InGameUI::SetMusic(FDialogStruct *dialogRow)
 		ScriptManager->AudioPlayer->SetSound(dialogRow->BackgroundSound);
 		ScriptManager->AudioPlayer->Play();
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString(ScriptManager->BackgroundMusic->GetName()));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString(ScriptManager->BackgroundMusic->GetName()));
 }
 
 void USW_InGameUI::SetConversationalVoice(FDialogStruct *dialogRow)

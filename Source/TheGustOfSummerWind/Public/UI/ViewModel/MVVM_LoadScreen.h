@@ -39,7 +39,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SaveSlotButtonPressed(int32 Slot,UDataTable *EnterDataTable,int32 EnterRowDialog,USoundBase *EnterBackgroundMusic);
 	
-
 	UFUNCTION(BlueprintCallable)
 	void ReadSlotButtonPressed(int32 Slot);
 

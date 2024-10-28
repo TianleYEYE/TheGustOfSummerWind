@@ -38,7 +38,7 @@ public:
 	int32 RowDialog =0;
 
 	UPROPERTY()
-	FString ChapterName=FString("Default Chapter");
+	FString ChapterName=FString(" ");
 	
 	UPROPERTY()
 	TEnumAsByte<ESaveSlotStatus> SaveSlotStatus =Save;

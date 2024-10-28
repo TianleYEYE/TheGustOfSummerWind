@@ -38,7 +38,7 @@ UMVVM_LoadSlot* UMVVM_LoadScreen::GetLoadSlotViewModelByIndex(int32 Index)
 
 void UMVVM_LoadScreen::SaveSlotButtonPressed(int32 Slot,UDataTable *EnterDataTable,int32 EnterRowDialog,USoundBase *EnterBackgroundMusic)
 {
-	//LoadSlots[Slot]->SetWidgetSwitcherIndex.Broadcast(1);
+	
 	ASW_GameMode *SW_GameMode = Cast<ASW_GameMode>(UGameplayStatics::GetGameMode(this));
 
 	LoadSlots[Slot]->SetDataTable(EnterDataTable);
@@ -50,6 +50,7 @@ void UMVVM_LoadScreen::SaveSlotButtonPressed(int32 Slot,UDataTable *EnterDataTab
 	SW_GameMode->SaveSlotData(LoadSlots[Slot],Slot);
 	LoadSlots[Slot]->InitializeSlot();
 }
+
 
 void UMVVM_LoadScreen::ReadSlotButtonPressed(int32 Slot)
 {
@@ -76,7 +77,7 @@ void UMVVM_LoadScreen::LoadData()
 	 	LoadSlot.Value->SetBackgroundMusic(BackgroundMusic);
  	 	LoadSlot.Value->InitializeSlot();
 
-	 	//GEngine->AddOnScreenDebugMessage(-1,5.0f,FColor::Cyan,FString::Printf(TEXT("RowDialog : %d"),LoadSlot.Value->SlotStatus.GetValue()));
+	 	GEngine->AddOnScreenDebugMessage(-1,5.0f,FColor::Cyan,FString::Printf(TEXT("ChapterName : %s"),*LoadSlot.Value->GetChapterName()));
 	 }
 }
 

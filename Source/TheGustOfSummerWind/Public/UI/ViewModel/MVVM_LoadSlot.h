@@ -35,12 +35,14 @@ public:
 	void SetDataTable(UDataTable *InDataTable);
 	void SetChapterName(FString InChapterName);
 	void SetRowDialog(int32 InRowDialog);
+	void SetDateTime(FDateTime InDateTime);
 	
 	FString GetLoadSlotName() const {return LoadSlotName; }
 	USoundBase *GetBackgroundMusic() const {return  BackgroundMusic;}
 	UDataTable *GetDataTable() const {return DataTable; }
 	FString GetChapterName() const {return ChapterName; }
 	int32 GetRowDialog() const {return RowDialog; }
+	FDateTime GetDateTime() const { return DateTime;}
 
 private:
 	
@@ -58,5 +60,8 @@ private:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,FieldNotify,Setter,Getter,meta=(AllowPrivateAccess="true"))
 	int32 RowDialog;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,FieldNotify,Setter,Getter,meta=(AllowPrivateAccess="true"))
+	FDateTime DateTime;
 	
 };

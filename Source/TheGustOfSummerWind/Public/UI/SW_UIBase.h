@@ -20,11 +20,12 @@ public:
 	UFUNCTION(BlueprintImplementableEvent,BlueprintCallable)
 	void BlueprintInializeWidget();
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="AudioPlayer")
+	UPROPERTY(EditAnywhere,Category="AudioPlayer")
 	TObjectPtr<ASW_ScriptManager>ScriptManager;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	TObjectPtr<UWidgetAnimation>ContinueUIFade;
-	
+
+
 	ASW_ScriptManager* GetScriptManager();
 };

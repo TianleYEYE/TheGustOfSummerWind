@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "MVVMViewModelBase.h"
 #include "MVVM_CGSlot.h"
+#include "MVVM_SettingSlot.h"
 #include "MVVM_System.generated.h"
 
 USTRUCT(BlueprintType)
@@ -33,7 +34,9 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UMVVM_CGSlot>CGSlotViewModelClass;
-
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UMVVM_SettingSlot>SettingSlotViewModelClass;
+	
 	UFUNCTION(BlueprintPure)
 	UMVVM_CGSlot* GetCGSlotViewModelByIndex(int32 index);
 
@@ -41,14 +44,24 @@ public:
 	void CGSlotUnlock(int32 Slot);
 
 	UFUNCTION(BlueprintCallable)
+	void TextDisplaySpeedData(float InTextDisplaySpeed);
+
+	UFUNCTION(BlueprintCallable)
+	void MasterVolumeData(float InMasterVolume);
+
+	UFUNCTION(BlueprintCallable)
+	void SoundEffectVolumeData(float InSoundEffectVolume);
+	
+	UFUNCTION(BlueprintCallable)
 	void LoadData();
-
-
+	
 	void SetNumLoadSlots(int32 InNumLoadSlots);
 
 	int GetNumLoadSlots() const {return NumLoadSlots;}
 	
 	TMap<int32,UMVVM_CGSlot*>GetCGSlots() { return CGSlots; }
+
+	UMVVM_SettingSlot *GetSettingSlot () const {return SettingSlot;}
 private:
 	UPROPERTY()
 	TMap<int32,UMVVM_CGSlot*>CGSlots;
@@ -68,6 +81,9 @@ private:
 	UPROPERTY()
 	TObjectPtr<UMVVM_CGSlot>CGSlot_6;
 
+	UPROPERTY()
+	TObjectPtr<UMVVM_SettingSlot>SettingSlot;
+	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,FieldNotify,Setter,Getter,meta=(AllowPrivateAccess="true"))
 	int32 NumLoadSlots;
 };

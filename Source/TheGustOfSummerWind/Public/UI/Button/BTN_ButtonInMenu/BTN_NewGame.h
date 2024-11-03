@@ -39,7 +39,4 @@ public:
 	UFUNCTION()
 	virtual void DelegatedAgentAndPlayAnimation()override;
 	
-	UFUNCTION()
-	void FlashingOver();
-	
 };

@@ -32,13 +32,16 @@ public:
 	TObjectPtr<UDataTable>DataTable;
 
 	UPROPERTY()
+	FDateTime DateTime;
+
+	UPROPERTY()
 	int32 SlotIndex=0;
 
 	UPROPERTY()
 	int32 RowDialog =0;
 
 	UPROPERTY()
-	FString ChapterName=FString(" ");
+	FString ChapterName=TEXT("没有数据");
 	
 	UPROPERTY()
 	TEnumAsByte<ESaveSlotStatus> SaveSlotStatus =Save;

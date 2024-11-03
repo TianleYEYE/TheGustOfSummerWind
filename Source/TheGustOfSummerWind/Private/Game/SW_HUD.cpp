@@ -10,7 +10,6 @@ void ASW_HUD::BeginPlay()
 {
 	Super::BeginPlay();
 
-
 	LoadScreenViewModel = NewObject<UMVVM_LoadScreen>(this,LoadScreenViewModelClass);
 	LoadScreenViewModel->InitializeLoadSlots();
 
@@ -21,6 +20,8 @@ void ASW_HUD::BeginPlay()
 	Menu->AddToViewport();
 
 	SystemViewModel -> LoadData();
+
+	
 }
 
 

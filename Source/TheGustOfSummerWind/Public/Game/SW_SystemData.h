@@ -22,5 +22,15 @@ public:
 
 	UPROPERTY()
 	TMap<int32,FCGSlotData>CGSlotData;
+
+	UPROPERTY()
+	float TextDisplaySpeed = 0.1f;
+
+	UPROPERTY()
+	float MasterVolume = 0.5f;
+
+	UPROPERTY()
+	float SoundEffectVolume = 0.5f;
+	
 	
 };

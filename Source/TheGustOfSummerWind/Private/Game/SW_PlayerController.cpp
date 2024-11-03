@@ -34,7 +34,7 @@ void ASW_PlayerController::ReturnOrOpenInGameMenuUI()
 
 		HUD = Cast<ASW_HUD>(GetHUD());
 
-		if (ScriptManager->WidgetState == SettingUI)
+		if (ScriptManager->WidgetState == SettingUI || ScriptManager->WidgetState == InGameSetting)
 		{
 			HUD->SettingUI->PlayAnimation(HUD->SettingUI->Fade);
 		}

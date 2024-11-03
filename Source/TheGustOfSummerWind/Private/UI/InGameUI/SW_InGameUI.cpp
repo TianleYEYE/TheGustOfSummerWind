@@ -88,9 +88,7 @@ void USW_InGameUI::SetMusic(FDialogStruct *dialogRow)
 	if (dialogRow->BackgroundSound!=nullptr)
 	{
 		ScriptManager->BackgroundMusic = dialogRow->BackgroundSound;
-
-		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString(ScriptManager->BackgroundMusic->GetName()));
-		
+		//SetSoundMixClassOver
 		ScriptManager->AudioPlayer->Stop();
 		ScriptManager->AudioPlayer->SetSound(dialogRow->BackgroundSound);
 		ScriptManager->AudioPlayer->Play();

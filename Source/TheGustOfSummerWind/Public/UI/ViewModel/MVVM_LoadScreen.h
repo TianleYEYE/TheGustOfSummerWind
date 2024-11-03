@@ -37,7 +37,7 @@ public:
 	UMVVM_LoadSlot* GetLoadSlotViewModelByIndex(int32 index);
 
 	UFUNCTION(BlueprintCallable)
-	void SaveSlotButtonPressed(int32 Slot,UDataTable *EnterDataTable,int32 EnterRowDialog,USoundBase *EnterBackgroundMusic);
+	void SaveSlotButtonPressed(int32 Slot,UDataTable *EnterDataTable,int32 EnterRowDialog,USoundBase *EnterBackgroundMusic,FDateTime EnterDataTime);
 	
 	UFUNCTION(BlueprintCallable)
 	void ReadSlotButtonPressed(int32 Slot);

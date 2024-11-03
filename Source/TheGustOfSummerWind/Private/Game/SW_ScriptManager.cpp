@@ -2,7 +2,10 @@
 
 
 #include "Game/SW_ScriptManager.h"
+
+#include "Game/SW_GameMode.h"
 #include "Game/SW_HUD.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values
@@ -24,8 +27,9 @@ ASW_ScriptManager::ASW_ScriptManager()
 void ASW_ScriptManager::BeginPlay()
 {
 	Super::BeginPlay();
+
+	LoadData();
 	
-	MenuMusicPlay();
 }
 
 // Called every frame
@@ -37,6 +41,19 @@ void ASW_ScriptManager::Tick(float DeltaTime)
 void ASW_ScriptManager::SetDataTable(UDataTable* EnterDataTable)
 {
 	DataTable = EnterDataTable;
+}
+
+void ASW_ScriptManager::LoadData()
+{
+	
+	ASW_GameMode* GameMode = Cast<ASW_GameMode>(UGameplayStatics::GetGameMode(this));
+	USW_SystemData* SaveObject = GameMode->GetCGSlotData();
+
+	TextDisplaySpeed = SaveObject -> TextDisplaySpeed;
+	MasterVolume = SaveObject ->MasterVolume;
+	SoundEffectVolume = SaveObject ->SoundEffectVolume;
+
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green,FString::Printf(TEXT("TextDisplaySpeed : %f"),MasterVolume));
 }
 
 void ASW_ScriptManager::SetRowDialog(int EnterRowDialog)
@@ -55,14 +72,11 @@ int ASW_ScriptManager::GetMaxDialogIndex()
 
 void ASW_ScriptManager::MenuMusicPlay()
 {
-	 USoundBase *menuSound=LoadObject<USoundBase>(this,TEXT("/Game/Assets/Audio/TheCherryBlossoms.TheCherryBlossoms"));
-	 AudioPlayer->SetSound(menuSound);
-	 AudioPlayer->Play();
+	USoundBase *menuSound=LoadObject<USoundBase>(this,TEXT("/Game/Assets/Audio/Music/TheCherryBlossoms.TheCherryBlossoms"));
+	AudioPlayer->SetSound(menuSound);
+	AudioPlayer->Play();
 }
 
-void ASW_ScriptManager::OnUICollectionInitialized()
-{
-}
 
 FDialogStruct* ASW_ScriptManager::SetDialogStruct()
 {

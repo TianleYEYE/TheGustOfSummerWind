@@ -36,7 +36,7 @@ UMVVM_LoadSlot* UMVVM_LoadScreen::GetLoadSlotViewModelByIndex(int32 Index)
 	return LoadSlots.FindChecked(Index);
 }
 
-void UMVVM_LoadScreen::SaveSlotButtonPressed(int32 Slot,UDataTable *EnterDataTable,int32 EnterRowDialog,USoundBase *EnterBackgroundMusic)
+void UMVVM_LoadScreen::SaveSlotButtonPressed(int32 Slot,UDataTable *EnterDataTable,int32 EnterRowDialog,USoundBase *EnterBackgroundMusic,FDateTime EnterDataTime)
 {
 	
 	ASW_GameMode *SW_GameMode = Cast<ASW_GameMode>(UGameplayStatics::GetGameMode(this));
@@ -46,6 +46,7 @@ void UMVVM_LoadScreen::SaveSlotButtonPressed(int32 Slot,UDataTable *EnterDataTab
 	LoadSlots[Slot]->SlotStatus = Load;
 	LoadSlots[Slot]->SetBackgroundMusic(EnterBackgroundMusic);
 	LoadSlots[Slot]->SetRowDialog(EnterRowDialog);
+	LoadSlots[Slot]->SetDateTime(EnterDataTime);
 	
 	SW_GameMode->SaveSlotData(LoadSlots[Slot],Slot);
 	LoadSlots[Slot]->InitializeSlot();
@@ -69,15 +70,17 @@ void UMVVM_LoadScreen::LoadData()
 	 	TEnumAsByte<ESaveSlotStatus> SaveSlotStatus =SaveObject ->SaveSlotStatus;
 	 	int32 RowDialog =SaveObject ->RowDialog;
 	 	FString ChapterName = SaveObject->ChapterName;
+	 	FDateTime DateTime = SaveObject ->DateTime;
 
 	 	LoadSlot.Value->SlotStatus = SaveSlotStatus;
 	 	LoadSlot.Value->SetChapterName(ChapterName);
 	 	LoadSlot.Value->SetDataTable(DataTable);
 	 	LoadSlot.Value->SetRowDialog(RowDialog);
+	 	LoadSlot.Value->SetDateTime(DateTime);
 	 	LoadSlot.Value->SetBackgroundMusic(BackgroundMusic);
+	 	
  	 	LoadSlot.Value->InitializeSlot();
 
-	 	GEngine->AddOnScreenDebugMessage(-1,5.0f,FColor::Cyan,FString::Printf(TEXT("ChapterName : %s"),*LoadSlot.Value->GetChapterName()));
 	 }
 }
 

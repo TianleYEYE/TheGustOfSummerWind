@@ -11,7 +11,6 @@ void UBTN_NewGame::NativeConstruct()
 	Super::NativeConstruct();
 
 	BTN_NewGame->OnClicked.AddDynamic(this,&UBTN_NewGame::DelegatedAgentAndPlayAnimation);
-	Flashing.BindDynamic(this,&UBTN_NewGame::FlashingOver);
 	BindToAnimationFinished(flashing,Flashing);
 	
 }
@@ -27,16 +26,4 @@ void UBTN_NewGame::DelegatedAgentAndPlayAnimation()
 	PlayAnimation(flashing);
 }
 
-void UBTN_NewGame::FlashingOver()
-{
-	// if (ParentSwitcher)
-	// {
-	// 	ParentSwitcher->SetActiveWidgetIndex(1); // Set the index to the desired widget
-	// }
-	// ASW_HUD *HUD =Cast<ASW_HUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
-	// ScriptManager = GetScriptManager();
-	// ScriptManager->WidgetState = InGame;
-	//
-	//
-	// HUD->Menu->InGameUI->ReadDialog();
-}
+

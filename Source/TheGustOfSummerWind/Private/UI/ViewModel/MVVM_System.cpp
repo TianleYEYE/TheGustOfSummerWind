@@ -27,6 +27,9 @@ void UMVVM_System::InitializeLoadSlots()
 	CGSlot_5->SetCGSlotName(FString("CGSlot_5"));
 	CGSlots.Add(5,CGSlot_5);
 
+	SettingSlot = NewObject<UMVVM_SettingSlot>(this,SettingSlotViewModelClass);
+
+	
 	SetNumLoadSlots(CGSlots.Num());
 }
 
@@ -43,11 +46,41 @@ void UMVVM_System::CGSlotUnlock(int32 Slot)
 	CGSlots[Slot]->SlotStatus = Unlocked;
 
 	// 更新所有 CGSlot 数据
-	SW_GameMode->SaveCGData(this);
+	SW_GameMode->SaveSystemData(this);
 
 	// 初始化 CGSlot
 	CGSlots[Slot]->InitializeSlot();
 }
+
+void UMVVM_System::TextDisplaySpeedData(float InTextDisplaySpeed)
+{
+	ASW_GameMode* SW_GameMode = Cast<ASW_GameMode>(UGameplayStatics::GetGameMode(this));
+
+	SettingSlot->SetTextDisplaySpeed(InTextDisplaySpeed);
+
+	SW_GameMode ->SaveSystemData(this);
+}
+
+void UMVVM_System::MasterVolumeData(float InMasterVolume)
+{
+	ASW_GameMode* SW_GameMode = Cast<ASW_GameMode>(UGameplayStatics::GetGameMode(this));
+
+	SettingSlot ->SetMasterVolume(InMasterVolume);
+
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green,FString::Printf(TEXT("TextDisplaySpeed : %f"),));
+	
+	SW_GameMode ->SaveSystemData(this);
+}
+
+void UMVVM_System::SoundEffectVolumeData(float InSoundEffectVolume)
+{
+	ASW_GameMode* SW_GameMode = Cast<ASW_GameMode>(UGameplayStatics::GetGameMode(this));
+
+	SettingSlot ->SetSoundEffectVolume(InSoundEffectVolume);
+
+	SW_GameMode ->SaveSystemData(this);
+}
+
 
 void UMVVM_System::LoadData()
 {
@@ -69,6 +102,9 @@ void UMVVM_System::LoadData()
 			}
 		}
 	}
+	GetSettingSlot()->SetMasterVolume(SaveObject->MasterVolume);
+	GetSettingSlot()->SetTextDisplaySpeed(SaveObject->TextDisplaySpeed);
+	GetSettingSlot()->SetSoundEffectVolume(SaveObject->SoundEffectVolume);
 }
 
 void UMVVM_System::SetNumLoadSlots(int32 InNumLoadSlots)

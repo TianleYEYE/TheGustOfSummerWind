@@ -25,7 +25,7 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<USaveGame>SystemSaveGameClass;
 
-	void SaveCGData(UMVVM_System* MVVMSystem);
+	void SaveSystemData(UMVVM_System* MVVMSystem);
 	void SaveSlotData(UMVVM_LoadSlot* LoadSlot,int32 SlotIndex);
 	USW_SaveGame* GetSaveSlotData(const FString& SlotName,int32 SlotIndex) const;
 	USW_SystemData* GetCGSlotData() const;

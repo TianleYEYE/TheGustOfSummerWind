@@ -8,12 +8,13 @@
 #include "UI/ViewModel/MVVM_LoadSlot.h"
 #include "UI/ViewModel/MVVM_System.h"
 
-void ASW_GameMode::SaveCGData(UMVVM_System* MVVMSystem)
+void ASW_GameMode::SaveSystemData(UMVVM_System* MVVMSystem)
 {
-	if (UGameplayStatics::DoesSaveGameExist(FString("SystemData"),0))
+	if (UGameplayStatics::DoesSaveGameExist(FString("SystemData"), 0))
 	{
-		UGameplayStatics::DeleteGameInSlot(FString("SystemData"),0);
+		UGameplayStatics::DeleteGameInSlot(FString("SystemData"), 0);
 	}
+
 	USaveGame* SaveGameObject = UGameplayStatics::CreateSaveGameObject(SystemSaveGameClass);
 	USW_SystemData* SystemDataSaveGame = Cast<USW_SystemData>(SaveGameObject);
 
@@ -26,12 +27,19 @@ void ASW_GameMode::SaveCGData(UMVVM_System* MVVMSystem)
 		}
 	}
 
-	// 使用固定的保存名称或添加一个方法获取名称
-	FString SaveSlotName = TEXT("SystemData"); // 替换为你需要的名称
-	UGameplayStatics::SaveGameToSlot(SystemDataSaveGame, SaveSlotName,0);
+	// 确保每次都从 SettingSlot 获取最新的值
+	SystemDataSaveGame->TextDisplaySpeed = MVVMSystem->GetSettingSlot()->GetTextDisplaySpeed();
+	SystemDataSaveGame->MasterVolume = MVVMSystem->GetSettingSlot()->GetMasterVolume();
+	SystemDataSaveGame->SoundEffectVolume = MVVMSystem->GetSettingSlot()->GetSoundEffectVolume();
 
-	// 保存时
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Saving CGSlot Data"));
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("TextDisplaySpeed : %f, MasterVolume: %f"), SystemDataSaveGame->TextDisplaySpeed, SystemDataSaveGame->MasterVolume));
+
+	// 使用固定的保存名称或添加一个方法获取名称
+	FString SaveSlotName = TEXT("SystemData");
+	UGameplayStatics::SaveGameToSlot(SystemDataSaveGame, SaveSlotName, 0);
+
+	// 调试信息
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Saving CGSlot Data with updated TextDisplaySpeed and MasterVolume"));
 }
 
 void ASW_GameMode::SaveSlotData(UMVVM_LoadSlot* LoadSlot, int32 SlotIndex)
@@ -46,6 +54,7 @@ void ASW_GameMode::SaveSlotData(UMVVM_LoadSlot* LoadSlot, int32 SlotIndex)
 	LoadScreenSaveGame -> BackgroundMusic = LoadSlot ->GetBackgroundMusic();
 	LoadScreenSaveGame -> ChapterName = LoadSlot ->GetChapterName();
 	LoadScreenSaveGame -> RowDialog = LoadSlot ->GetRowDialog();
+	LoadScreenSaveGame -> DateTime = LoadSlot ->GetDateTime();
 	LoadScreenSaveGame -> SaveSlotStatus= Load;
 
 	UGameplayStatics::SaveGameToSlot(LoadScreenSaveGame,LoadSlot->GetLoadSlotName(),SlotIndex);

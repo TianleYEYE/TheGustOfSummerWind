@@ -23,8 +23,10 @@ void USW_DialogBox::SetDialogStructAndCurrentIndex(FDialogStruct * ParentsDialog
 
 void USW_DialogBox::SetDialog()
 {
+	float Speed =GetScriptManager()->TextDisplaySpeed;
+	
 	Throbber_1->SetVisibility(ESlateVisibility::Visible);
-	GetWorld()->GetTimerManager().SetTimer(UpdataTextHandle, this, &USW_DialogBox::UpdateText, 0.1f, true);
+	GetWorld()->GetTimerManager().SetTimer(UpdataTextHandle, this, &USW_DialogBox::UpdateText, Speed, true);
 }
 
 void USW_DialogBox::UpdateText()

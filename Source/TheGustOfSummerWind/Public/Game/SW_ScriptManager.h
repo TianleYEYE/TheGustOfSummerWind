@@ -17,6 +17,7 @@ enum EWidgetStatus
 	ContinueUI,
 	AlbumUI,
 	SettingUI,
+	InGameSetting,
 };
 
 UCLASS()
@@ -63,17 +64,18 @@ public:
 	void SetDataTable(UDataTable* EnterDataTable);
 	UDataTable* GetDataTable() const {return DataTable;}
 
+	UFUNCTION(BlueprintCallable)
+	void LoadData();
+
 	void SetRowDialog(int EnterRowDialog);
 	
 	int GetRowDialog() const {return rowDialog ;}
 	
 	int GetMaxDialogIndex();
-	
+
+	UFUNCTION(BlueprintCallable)
 	void MenuMusicPlay();
-
-	UFUNCTION()
-	void OnUICollectionInitialized();
-
+	
 	FDialogStruct *SetDialogStruct();
 	
 	FDialogStruct *DialogStruct;
@@ -82,4 +84,13 @@ public:
 	
 	UPROPERTY(BlueprintReadWrite)
 	TEnumAsByte<EWidgetStatus> WidgetState = Menu;
+
+	UPROPERTY(BlueprintReadWrite)
+	float TextDisplaySpeed = 0.1f;
+
+	UPROPERTY(BlueprintReadWrite)
+	float MasterVolume = 0.5f;
+
+	UPROPERTY(BlueprintReadWrite)
+	float SoundEffectVolume = 0.5f;
 };

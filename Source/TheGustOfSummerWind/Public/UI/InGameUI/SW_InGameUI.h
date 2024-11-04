@@ -7,11 +7,9 @@
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 #include "UI/SW_UIBase.h"
-#include "UI/Button/BTN_ButtonInGame/BTN_Button0fInGameUI.h"
 #include "UI/Button/BTN_ButtonInGame/BTN_NextDialog.h"
 #include "UI/Button/BTN_ButtonInMenu/BTN_SaveOrRead.h"
 #include "DataStruct\DialogStruct.h"
-#include "TimerManager.h"
 #include "Components/CanvasPanelSlot.h"
 #include "SW_InGameUI.generated.h"
 
@@ -22,9 +20,6 @@ class THEGUSTOFSUMMERWIND_API USW_InGameUI : public USW_UIBase
 	GENERATED_BODY()
 public:
 	virtual void NativeConstruct() override;
-	
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
-	TObjectPtr<UBTN_Button0fInGameUI>BP_ButtonOfInGameUI;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<UBTN_SaveOrRead>BP_SaveOrRead;

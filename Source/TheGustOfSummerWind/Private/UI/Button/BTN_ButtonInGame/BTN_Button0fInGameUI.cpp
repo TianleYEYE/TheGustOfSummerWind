@@ -1,4 +1,0 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
-#include "UI/Button/BTN_ButtonInGame/BTN_Button0fInGameUI.h"

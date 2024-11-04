@@ -41,6 +41,7 @@ public:
 	
 	virtual void NativeConstruct() override;
 
+	UPROPERTY(BlueprintReadOnly)
 	FTimerHandle UpdataTextHandle;
 
 	int CurrentIndex = 0;

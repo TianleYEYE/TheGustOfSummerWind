@@ -19,3 +19,8 @@ void UMVVM_SettingSlot::SetSoundEffectVolume(float InSoundEffect)
 	UE_MVVM_SET_PROPERTY_VALUE(SoundEffectVolume,InSoundEffect);
 }
 
+void UMVVM_SettingSlot::SetConversationalVoice(float InConversationalVoice)
+{
+	UE_MVVM_SET_PROPERTY_VALUE(ConversationalVoice,InConversationalVoice);
+}
+

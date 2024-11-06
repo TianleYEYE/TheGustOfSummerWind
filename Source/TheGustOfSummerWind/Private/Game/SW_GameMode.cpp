@@ -31,8 +31,9 @@ void ASW_GameMode::SaveSystemData(UMVVM_System* MVVMSystem)
 	SystemDataSaveGame->TextDisplaySpeed = MVVMSystem->GetSettingSlot()->GetTextDisplaySpeed();
 	SystemDataSaveGame->MasterVolume = MVVMSystem->GetSettingSlot()->GetMasterVolume();
 	SystemDataSaveGame->SoundEffectVolume = MVVMSystem->GetSettingSlot()->GetSoundEffectVolume();
-
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("TextDisplaySpeed : %f, MasterVolume: %f"), SystemDataSaveGame->TextDisplaySpeed, SystemDataSaveGame->MasterVolume));
+	SystemDataSaveGame->ConversationalVoice =MVVMSystem->GetSettingSlot()->GetConversationalVoice();
+	
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("TextDisplaySpeed : %f, MasterVolume: %f"), SystemDataSaveGame->TextDisplaySpeed, SystemDataSaveGame->MasterVolume));
 
 	// 使用固定的保存名称或添加一个方法获取名称
 	FString SaveSlotName = TEXT("SystemData");

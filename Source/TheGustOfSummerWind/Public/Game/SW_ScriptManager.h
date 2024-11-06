@@ -93,4 +93,7 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	float SoundEffectVolume = 0.5f;
+
+	UPROPERTY(BlueprintReadWrite)
+	float ConversationalVoice = 0.5f;
 };

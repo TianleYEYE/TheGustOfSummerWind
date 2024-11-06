@@ -32,5 +32,6 @@ public:
 	UPROPERTY()
 	float SoundEffectVolume = 0.5f;
 	
-	
+	UPROPERTY()
+	float ConversationalVoice = 0.5f;
 };

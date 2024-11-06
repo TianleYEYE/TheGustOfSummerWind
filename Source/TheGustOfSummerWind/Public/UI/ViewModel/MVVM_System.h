@@ -51,6 +51,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SoundEffectVolumeData(float InSoundEffectVolume);
+
+	UFUNCTION(BlueprintCallable)
+	void ConversationalVoiceVolumeData(float InConversationalVoice);
 	
 	UFUNCTION(BlueprintCallable)
 	void LoadData();

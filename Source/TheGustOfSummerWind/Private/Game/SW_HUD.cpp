@@ -18,6 +18,7 @@ void ASW_HUD::BeginPlay()
 	
 	Menu = CreateWidget<USW_InMenuUI>(GetOwningPlayerController(),MenuClass);
 	Menu->AddToViewport();
+	Menu->BlueprintInializeWidget();
 
 	SystemViewModel -> LoadData();
 

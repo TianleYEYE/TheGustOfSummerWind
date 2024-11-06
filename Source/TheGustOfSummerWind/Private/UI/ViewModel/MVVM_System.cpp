@@ -81,6 +81,15 @@ void UMVVM_System::SoundEffectVolumeData(float InSoundEffectVolume)
 	SW_GameMode ->SaveSystemData(this);
 }
 
+void UMVVM_System::ConversationalVoiceVolumeData(float InConversationalVoice)
+{
+	ASW_GameMode* SW_GameMode = Cast<ASW_GameMode>(UGameplayStatics::GetGameMode(this));
+
+	SettingSlot ->SetConversationalVoice(InConversationalVoice);
+
+	SW_GameMode ->SaveSystemData(this);
+}
+
 
 void UMVVM_System::LoadData()
 {
@@ -105,6 +114,7 @@ void UMVVM_System::LoadData()
 	GetSettingSlot()->SetMasterVolume(SaveObject->MasterVolume);
 	GetSettingSlot()->SetTextDisplaySpeed(SaveObject->TextDisplaySpeed);
 	GetSettingSlot()->SetSoundEffectVolume(SaveObject->SoundEffectVolume);
+	GetSettingSlot()->SetConversationalVoice(SaveObject->ConversationalVoice);
 }
 
 void UMVVM_System::SetNumLoadSlots(int32 InNumLoadSlots)

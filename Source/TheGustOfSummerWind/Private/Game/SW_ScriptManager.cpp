@@ -52,6 +52,7 @@ void ASW_ScriptManager::LoadData()
 	TextDisplaySpeed = SaveObject -> TextDisplaySpeed;
 	MasterVolume = SaveObject ->MasterVolume;
 	SoundEffectVolume = SaveObject ->SoundEffectVolume;
+	ConversationalVoice = SaveObject ->ConversationalVoice;
 
 	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green,FString::Printf(TEXT("TextDisplaySpeed : %f"),MasterVolume));
 }
@@ -72,8 +73,7 @@ int ASW_ScriptManager::GetMaxDialogIndex()
 
 void ASW_ScriptManager::MenuMusicPlay()
 {
-	USoundBase *menuSound=LoadObject<USoundBase>(this,TEXT("/Game/Assets/Audio/Music/TheCherryBlossoms.TheCherryBlossoms"));
-	AudioPlayer->SetSound(menuSound);
+	AudioPlayer->SetSound(BackgroundMusic);
 	AudioPlayer->Play();
 }
 

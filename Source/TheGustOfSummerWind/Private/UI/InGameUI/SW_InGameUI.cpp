@@ -55,12 +55,11 @@ void USW_InGameUI::ReadDialog()
 	BP_CharacterPortraits->SetCharacterPortraits();
 	SetName(DialogStruct);
 	SetBackground(DialogStruct);
-	SwitchChapter();
 	SetMusic(DialogStruct);
 	SetConversationalVoice(DialogStruct);
 	CurrentIndex=0;
 	ScriptManager->rowDialog++;
-	
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green,FString::Printf(TEXT("Dialog : %d"),	ScriptManager->rowDialog));
 }
 
 void USW_InGameUI::SetName(FDialogStruct *dialogRow)
@@ -93,7 +92,7 @@ void USW_InGameUI::SetMusic(FDialogStruct *dialogRow)
 		ScriptManager->AudioPlayer->SetSound(dialogRow->BackgroundSound);
 		ScriptManager->AudioPlayer->Play();
 	}
-	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString(ScriptManager->BackgroundMusic->GetName()));
+	
 }
 
 void USW_InGameUI::SetConversationalVoice(FDialogStruct *dialogRow)
@@ -125,11 +124,4 @@ void USW_InGameUI::CancelInGameMenuUIImplement()
 	bIsInGameMenuUIExist=false;
 }
 
-void USW_InGameUI::SwitchChapter()
-{
-	if (ScriptManager->GetRowDialog() == ScriptManager->GetMaxDialogIndex()-1)
-	{
-		//ScriptManager->SetDataTable();
-		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("Switch Chapter"));
-	}
-}
+

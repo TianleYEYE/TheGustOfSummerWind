@@ -66,7 +66,8 @@ public:
 	void SetRowDialog(int EnterRowDialog);
 	
 	int GetRowDialog() const {return rowDialog ;}
-	
+
+	UFUNCTION(BlueprintCallable,BlueprintPure)
 	int GetMaxDialogIndex();
 
 	UFUNCTION(BlueprintCallable)

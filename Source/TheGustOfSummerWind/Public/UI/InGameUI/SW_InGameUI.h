@@ -52,7 +52,6 @@ public:
 
 	
 	
-
 	UPROPERTY()
 	TObjectPtr<UCanvasPanelSlot>inGameMenuUISlot;
 
@@ -84,9 +83,7 @@ public:
 	void GetInGameMenuUI();
 	UFUNCTION()
 	void CancelInGameMenuUIImplement();
-	//切换章节
-	void SwitchChapter();
-	
+
 	FDialogStruct *PreviousDialogRow;
 	
 	int CurrentIndex;

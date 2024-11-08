@@ -31,4 +31,7 @@ struct THEGUSTOFSUMMERWIND_API FDialogStruct:public FTableRowBase
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	TObjectPtr<UTexture2D>Face_2;
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	bool bIsStarted = false ;
 };

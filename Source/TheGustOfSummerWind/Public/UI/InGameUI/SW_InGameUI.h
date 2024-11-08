@@ -13,7 +13,6 @@
 #include "Components/CanvasPanelSlot.h"
 #include "SW_InGameUI.generated.h"
 
-
 UCLASS()
 class THEGUSTOFSUMMERWIND_API USW_InGameUI : public USW_UIBase
 {
@@ -85,6 +84,8 @@ public:
 	void GetInGameMenuUI();
 	UFUNCTION()
 	void CancelInGameMenuUIImplement();
+	//切换章节
+	void SwitchChapter();
 	
 	FDialogStruct *PreviousDialogRow;
 	
@@ -93,7 +94,8 @@ public:
 
 	bool bIsWhiteOver=false;
 
-
+	UPROPERTY(BlueprintReadWrite)
+	TArray<UDataTable*> Chapters;
 
 public:
 	int row ;

@@ -67,6 +67,20 @@ private:
 	TObjectPtr<UMVVM_LoadSlot>LoadSlot_4;
 	UPROPERTY()
 	TObjectPtr<UMVVM_LoadSlot>LoadSlot_5;
+	UPROPERTY()
+	TObjectPtr<UMVVM_LoadSlot>LoadSlot_6;
+	UPROPERTY()
+	TObjectPtr<UMVVM_LoadSlot>LoadSlot_7;
+	UPROPERTY()
+	TObjectPtr<UMVVM_LoadSlot>LoadSlot_8;
+	UPROPERTY()
+	TObjectPtr<UMVVM_LoadSlot>LoadSlot_9;
+	UPROPERTY()
+	TObjectPtr<UMVVM_LoadSlot>LoadSlot_10;
+	UPROPERTY()
+	TObjectPtr<UMVVM_LoadSlot>LoadSlot_11;
+	
+	
 	
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,FieldNotify,Setter,Getter,meta=(AllowPrivateAccess="true"))

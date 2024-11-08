@@ -55,7 +55,7 @@ void USW_InGameUI::ReadDialog()
 	BP_CharacterPortraits->SetCharacterPortraits();
 	SetName(DialogStruct);
 	SetBackground(DialogStruct);
-	
+	SwitchChapter();
 	SetMusic(DialogStruct);
 	SetConversationalVoice(DialogStruct);
 	CurrentIndex=0;
@@ -123,4 +123,13 @@ void USW_InGameUI::CancelInGameMenuUIImplement()
 	inGameMenuUISlot=Cast<UCanvasPanelSlot>(InGameMenuUI->Slot);
 	inGameMenuUISlot->SetZOrder(0);
 	bIsInGameMenuUIExist=false;
+}
+
+void USW_InGameUI::SwitchChapter()
+{
+	if (ScriptManager->GetRowDialog() == ScriptManager->GetMaxDialogIndex()-1)
+	{
+		//ScriptManager->SetDataTable();
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("Switch Chapter"));
+	}
 }

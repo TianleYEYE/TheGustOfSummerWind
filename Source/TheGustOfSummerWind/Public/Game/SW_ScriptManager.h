@@ -49,10 +49,6 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "Chapter DataTable")
 	TObjectPtr<UDataTable>DataTable;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "Chapter DataTable")
-	TObjectPtr<UDataTable>PreviousDataTable;
-
-	
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="properties")
 	int rowDialog=0;

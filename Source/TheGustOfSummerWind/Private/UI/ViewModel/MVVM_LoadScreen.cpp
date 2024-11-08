@@ -27,6 +27,24 @@ void UMVVM_LoadScreen::InitializeLoadSlots()
 	LoadSlot_5 = NewObject<UMVVM_LoadSlot>(this,LoadSlotViewModelClass);
 	LoadSlot_5->SetLoadSlotName(FString("LoadSlot_5"));
 	LoadSlots.Add(5,LoadSlot_5);
+	LoadSlot_6 = NewObject<UMVVM_LoadSlot>(this,LoadSlotViewModelClass);
+	LoadSlot_6->SetLoadSlotName(FString("LoadSlot_6"));
+	LoadSlots.Add(6,LoadSlot_6);
+	LoadSlot_7 = NewObject<UMVVM_LoadSlot>(this,LoadSlotViewModelClass);
+	LoadSlot_7->SetLoadSlotName(FString("LoadSlot_7"));
+	LoadSlots.Add(7,LoadSlot_7);
+	LoadSlot_8 = NewObject<UMVVM_LoadSlot>(this,LoadSlotViewModelClass);
+	LoadSlot_8->SetLoadSlotName(FString("LoadSlot_8"));
+	LoadSlots.Add(8,LoadSlot_8);
+	LoadSlot_9 = NewObject<UMVVM_LoadSlot>(this,LoadSlotViewModelClass);
+	LoadSlot_9->SetLoadSlotName(FString("LoadSlot_9"));
+	LoadSlots.Add(9,LoadSlot_9);
+	LoadSlot_10 = NewObject<UMVVM_LoadSlot>(this,LoadSlotViewModelClass);
+	LoadSlot_10->SetLoadSlotName(FString("LoadSlot_10"));
+	LoadSlots.Add(10,LoadSlot_10);
+	LoadSlot_11 = NewObject<UMVVM_LoadSlot>(this,LoadSlotViewModelClass);
+	LoadSlot_11->SetLoadSlotName(FString("LoadSlot_11"));
+	LoadSlots.Add(11,LoadSlot_11);
 
 	SetNumLoadSlots(LoadSlots.Num());
 }

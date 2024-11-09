@@ -39,9 +39,9 @@ void USW_DialogBox::UpdateText()
 		FText CurrentText = FText::FromString(DialogRow->Dialog.ToString().Left(CurrentIndex + 1));
         
 		// 设置 TextBlock 的文本
-		if (Textblock_Dialog)
+		if (RichTextBlock_Dialogue)
 		{
-			Textblock_Dialog->SetText(CurrentText);
+			RichTextBlock_Dialogue->SetText(CurrentText);
 			
 		}
         

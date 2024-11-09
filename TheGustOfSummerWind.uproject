@@ -25,6 +25,11 @@
 		{
 			"Name": "ModelViewViewModel",
 			"Enabled": true
+		},
+		{
+			"Name": "DreamTools",
+			"Enabled": false,
+			"MarketplaceURL": "https://gitee.com/dreammoonst/unreal-dreamtools"
 		}
 	]
 }

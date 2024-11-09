@@ -83,6 +83,10 @@ public:
 	void GetInGameMenuUI();
 	UFUNCTION()
 	void CancelInGameMenuUIImplement();
+	//设置切换游戏章节
+	UFUNCTION()
+	void SwitchChapter();
+	
 
 	FDialogStruct *PreviousDialogRow;
 	
@@ -90,9 +94,6 @@ public:
 	int Num_nextDialogButtonClicked=0;
 
 	bool bIsWhiteOver=false;
-
-	UPROPERTY(BlueprintReadWrite)
-	TArray<UDataTable*> Chapters;
 
 public:
 	int row ;

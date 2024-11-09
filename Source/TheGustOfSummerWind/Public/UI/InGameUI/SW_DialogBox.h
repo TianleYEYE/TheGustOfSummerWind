@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/CircularThrobber.h"
-#include "Components/TextBlock.h"
+#include "Components/RichTextBlock.h"
 #include "DataStruct\DialogStruct.h"
 #include "UI/SW_UIBase.h"
 #include "SW_DialogBox.generated.h"
@@ -18,7 +18,7 @@ class THEGUSTOFSUMMERWIND_API USW_DialogBox : public USW_UIBase
 	GENERATED_BODY()
 public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
-	TObjectPtr<UTextBlock>Textblock_Dialog;
+	TObjectPtr<URichTextBlock>RichTextBlock_Dialogue;
 
 	UPROPERTY(Transient,EditAnywhere,BlueprintReadWrite,meta=(BindWidgetAnim))
 	TObjectPtr<UWidgetAnimation>DialogFade;

@@ -22,7 +22,6 @@ void USW_InGameUI::InitializeGame()
 {
 	//获取场景中的ScriptManager
 	ScriptManager = GetScriptManager();
-	
 	//下一段对话按钮绑定函数
 	BP_NextDialog->EntrustDelegated.AddDynamic(this,&USW_InGameUI::PressBTN_NEXT);
 	//绑定菜单开始动画时间，动画开始时，执行
@@ -41,7 +40,8 @@ void USW_InGameUI::PressBTN_NEXT(int32 InRow)
 
 void USW_InGameUI::ReadDialog()
 {
-	// //从游戏实例获取到DialogStruct
+	SwitchChapter();
+	// //从游戏脚本管理器获取到DialogStruct
 	DialogStruct=ScriptManager->SetDialogStruct();
 	// //将ScriptManager获取的DilaogStruct给DialogBox
 	BP_DialogBox->SetDialogStructAndCurrentIndex(DialogStruct,CurrentIndex);
@@ -57,6 +57,8 @@ void USW_InGameUI::ReadDialog()
 	SetBackground(DialogStruct);
 	SetMusic(DialogStruct);
 	SetConversationalVoice(DialogStruct);
+
+	
 	CurrentIndex=0;
 	ScriptManager->rowDialog++;
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green,FString::Printf(TEXT("Dialog : %d"),	ScriptManager->rowDialog));
@@ -123,5 +125,20 @@ void USW_InGameUI::CancelInGameMenuUIImplement()
 	inGameMenuUISlot->SetZOrder(0);
 	bIsInGameMenuUIExist=false;
 }
+
+void USW_InGameUI::SwitchChapter()
+{
+	if (ScriptManager->rowDialog == ScriptManager->GetMaxDialogIndex() && ScriptManager->CurrentChapter < 15)
+	{
+		ScriptManager->rowDialog = 0;
+		ScriptManager->CurrentChapter++;
+
+		UDataTable * CurrentChapter = ScriptManager->GetDataTableByIndex(ScriptManager->CurrentChapter);
+		ScriptManager->DataTable = CurrentChapter;
+	}
+
+	ScriptManager->CurrentChapter = ScriptManager->GetDataTableIndex(ScriptManager->DataTable);
+}
+
 
 

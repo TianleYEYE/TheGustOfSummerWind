@@ -57,7 +57,7 @@ void ASW_GameMode::SaveSlotData(UMVVM_LoadSlot* LoadSlot, int32 SlotIndex)
 	LoadScreenSaveGame -> RowDialog = LoadSlot ->GetRowDialog();
 	LoadScreenSaveGame -> DateTime = LoadSlot ->GetDateTime();
 	LoadScreenSaveGame -> SaveSlotStatus= Load;
-
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("DataTable : %s , RowDialog: %d"),*LoadScreenSaveGame->DataTable->GetName() , LoadScreenSaveGame->RowDialog));
 	UGameplayStatics::SaveGameToSlot(LoadScreenSaveGame,LoadSlot->GetLoadSlotName(),SlotIndex);
 }
 
@@ -88,7 +88,7 @@ USW_SystemData* ASW_GameMode::GetCGSlotData() const
 		SaveGameObject = UGameplayStatics::CreateSaveGameObject(SystemSaveGameClass);
 	}
 	USW_SystemData* SaveGame = Cast<USW_SystemData>(SaveGameObject);
-	// 加载时
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("Loading CGSlot Data"));
+	// // 加载时
+	// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("Loading CGSlot Data"));
 	return SaveGame;
 }

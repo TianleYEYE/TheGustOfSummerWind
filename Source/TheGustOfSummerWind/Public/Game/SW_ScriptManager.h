@@ -59,6 +59,7 @@ public:
 
 	void SetDataTable(UDataTable* EnterDataTable);
 	UDataTable* GetDataTable() const {return DataTable;}
+	
 
 	UFUNCTION(BlueprintCallable)
 	void LoadData();
@@ -72,6 +73,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void MenuMusicPlay();
+
+	void InitializeDataTableIndexMap();
 	
 	FDialogStruct *SetDialogStruct();
 	
@@ -81,6 +84,14 @@ public:
 	
 	UPROPERTY(BlueprintReadWrite)
 	TEnumAsByte<EWidgetStatus> WidgetState = Menu;
+
+	UPROPERTY()
+	int CurrentChapter;
+
+	UFUNCTION(BlueprintCallable)
+	int32 GetDataTableIndex(UDataTable* InDataTable);
+	UFUNCTION(BlueprintCallable)
+	UDataTable* GetDataTableByIndex(int32 Index);
 
 	UPROPERTY(BlueprintReadWrite)
 	float TextDisplaySpeed = 0.1f;
@@ -93,4 +104,20 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	float ConversationalVoice = 0.5f;
+
+
+	UFUNCTION(BlueprintCallable)
+	TMap<FName, int32> GetDataTableIndexMap()const {return DataTableIndexMap;};
+
+	UFUNCTION(BlueprintCallable)
+	TArray<UDataTable*>	GetDataTableArray() const {return DataTableArray;}
+	
+private:
+	TMap<FName, int32> DataTableIndexMap;
+
+	// 声明一个数组来存储DataTable指针
+	TArray<UDataTable*> DataTableArray;
+
+
+	
 };

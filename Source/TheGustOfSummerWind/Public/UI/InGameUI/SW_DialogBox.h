@@ -9,6 +9,8 @@
 #include "UI/SW_UIBase.h"
 #include "SW_DialogBox.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FUpdateText,FText,Text);
+
 /**
  * 
  */
@@ -28,6 +30,12 @@ public:
 
 	UPROPERTY(Transient,EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<UCircularThrobber>Throbber_1;
+
+	UFUNCTION(BlueprintCallable)
+	void SetDialogText(FText &Text);
+
+	UPROPERTY(BlueprintAssignable, Category = "MyDelegate")
+	FUpdateText UpdateDialogText; 
 
 	TArray<FString>MessageCharactArray;
 

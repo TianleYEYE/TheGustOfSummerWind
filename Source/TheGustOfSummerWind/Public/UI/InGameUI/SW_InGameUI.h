@@ -51,7 +51,6 @@ public:
 	TObjectPtr<UWidgetAnimation>CancelDisplaysInGameMenu;
 
 	
-	
 	UPROPERTY()
 	TObjectPtr<UCanvasPanelSlot>inGameMenuUISlot;
 

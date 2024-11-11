@@ -15,6 +15,11 @@ void USW_DialogBox::NativeConstruct()
 	}
 }
 
+void USW_DialogBox::SetDialogText(FText& Text)
+{
+	UpdateDialogText.Broadcast(Text);
+}
+
 void USW_DialogBox::SetDialogStructAndCurrentIndex(FDialogStruct * ParentsDialogStruct,int Index)
 {
 	DialogRow=ParentsDialogStruct;
@@ -55,3 +60,4 @@ void USW_DialogBox::UpdateText()
 		Throbber_1->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
+

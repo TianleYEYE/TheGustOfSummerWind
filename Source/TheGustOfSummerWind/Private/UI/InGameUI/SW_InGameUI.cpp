@@ -18,6 +18,7 @@ void USW_InGameUI::NativeConstruct()
 	InitializeGame();
 }
 
+
 void USW_InGameUI::InitializeGame()
 {
 	//获取场景中的ScriptManager
@@ -51,7 +52,7 @@ void USW_InGameUI::ReadDialog()
 		PreviousDialogRow =ScriptManager->PreviousDialogStruct;
 	}
 	
-	BP_DialogBox->SetDialog();
+	BP_DialogBox->SetDialogText(DialogStruct->Dialog);
 	BP_CharacterPortraits->SetCharacterPortraits();
 	SetName(DialogStruct);
 	SetBackground(DialogStruct);

@@ -44,8 +44,6 @@ void USW_InGameUI::ReadDialog()
 	SwitchChapter();
 	// //从游戏脚本管理器获取到DialogStruct
 	DialogStruct=ScriptManager->SetDialogStruct();
-	// //将ScriptManager获取的DilaogStruct给DialogBox
-	BP_DialogBox->SetDialogStructAndCurrentIndex(DialogStruct,CurrentIndex);
 	
 	if (ScriptManager->rowDialog>=1)
 	{
@@ -133,7 +131,7 @@ void USW_InGameUI::SwitchChapter()
 	{
 		ScriptManager->rowDialog = 0;
 		ScriptManager->CurrentChapter++;
-
+		PlayAnimation(Fade);
 		UDataTable * CurrentChapter = ScriptManager->GetDataTableByIndex(ScriptManager->CurrentChapter);
 		ScriptManager->DataTable = CurrentChapter;
 	}

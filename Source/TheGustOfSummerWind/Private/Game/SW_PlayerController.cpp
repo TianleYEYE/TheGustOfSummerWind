@@ -2,6 +2,7 @@
 
 
 #include "TheGustOfSummerWind\Public\Game\SW_PlayerController.h"
+#include "GameFramework/GameUserSettings.h"
 
 #include "Kismet/GameplayStatics.h"
 
@@ -37,6 +38,8 @@ void ASW_PlayerController::ReturnOrOpenInGameMenuUI()
 		if (ScriptManager->WidgetState == SettingUI || ScriptManager->WidgetState == InGameSetting)
 		{
 			HUD->SettingUI->PlayAnimation(HUD->SettingUI->Fade);
+			UGameUserSettings* UserSettings = UGameUserSettings::GetGameUserSettings();
+			UserSettings->SaveSettings();
 		}
 		else if (ScriptManager->WidgetState == AlbumUI)
 		{

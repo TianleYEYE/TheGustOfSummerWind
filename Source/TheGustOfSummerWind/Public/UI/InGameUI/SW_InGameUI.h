@@ -50,6 +50,9 @@ public:
 	UPROPERTY(Transient,EditAnywhere,BlueprintReadWrite,meta=(BindWidgetAnim))
 	TObjectPtr<UWidgetAnimation>CancelDisplaysInGameMenu;
 
+	UPROPERTY(Transient,EditAnywhere,BlueprintReadWrite,meta=(BindWidgetAnim))
+	TObjectPtr<UWidgetAnimation>Fade;
+
 	
 	UPROPERTY()
 	TObjectPtr<UCanvasPanelSlot>inGameMenuUISlot;

@@ -8,6 +8,8 @@
 #include "UI/QuitGameUI/SW_QuitGameUI.h"
 #include "SW_PlayerController.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInGameMenu,bool,bIsMenuExist);
+
 
 UCLASS()
 class THEGUSTOFSUMMERWIND_API ASW_PlayerController : public APlayerController
@@ -22,6 +24,7 @@ public:
 public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Widget")
 	TSubclassOf<USW_QuitGameUI>BP_QuitGameUIClass;
+	
 	UPROPERTY()
 	TObjectPtr<ASW_HUD>HUD;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
@@ -30,9 +33,15 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	TObjectPtr<USW_QuitGameUI>QuitGameUI;
 
+	UPROPERTY(BlueprintAssignable)
+	FInGameMenu InGameMenu;
 	
 	void BeginPlay() override;
 
+	UPROPERTY(Blueprintable,BlueprintReadWrite)
+	bool bIsMenuExist = false;
+
+private:
 	// 冷却时间（秒）
 	float CooldownTime=1.f;
 	// 上次按键时间

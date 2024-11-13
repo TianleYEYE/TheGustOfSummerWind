@@ -3,9 +3,7 @@
 
 #include "UI/InGameUI/SW_InGameUI.h"
 #include "Animation/UMGSequencePlayer.h"
-#include "Animation/WidgetAnimation.h"
 #include "Components/AudioComponent.h"
-#include "Components/CanvasPanelSlot.h"
 #include "Game/SW_HUD.h"
 
 
@@ -25,12 +23,6 @@ void USW_InGameUI::InitializeGame()
 	ScriptManager = GetScriptManager();
 	//下一段对话按钮绑定函数
 	BP_NextDialog->EntrustDelegated.AddDynamic(this,&USW_InGameUI::PressBTN_NEXT);
-	//绑定菜单开始动画时间，动画开始时，执行
-	InGameMenuUIEvent.BindDynamic(this,&USW_InGameUI::GetInGameMenuUI);
-	BindToAnimationStarted(DisplaysInGameMenu,InGameMenuUIEvent);
-	//绑定菜单开始动画时间，动画结束后，执行
-	CancelInGameMenuUIEvent.BindDynamic(this,&USW_InGameUI::CancelInGameMenuUIImplement);
-	BindToAnimationFinished(CancelDisplaysInGameMenu,CancelInGameMenuUIEvent);
 }
 
 void USW_InGameUI::PressBTN_NEXT(int32 InRow)
@@ -107,22 +99,6 @@ void USW_InGameUI::SetConversationalVoice(FDialogStruct *dialogRow)
 		ScriptManager->ConversationalVoicePlayer->SetSound(dialogRow->ConversationalVoice);
 		ScriptManager->ConversationalVoicePlayer->Play();
 	}
-}
-
-void USW_InGameUI::GetInGameMenuUI()
-{
-	inGameMenuUISlot=Cast<UCanvasPanelSlot>(InGameMenuUI->Slot);
-	inGameMenuUISlot->SetZOrder(9);
-	bIsInGameMenuUIExist=true;
-}
-
-void USW_InGameUI::CancelInGameMenuUIImplement()
-{
-	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("CancelInGameMenuUIImplement"));
-	GetScriptManager()->WidgetState = InGame;
-	inGameMenuUISlot=Cast<UCanvasPanelSlot>(InGameMenuUI->Slot);
-	inGameMenuUISlot->SetZOrder(0);
-	bIsInGameMenuUIExist=false;
 }
 
 void USW_InGameUI::SwitchChapter()

@@ -21,9 +21,6 @@ public:
 	virtual void NativeConstruct() override;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
-	TObjectPtr<UBTN_SaveOrRead>BP_SaveOrRead;
-	
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<UTextBlock>TextBlock_Name;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
@@ -41,14 +38,6 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<UBorder>NameBoxBackground;
 	
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
-	TObjectPtr<UBorder>InGameMenuUI;
-	
-	UPROPERTY(Transient,EditAnywhere,BlueprintReadWrite,meta=(BindWidgetAnim))
-	TObjectPtr<UWidgetAnimation>DisplaysInGameMenu;
-	
-	UPROPERTY(Transient,EditAnywhere,BlueprintReadWrite,meta=(BindWidgetAnim))
-	TObjectPtr<UWidgetAnimation>CancelDisplaysInGameMenu;
 
 	UPROPERTY(Transient,EditAnywhere,BlueprintReadWrite,meta=(BindWidgetAnim))
 	TObjectPtr<UWidgetAnimation>Fade;
@@ -80,11 +69,6 @@ public:
 	void SetMusic(FDialogStruct *dialogRow);
 	//设置角色语音
 	void SetConversationalVoice(FDialogStruct *dialogRow);
-	//设置游戏内菜单
-	UFUNCTION()
-	void GetInGameMenuUI();
-	UFUNCTION()
-	void CancelInGameMenuUIImplement();
 	//设置切换游戏章节
 	UFUNCTION()
 	void SwitchChapter();

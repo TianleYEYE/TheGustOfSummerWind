@@ -21,8 +21,6 @@ void USW_UICollection::SetupWidgets()
 		BP_MenuUI->BP_ButtonOfInMenu->BP_Album->SetParentSwitcher(UISwitcher);
 		//设置BP_Setting的父级switcher，用来跳转到SettingUI
 		BP_MenuUI->BP_ButtonOfInMenu->BP_Setting->SetParentSwitcher(UISwitcher);
-		//设置AlbumUI的父级swicher，给AlbumUI中的return按钮调用
-		BP_AlbumUI->SetParentSwitcher(UISwitcher);
 	}
 }
 

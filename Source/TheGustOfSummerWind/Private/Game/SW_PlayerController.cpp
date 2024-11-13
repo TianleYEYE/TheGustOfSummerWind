@@ -34,6 +34,7 @@ void ASW_PlayerController::ReturnOrOpenInGameMenuUI()
 		bIsOnCooldown = true;  // 设置冷却标志，防止短时间内重复按键
 
 		HUD = Cast<ASW_HUD>(GetHUD());
+		
 
 		if (ScriptManager->WidgetState == SettingUI || ScriptManager->WidgetState == InGameSetting)
 		{
@@ -52,13 +53,9 @@ void ASW_PlayerController::ReturnOrOpenInGameMenuUI()
 		{
 			HUD->ContinueUI->PlayAnimation(HUD->ContinueUI->ContinueUIFade);
 		}
-		else if (ScriptManager->WidgetState == InGame && !HUD->InGameUI->bIsInGameMenuUIExist )
+		else if (ScriptManager->WidgetState == InGame )
 		{
-			HUD->InGameUI->PlayAnimation(HUD->InGameUI->DisplaysInGameMenu);
-		}
-		else if (ScriptManager->WidgetState == InGame && HUD->InGameUI->bIsInGameMenuUIExist )
-		{
-			HUD->InGameUI->PlayAnimation(HUD->InGameUI->CancelDisplaysInGameMenu);
+			InGameMenu.Broadcast(bIsMenuExist);
 		}
 	}
 	else

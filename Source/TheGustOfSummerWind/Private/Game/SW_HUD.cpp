@@ -11,8 +11,8 @@ void ASW_HUD::BeginPlay()
 	Super::BeginPlay();
 
 	UGameUserSettings::GetGameUserSettings()->LoadSettings();
+	UGameUserSettings::GetGameUserSettings()->ApplyResolutionSettings(false);
 	
-
 	LoadScreenViewModel = NewObject<UMVVM_LoadScreen>(this,LoadScreenViewModelClass);
 	LoadScreenViewModel->InitializeLoadSlots();
 

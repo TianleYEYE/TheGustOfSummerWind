@@ -38,8 +38,7 @@ void ASW_PlayerController::ReturnOrOpenInGameMenuUI()
 		if (ScriptManager->WidgetState == SettingUI || ScriptManager->WidgetState == InGameSetting)
 		{
 			HUD->SettingUI->PlayAnimation(HUD->SettingUI->Fade);
-			UGameUserSettings* UserSettings = UGameUserSettings::GetGameUserSettings();
-			UserSettings->SaveSettings();
+			UGameUserSettings::GetGameUserSettings()->SaveSettings();
 		}
 		else if (ScriptManager->WidgetState == AlbumUI)
 		{

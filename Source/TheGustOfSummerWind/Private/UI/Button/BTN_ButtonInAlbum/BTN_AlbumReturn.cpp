@@ -3,11 +3,6 @@
 
 #include "UI/Button/BTN_ButtonInAlbum/BTN_AlbumReturn.h"
 
-void UBTN_AlbumReturn::SetParentSwitcher(UWidgetSwitcher* InSwitcher)
-{
-	ParentSwitcher=InSwitcher;
-}
-
 void UBTN_AlbumReturn::NativeConstruct()
 {
 	Super::NativeConstruct();

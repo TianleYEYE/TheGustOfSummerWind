@@ -6,8 +6,6 @@
 #include "Components/CanvasPanel.h"
 #include "Components/WidgetSwitcher.h"
 #include "UI/SW_UIBase.h"
-#include "UI/Button/BTN_Return.h"
-#include "UI/Button/BTN_ButtonInAlbum/BTN_AlbumReturn.h"
 #include "UI/Button/BTN_ButtonInAlbum/BTN_Next.h"
 #include "UI/Button/BTN_ButtonInAlbum/BTN_Previous.h"
 #include "SW_AlbumUI.generated.h"
@@ -28,27 +26,9 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<UWidgetSwitcher>PageSwitcher;
-
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
-	TObjectPtr<UCanvasPanel>Page_1;
 	
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
-	TObjectPtr<UCanvasPanel>Page_2;
-
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
-	TObjectPtr<UBTN_AlbumReturn>BP_Return;
-
 	UPROPERTY(Transient,EditAnywhere,BlueprintReadWrite,meta=(BindWidgetAnim))
 	TObjectPtr<UWidgetAnimation>Fade;
-
-	// Function to set the reference to the parent widget
-	void SetParentSwitcher(UWidgetSwitcher* InSwitcher);
-	UFUNCTION()
-	void OnReturnButtonClicked();
-	
-	
-	UPROPERTY()
-	TObjectPtr<UWidgetSwitcher> ParentSwitcher;
 	
 	virtual void NativeConstruct() override;
 

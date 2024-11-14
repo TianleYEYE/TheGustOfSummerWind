@@ -1,3 +1,4 @@
+
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
@@ -6,6 +7,7 @@
 #include "Components/AudioComponent.h"
 #include "DataStruct\DialogStruct.h"
 #include "SW_ScriptManager.generated.h"
+
 
 UENUM(BlueprintType)
 enum EWidgetStatus
@@ -76,7 +78,8 @@ public:
 
 	void InitializeDataTableIndexMap();
 	
-	FDialogStruct *SetDialogStruct();
+	FDialogStruct *GetDialogStruct();
+	FDialogStruct *GetPreviousDialogStruct();
 	
 	FDialogStruct *DialogStruct;
 	

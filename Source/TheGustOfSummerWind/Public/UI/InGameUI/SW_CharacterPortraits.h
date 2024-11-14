@@ -7,6 +7,7 @@
 #include "UI/SW_UIBase.h"
 #include "SW_CharacterPortraits.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FSetCharacter,FDialogStruct,DialogStruct,FDialogStruct,PreviousDialogStruct);
 /**
  * 
  */
@@ -17,19 +18,16 @@ class THEGUSTOFSUMMERWIND_API USW_CharacterPortraits : public USW_UIBase
 
 public:
 	
-	UPROPERTY(Transient,EditAnywhere,BlueprintReadWrite,meta=(BindWidgetAnim))
-	TObjectPtr<UWidgetAnimation>FaceChange;
+	// UPROPERTY(Transient,EditAnywhere,BlueprintReadWrite,meta=(BindWidgetAnim))
+	// TObjectPtr<UWidgetAnimation>FaceChange;
 	// UPROPERTY(Transient,EditAnywhere,BlueprintReadWrite,meta=(BindWidgetAnim))
 	// TObjectPtr<UWidgetAnimation>AppearCharacter;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
-	TObjectPtr<UImage>Face_1;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
-	TObjectPtr<UImage>Face_2;
-	
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<UImage>VerticalPainting;
-	
+
+	UPROPERTY(BlueprintAssignable) 
+	FSetCharacter SetCharacter;
 
 	FWidgetAnimationDynamicEvent FaceChangeEvent;
 	FDialogStruct *DialogStruct;
@@ -37,7 +35,4 @@ public:
 
 	void NativeConstruct() override;
 	void SetCharacterPortraits();
-	
-	UFUNCTION()
-	void DoFaceChange();
 };

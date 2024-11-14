@@ -80,8 +80,8 @@ void USW_InMenuUI::FlashingOver()
 
 void USW_InMenuUI::PlayATapSound()
 {
-	USoundBase*click=LoadObject<USoundBase>(this,TEXT("/Game/Assets/Audio/Click/switch_button_push_small_06_Cue.switch_button_push_small_06_Cue"));
-	UGameplayStatics::PlaySound2D(this,click);
+	// USoundBase*click=LoadObject<USoundBase>(this,TEXT("/Game/Assets/Audio/Click/switch_button_push_small_06_Cue.switch_button_push_small_06_Cue"));
+	// UGameplayStatics::PlaySound2D(this,click);
 }
 
 

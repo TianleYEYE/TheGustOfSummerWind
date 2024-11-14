@@ -35,7 +35,7 @@ void USW_InGameUI::ReadDialog()
 {
 	SwitchChapter();
 	// //从游戏脚本管理器获取到DialogStruct
-	DialogStruct=ScriptManager->SetDialogStruct();
+	DialogStruct=ScriptManager->GetDialogStruct();
 	
 	if (ScriptManager->rowDialog>=1)
 	{
@@ -52,7 +52,7 @@ void USW_InGameUI::ReadDialog()
 	
 	CurrentIndex=0;
 	ScriptManager->rowDialog++;
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green,FString::Printf(TEXT("Dialog : %d"),	ScriptManager->rowDialog));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green,FString::Printf(TEXT("Dialog : %d"),	ScriptManager->rowDialog));
 }
 
 void USW_InGameUI::SetName(FDialogStruct *dialogRow)
@@ -72,7 +72,8 @@ void USW_InGameUI::SetName(FDialogStruct *dialogRow)
 
 void USW_InGameUI::SetBackground(FDialogStruct *dialogRow)
 {
-	TEX_Background->SetBrushFromTexture(dialogRow->Background,true);
+	TEX_Background->SetBrushFromTexture(dialogRow->Background,false);
+
 }
 
 void USW_InGameUI::SetMusic(FDialogStruct *dialogRow)

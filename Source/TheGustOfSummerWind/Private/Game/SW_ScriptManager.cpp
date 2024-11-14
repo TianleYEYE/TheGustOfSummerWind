@@ -134,18 +134,23 @@ void ASW_ScriptManager::InitializeDataTableIndexMap()
 }
 
 
-FDialogStruct* ASW_ScriptManager::SetDialogStruct()
+FDialogStruct* ASW_ScriptManager::GetDialogStruct()
 {
 	if (rowDialog<GetMaxDialogIndex())
 	{
 		DialogStruct = DataTable->FindRow<FDialogStruct>(DataTable->GetRowNames()[rowDialog],TEXT(""));
-		if (rowDialog >= 1)
-		{
-			PreviousDialogStruct =DataTable->FindRow<FDialogStruct>(DataTable->GetRowNames()[rowDialog-1],TEXT(""));
-		}
 		return DialogStruct;
 	}
 	return DialogStruct;
+}
+
+FDialogStruct* ASW_ScriptManager::GetPreviousDialogStruct()
+{
+	if (rowDialog >= 1)
+	{
+		PreviousDialogStruct =DataTable->FindRow<FDialogStruct>(DataTable->GetRowNames()[rowDialog-1],TEXT(""));
+	}
+	return PreviousDialogStruct;
 }
 
 int32 ASW_ScriptManager::GetDataTableIndex(UDataTable* InDataTable)

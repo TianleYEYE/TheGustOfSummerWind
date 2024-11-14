@@ -15,7 +15,15 @@ struct THEGUSTOFSUMMERWIND_API FDialogStruct:public FTableRowBase
 	FText Dialog=FText();
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
-	TObjectPtr<UTexture2D>CharacterPortraits_1;
+	TObjectPtr<UTexture2D>CurrentSprite;
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	TObjectPtr<UTexture2D>NewSprite;;
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	TObjectPtr<UTexture2D>Face_1;
+
+	// UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	// TObjectPtr<UTexture2D>Face_2;
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	TObjectPtr<UTexture2D>Background;
@@ -25,12 +33,6 @@ struct THEGUSTOFSUMMERWIND_API FDialogStruct:public FTableRowBase
 	
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	TObjectPtr<USoundBase>ConversationalVoice;
-	
-	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
-	TObjectPtr<UTexture2D>Face_1;
-
-	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
-	TObjectPtr<UTexture2D>Face_2;
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	bool bIsStarted = false ;

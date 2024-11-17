@@ -16,15 +16,10 @@ struct THEGUSTOFSUMMERWIND_API FDialogStruct:public FTableRowBase
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	TObjectPtr<UTexture2D>CurrentSprite;
-	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
-	TObjectPtr<UTexture2D>NewSprite;;
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
-	TObjectPtr<UTexture2D>Face_1;
-
-	// UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
-	// TObjectPtr<UTexture2D>Face_2;
-
+	TObjectPtr<UTexture2D>Face;
+	
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	TObjectPtr<UTexture2D>Background;
 
@@ -34,6 +29,6 @@ struct THEGUSTOFSUMMERWIND_API FDialogStruct:public FTableRowBase
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	TObjectPtr<USoundBase>ConversationalVoice;
 
-	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
-	bool bIsStarted = false ;
+	// UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	// bool bIsStarted = false ;
 };

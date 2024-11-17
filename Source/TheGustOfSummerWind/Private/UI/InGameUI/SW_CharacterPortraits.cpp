@@ -5,6 +5,7 @@
 
 
 void USW_CharacterPortraits::NativeConstruct()
+
 {
 	Super::NativeConstruct();
 
@@ -32,4 +33,4 @@ void USW_CharacterPortraits::SetCharacterPortraits()
 	
 }
 
-
+ 

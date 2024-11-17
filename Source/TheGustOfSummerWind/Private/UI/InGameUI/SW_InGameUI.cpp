@@ -64,7 +64,7 @@ void USW_InGameUI::SetName(FDialogStruct *dialogRow)
 	}
 	else
 	{
-		NameBoxBackground->SetBrushColor(FColor(200.0f,235.0f,228.0f,255.0f));
+		NameBoxBackground->SetBrushColor(FColor(255.0f,255.0f,255.0f,255.0f));
 		NameBoxBackground->SetContentColorAndOpacity(FColor(255.0f,255.0f,255.0f,255.0f));
 		TextBlock_Name->SetText(dialogRow->Name);
 	}

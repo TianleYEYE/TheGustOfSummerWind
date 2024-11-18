@@ -25,7 +25,6 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	TObjectPtr<UWidgetAnimation>ContinueUIFade;
-
-
+	
 	ASW_ScriptManager* GetScriptManager();
 };

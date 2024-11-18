@@ -12,6 +12,8 @@
 #include "Components/CanvasPanelSlot.h"
 #include "SW_InGameUI.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDialogueRecord,FText,readText,FText,readName);
+
 UCLASS()
 class THEGUSTOFSUMMERWIND_API USW_InGameUI : public USW_UIBase
 {
@@ -71,6 +73,9 @@ public:
 	//设置切换游戏章节
 	UFUNCTION()
 	void SwitchChapter();
+
+	UPROPERTY(BlueprintAssignable)
+	FDialogueRecord DialogueRecord;
 	
 
 	FDialogStruct *PreviousDialogRow;

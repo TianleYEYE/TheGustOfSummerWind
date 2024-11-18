@@ -9,6 +9,8 @@
 #include "SW_PlayerController.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInGameMenu,bool,bIsMenuExist);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FLog,bool,bIsLogExist);
+
 
 
 UCLASS()
@@ -23,24 +25,30 @@ public:
 	void QuitGame();
 public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Widget")
-	TSubclassOf<USW_QuitGameUI>BP_QuitGameUIClass;
+	TSubclassOf<USW_UIBase>BP_QuitGameUIClass;
 	
 	UPROPERTY()
 	TObjectPtr<ASW_HUD>HUD;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	TObjectPtr<ASW_ScriptManager>ScriptManager;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	TObjectPtr<USW_QuitGameUI>QuitGameUI;
+	UPROPERTY()
+	TObjectPtr<USW_UIBase>QuitGameUI;
 
 	UPROPERTY(BlueprintAssignable)
 	FInGameMenu InGameMenu;
+
+	UPROPERTY(BlueprintAssignable)
+	FLog Log;
 	
 	void BeginPlay() override;
 
 	UPROPERTY(Blueprintable,BlueprintReadWrite)
 	bool bIsMenuExist = false;
+	UPROPERTY(Blueprintable,BlueprintReadWrite)
+	bool bIsLogExist = false;
 
+	void DialogueRecord();
 private:
 	// 冷却时间（秒）
 	float CooldownTime=1.f;

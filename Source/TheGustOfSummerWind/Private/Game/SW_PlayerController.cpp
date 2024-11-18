@@ -22,8 +22,9 @@ void ASW_PlayerController::SetupInputComponent()
 		ScriptManager= Cast<ASW_ScriptManager>(TempActor);
 	}
 
-	InputComponent->BindAction("QuitGame",IE_Pressed,this,&ASW_PlayerController::QuitGame);
-	InputComponent->BindAction("ReturnOrOpenInGameMenuUI",IE_Released,this,&ASW_PlayerController::ReturnOrOpenInGameMenuUI);
+	InputComponent->BindAction("QuitGame",IE_Pressed,this,&ThisClass::QuitGame);
+	InputComponent->BindAction("ReturnOrOpenInGameMenuUI",IE_Released,this,&ThisClass::ReturnOrOpenInGameMenuUI);
+	InputComponent->BindAction("DialogueRecord",IE_Pressed,this,&ThisClass::DialogueRecord);
 }
 
 void ASW_PlayerController::ReturnOrOpenInGameMenuUI()
@@ -71,6 +72,16 @@ void ASW_PlayerController::BeginPlay()
 	LastKeyPressTime = GetWorld()->GetTimeSeconds();
 }
 
+void ASW_PlayerController::DialogueRecord()
+{
+	if (CanPressKey() && ScriptManager->WidgetState == InGame)
+	{
+		Log.Broadcast(bIsLogExist);
+		GEngine->AddOnScreenDebugMessage(1,1.f,FColor::Red,"DialogueRecord");
+	}
+	
+}
+
 bool ASW_PlayerController::CanPressKey()
 {
 	// 当前时间和上次按键时间的时间差
@@ -91,11 +102,11 @@ void ASW_PlayerController::QuitGame()
 {
 	if (QuitGameUI ==nullptr)
 	{
-		QuitGameUI=CreateWidget<USW_QuitGameUI>(this,BP_QuitGameUIClass);
+		QuitGameUI=CreateWidget<USW_UIBase>(this,BP_QuitGameUIClass);
 	}
 	if (!QuitGameUI->IsInViewport())
 	{
 		QuitGameUI->AddToViewport(2);
-		QuitGameUI->PlayAnimationReverse(QuitGameUI->Fade);
+		//QuitGameUI->PlayAnimationReverse(QuitGameUI->Fade);
 	}
 }

@@ -39,7 +39,8 @@ void USW_InGameUI::ReadDialog()
 	
 	if (ScriptManager->rowDialog>=1)
 	{
-		PreviousDialogRow =ScriptManager->PreviousDialogStruct;
+		PreviousDialogRow =ScriptManager->GetPreviousDialogStruct();
+		DialogueRecord.Broadcast(PreviousDialogRow->Dialog,PreviousDialogRow->Name);
 	}
 	
 	BP_DialogBox->SetDialogText(DialogStruct->Dialog);

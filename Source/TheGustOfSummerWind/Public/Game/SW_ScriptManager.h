@@ -20,6 +20,7 @@ enum EWidgetStatus
 	AlbumUI,
 	SettingUI,
 	InGameSetting,
+	BackLog,
 };
 
 UCLASS()

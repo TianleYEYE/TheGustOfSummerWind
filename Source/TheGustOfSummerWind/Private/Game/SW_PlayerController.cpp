@@ -58,6 +58,15 @@ void ASW_PlayerController::ReturnOrOpenInGameMenuUI()
 		{
 			InGameMenu.Broadcast(bIsMenuExist);
 		}
+		else if (ScriptManager->WidgetState == BackLog)
+		{
+			//当BackLog存在时，右键消失
+			if (bIsLogExist)
+			{
+				Log.Broadcast(bIsLogExist);
+			}
+		}
+		
 	}
 	else
 	{
@@ -76,8 +85,15 @@ void ASW_PlayerController::DialogueRecord()
 {
 	if (CanPressKey() && ScriptManager->WidgetState == InGame)
 	{
-		Log.Broadcast(bIsLogExist);
-		GEngine->AddOnScreenDebugMessage(1,1.f,FColor::Red,"DialogueRecord");
+		LastKeyPressTime = GetWorld()->GetTimeSeconds();  // 更新按键时间
+		bIsOnCooldown = true;
+
+		//当BackLog不存在时，推滑轮出现
+		if (!bIsLogExist)
+		{
+			Log.Broadcast(bIsLogExist);
+		}
+		//GEngine->AddOnScreenDebugMessage(1,1.f,FColor::Red,"DialogueRecord");
 	}
 	
 }

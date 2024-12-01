@@ -7,6 +7,10 @@
 #include "Game/SW_ScriptManager.h"
 #include "SW_UIBase.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayAnimation,bool,bIsPlayingAnimation);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayingAnimation,bool,bIsPlayingAnimation);
+
+
 /**
  * 
  */
@@ -23,8 +27,11 @@ public:
 	UPROPERTY(EditAnywhere,Category="AudioPlayer")
 	TObjectPtr<ASW_ScriptManager>ScriptManager;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	TObjectPtr<UWidgetAnimation>ContinueUIFade;
+	UPROPERTY(BlueprintAssignable)
+	FPlayAnimation PlayWidgetFade;
+
+	UPROPERTY(BlueprintAssignable)
+	FPlayAnimation PlayingWidgetFade;
 	
 	ASW_ScriptManager* GetScriptManager();
 };

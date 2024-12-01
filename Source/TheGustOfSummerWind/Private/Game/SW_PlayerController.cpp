@@ -39,20 +39,20 @@ void ASW_PlayerController::ReturnOrOpenInGameMenuUI()
 
 		if (ScriptManager->WidgetState == SettingUI || ScriptManager->WidgetState == InGameSetting)
 		{
-			HUD->SettingUI->PlayAnimation(HUD->SettingUI->Fade);
+			HUD->SettingUI->PlayWidgetFade.Broadcast(true);
 			UGameUserSettings::GetGameUserSettings()->SaveSettings();
 		}
 		else if (ScriptManager->WidgetState == AlbumUI)
 		{
-			HUD->AlbumUI->PlayAnimation(HUD->AlbumUI->Fade);
+			HUD->AlbumUI->PlayWidgetFade.Broadcast(true);
 		}
 		else if (ScriptManager->WidgetState == SaveOrLoad)
 		{
-			HUD->ContinueUI->PlayAnimation(HUD->ContinueUI->ContinueUIFade);
+			HUD->ContinueUI->PlayWidgetFade.Broadcast(true);
 		}
 		else if (ScriptManager->WidgetState == InGameSaveOrLoad)
 		{
-			HUD->ContinueUI->PlayAnimation(HUD->ContinueUI->ContinueUIFade);
+			HUD->ContinueUI->PlayWidgetFade.Broadcast(true);
 		}
 		else if (ScriptManager->WidgetState == InGame )
 		{

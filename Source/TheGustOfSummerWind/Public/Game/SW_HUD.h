@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
-#include "UI/SW_UICollection.h"
+#include "UI/InMenuUI/SW_InMenuUI.h"
 #include "UI/SettingUI/SW_SettingUI.h"
 #include "UI/ViewModel/MVVM_System.h"
 #include "SW_HUD.generated.h"
@@ -40,9 +40,9 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Widget")
 	TObjectPtr<USW_UIBase>ContinueUI;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Widget")
-	TObjectPtr<USW_AlbumUI>AlbumUI;
+	TObjectPtr<USW_UIBase>AlbumUI;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Widget")
-	TObjectPtr<USW_SettingUI>SettingUI;
+	TObjectPtr<USW_UIBase>SettingUI;
 	
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<USW_InMenuUI>MenuClass;

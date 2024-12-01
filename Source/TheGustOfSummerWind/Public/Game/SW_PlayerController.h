@@ -10,6 +10,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FInGameMenu,bool,bIsMenuExist);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FLog,bool,bIsLogExist);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAlbumUI);
 
 
 
@@ -47,6 +48,8 @@ public:
 	bool bIsMenuExist = false;
 	UPROPERTY(Blueprintable,BlueprintReadWrite)
 	bool bIsLogExist = false;
+	
+	//FAlbumUI AlbumUI;
 
 	void DialogueRecord();
 private:

@@ -17,19 +17,10 @@ void USW_CharacterPortraits::NativeConstruct()
 void USW_CharacterPortraits::SetCharacterPortraits()
 {
 	
-	ScriptManager = GetScriptManager();
-	DialogStruct = ScriptManager->GetDialogStruct();
-	if(ScriptManager->GetPreviousDialogStruct())
-	{
-		PreviousDialogStruct = ScriptManager->GetPreviousDialogStruct();
-	}
-	else
-	{
-		PreviousDialogStruct =new FDialogStruct();
-	}
+
 	
 
-	SetCharacter.Broadcast(*DialogStruct,*PreviousDialogStruct);
+	// SetCharacter.Broadcast(*DialogStruct,*PreviousDialogStruct);
 	
 }
 

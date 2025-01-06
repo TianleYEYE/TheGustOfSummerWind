@@ -3,8 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/CircularThrobber.h"
-#include "DataStruct\DialogStruct.h"
 #include "UI/SW_UIBase.h"
 #include "SW_DialogBox.generated.h"
 

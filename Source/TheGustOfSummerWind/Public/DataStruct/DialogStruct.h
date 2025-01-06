@@ -4,6 +4,18 @@
 #include "DialogStruct.generated.h"
 
 USTRUCT(BlueprintType)
+struct THEGUSTOFSUMMERWIND_API FCharacterSprite:public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	TObjectPtr<UTexture2D>CurrentSprite;
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	TObjectPtr<UTexture2D>Face;
+};
+
+USTRUCT(BlueprintType)
 struct THEGUSTOFSUMMERWIND_API FDialogStruct:public FTableRowBase
 {
 	GENERATED_BODY()
@@ -15,10 +27,11 @@ struct THEGUSTOFSUMMERWIND_API FDialogStruct:public FTableRowBase
 	FText Dialog=FText();
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
-	TObjectPtr<UTexture2D>CurrentSprite;
-
+	FCharacterSprite Character_1;
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
-	TObjectPtr<UTexture2D>Face;
+	FCharacterSprite Character_2;
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	FCharacterSprite Character_3;
 	
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	TObjectPtr<UTexture2D>Background;
@@ -32,3 +45,4 @@ struct THEGUSTOFSUMMERWIND_API FDialogStruct:public FTableRowBase
 	// UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	// bool bIsStarted = false ;
 };
+

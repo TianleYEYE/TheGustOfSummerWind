@@ -138,6 +138,7 @@ FDialogStruct* ASW_ScriptManager::GetDialogStruct()
 {
 	if (rowDialog<GetMaxDialogIndex())
 	{
+		//读表，返回表中内容的结构体
 		DialogStruct = DataTable->FindRow<FDialogStruct>(DataTable->GetRowNames()[rowDialog],TEXT(""));
 		return DialogStruct;
 	}

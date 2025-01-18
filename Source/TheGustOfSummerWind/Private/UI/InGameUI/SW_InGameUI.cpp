@@ -43,6 +43,7 @@ void USW_InGameUI::ReadDialog()
 		DialogueRecord.Broadcast(PreviousDialogRow->Dialog,PreviousDialogRow->Name);
 	}
 	
+	//读表中的对话内容
 	BP_DialogBox->SetDialogText(DialogStruct->Dialog);
 	BP_CharacterPortraits->SetCharacterPortraits();
 	SetName(DialogStruct);

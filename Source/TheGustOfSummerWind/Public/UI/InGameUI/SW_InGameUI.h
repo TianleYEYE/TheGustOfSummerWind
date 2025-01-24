@@ -4,7 +4,6 @@
 #include "SW_CharacterPortraits.h"
 #include "SW_DialogBox.h"
 #include "Components/Border.h"
-#include "Components/Image.h"
 #include "Components/TextBlock.h"
 #include "UI/SW_UIBase.h"
 #include "UI/Button/BTN_ButtonInGame/BTN_NextDialog.h"
@@ -13,6 +12,8 @@
 #include "SW_InGameUI.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDialogueRecord,FText,readText,FText,readName);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FSetCharacter,FDialogStruct,DialogStruct,FDialogStruct,PreviousDialogStruct);
+
 
 UCLASS()
 class THEGUSTOFSUMMERWIND_API USW_InGameUI : public USW_UIBase
@@ -27,8 +28,12 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<UImage>TEX_Background;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
-	TObjectPtr<USW_CharacterPortraits>BP_CharacterPortraits;
+	// UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
+	// TObjectPtr<USW_CharacterPortraits>BP_CharacterPortraits_0;
+	// UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
+	// TObjectPtr<USW_CharacterPortraits>BP_CharacterPortraits_1;
+	// UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
+	// TObjectPtr<USW_CharacterPortraits>BP_CharacterPortraits_2;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<USW_DialogBox>BP_DialogBox;
@@ -42,6 +47,9 @@ public:
 
 	UPROPERTY(Transient,EditAnywhere,BlueprintReadWrite,meta=(BindWidgetAnim))
 	TObjectPtr<UWidgetAnimation>Fade;
+
+	UPROPERTY(BlueprintAssignable) 
+	FSetCharacter SetCharacter;
 
 	
 	UPROPERTY()
@@ -61,7 +69,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ReadDialog();
-	
+	//设置前后结构体
+	void UpdateStruct();
 	//设置对话角色姓名
 	void SetName(FDialogStruct *dialogRow);
 	//设置背景
@@ -78,7 +87,7 @@ public:
 	FDialogueRecord DialogueRecord;
 	
 
-	FDialogStruct *PreviousDialogRow;
+	FDialogStruct *PreviousDialogStruct;
 	
 	int CurrentIndex;
 	int Num_nextDialogButtonClicked=0;

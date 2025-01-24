@@ -7,7 +7,7 @@
 #include "UI/SW_UIBase.h"
 #include "SW_CharacterPortraits.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FSetCharacter,FDialogStruct,DialogStruct,FDialogStruct,PreviousDialogStruct);
+
 /**
  * 
  */
@@ -26,8 +26,7 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<UImage>VerticalPainting;
 
-	UPROPERTY(BlueprintAssignable) 
-	FSetCharacter SetCharacter;
+	
 
 	FWidgetAnimationDynamicEvent FaceChangeEvent;
 	FDialogStruct *DialogStruct;

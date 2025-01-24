@@ -34,18 +34,14 @@ void USW_InGameUI::PressBTN_NEXT(int32 InRow)
 void USW_InGameUI::ReadDialog()
 {
 	SwitchChapter();
-	// //从游戏脚本管理器获取到DialogStruct
-	DialogStruct=ScriptManager->GetDialogStruct();
-	
-	if (ScriptManager->rowDialog>=1)
-	{
-		PreviousDialogRow =ScriptManager->GetPreviousDialogStruct();
-		DialogueRecord.Broadcast(PreviousDialogRow->Dialog,PreviousDialogRow->Name);
-	}
+	ScriptManager = GetScriptManager();
+	UpdateStruct();
 	
 	//读表中的对话内容
 	BP_DialogBox->SetDialogText(DialogStruct->Dialog);
-	BP_CharacterPortraits->SetCharacterPortraits();
+
+	SetCharacter.Broadcast(*DialogStruct,*PreviousDialogStruct);
+	
 	SetName(DialogStruct);
 	SetBackground(DialogStruct);
 	SetMusic(DialogStruct);
@@ -55,6 +51,19 @@ void USW_InGameUI::ReadDialog()
 	CurrentIndex=0;
 	ScriptManager->rowDialog++;
 	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green,FString::Printf(TEXT("Dialog : %d"),	ScriptManager->rowDialog));
+}
+
+void USW_InGameUI::UpdateStruct()
+{
+	DialogStruct = ScriptManager->GetDialogStruct();
+	if(ScriptManager->GetPreviousDialogStruct())
+	{
+		PreviousDialogStruct = ScriptManager->GetPreviousDialogStruct();
+	}
+	else
+	{
+		PreviousDialogStruct =new FDialogStruct();
+	}
 }
 
 void USW_InGameUI::SetName(FDialogStruct *dialogRow)

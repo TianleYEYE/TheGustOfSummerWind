@@ -46,11 +46,11 @@ void USW_InGameUI::ReadDialog()
 	SetBackground(DialogStruct);
 	SetMusic(DialogStruct);
 	SetConversationalVoice(DialogStruct);
-
+	DialogueRecord.Broadcast(DialogStruct->Dialog,DialogStruct->Name);
 	
 	CurrentIndex=0;
 	ScriptManager->rowDialog++;
-	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green,FString::Printf(TEXT("Dialog : %d"),	ScriptManager->rowDialog));
+	
 }
 
 void USW_InGameUI::UpdateStruct()

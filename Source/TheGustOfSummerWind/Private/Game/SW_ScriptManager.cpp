@@ -4,7 +4,6 @@
 #include "Game/SW_ScriptManager.h"
 
 #include "Game/SW_GameMode.h"
-#include "Game/SW_HUD.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -55,7 +54,7 @@ void ASW_ScriptManager::LoadData()
 	SoundEffectVolume = SaveObject ->SoundEffectVolume;
 	ConversationalVoice = SaveObject ->ConversationalVoice;
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green,FString::Printf(TEXT("CurrentChapter : %d"),CurrentChapter));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green,FString::Printf(TEXT("CurrentChapter : %d"),CurrentChapter));
 }
 
 void ASW_ScriptManager::SetRowDialog(int EnterRowDialog)

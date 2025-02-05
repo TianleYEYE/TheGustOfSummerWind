@@ -119,7 +119,7 @@ void USW_InGameUI::SwitchChapter()
 	{
 		ScriptManager->rowDialog = 0;
 		ScriptManager->CurrentChapter++;
-		PlayAnimation(Fade);
+		SwitchChapterCG.Broadcast();
 		UDataTable * CurrentChapter = ScriptManager->GetDataTableByIndex(ScriptManager->CurrentChapter);
 		ScriptManager->DataTable = CurrentChapter;
 	}

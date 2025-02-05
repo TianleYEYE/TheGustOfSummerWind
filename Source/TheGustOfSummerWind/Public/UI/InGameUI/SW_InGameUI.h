@@ -13,7 +13,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDialogueRecord,FText,readText,FText,readName);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FSetCharacter,FDialogStruct,DialogStruct,FDialogStruct,PreviousDialogStruct);
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FSwitchChapterCG);
 
 UCLASS()
 class THEGUSTOFSUMMERWIND_API USW_InGameUI : public USW_UIBase
@@ -51,6 +51,8 @@ public:
 	UPROPERTY(BlueprintAssignable) 
 	FSetCharacter SetCharacter;
 
+	UPROPERTY(BlueprintAssignable) 
+	FSwitchChapterCG SwitchChapterCG;
 	
 	UPROPERTY()
 	TObjectPtr<UCanvasPanelSlot>inGameMenuUISlot;

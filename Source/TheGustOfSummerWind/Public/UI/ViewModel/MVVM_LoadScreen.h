@@ -55,33 +55,8 @@ private:
 	UPROPERTY()
 	TMap<int32,UMVVM_LoadSlot*>LoadSlots;
 
-	UPROPERTY()
-	TObjectPtr<UMVVM_LoadSlot>LoadSlot_0;
-	UPROPERTY()
-	TObjectPtr<UMVVM_LoadSlot>LoadSlot_1;
-	UPROPERTY()
-	TObjectPtr<UMVVM_LoadSlot>LoadSlot_2;
-	UPROPERTY()
-	TObjectPtr<UMVVM_LoadSlot>LoadSlot_3;
-	UPROPERTY()
-	TObjectPtr<UMVVM_LoadSlot>LoadSlot_4;
-	UPROPERTY()
-	TObjectPtr<UMVVM_LoadSlot>LoadSlot_5;
-	UPROPERTY()
-	TObjectPtr<UMVVM_LoadSlot>LoadSlot_6;
-	UPROPERTY()
-	TObjectPtr<UMVVM_LoadSlot>LoadSlot_7;
-	UPROPERTY()
-	TObjectPtr<UMVVM_LoadSlot>LoadSlot_8;
-	UPROPERTY()
-	TObjectPtr<UMVVM_LoadSlot>LoadSlot_9;
-	UPROPERTY()
-	TObjectPtr<UMVVM_LoadSlot>LoadSlot_10;
-	UPROPERTY()
-	TObjectPtr<UMVVM_LoadSlot>LoadSlot_11;
-	
-	
-	
+	UPROPERTY(EditDefaultsOnly, Category = "Load Slots")
+	int32 DefaultSlotCount = 12;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,FieldNotify,Setter,Getter,meta=(AllowPrivateAccess="true"))
 	int32 NumLoadSlots;

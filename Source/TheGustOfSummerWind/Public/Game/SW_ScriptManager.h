@@ -28,6 +28,8 @@ class THEGUSTOFSUMMERWIND_API ASW_ScriptManager : public AActor
 {
 	GENERATED_BODY()
 
+	static constexpr int32 MaxChapterCount = 15;
+
 public:
 	// Sets default values for this actor's properties
 	ASW_ScriptManager();
@@ -52,6 +54,9 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "Chapter DataTable")
 	TObjectPtr<UDataTable>DataTable;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Chapter DataTable")
+	TArray<TSoftObjectPtr<UDataTable>> ChapterDataTables;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="properties")
 	int rowDialog=0;

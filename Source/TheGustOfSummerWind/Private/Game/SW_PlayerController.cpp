@@ -10,32 +10,35 @@
 void ASW_PlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
-	
-	bShowMouseCursor=true;
-	LastKeyPressTime = -CooldownTime; // 确保可以在第一次按键时触发
-	
-	
+
+	bShowMouseCursor = true;
+	LastKeyPressTime = -CooldownTime;
+
 	SetInputMode(FInputModeGameAndUI());
-	auto TempActor = UGameplayStatics::GetActorOfClass(GetWorld(),ScriptManager->StaticClass());
+
+	AActor* TempActor = UGameplayStatics::GetActorOfClass(GetWorld(), ASW_ScriptManager::StaticClass());
 	if (TempActor)
 	{
-		ScriptManager= Cast<ASW_ScriptManager>(TempActor);
+		ScriptManager = Cast<ASW_ScriptManager>(TempActor);
 	}
 
-	InputComponent->BindAction("QuitGame",IE_Pressed,this,&ThisClass::QuitGame);
-	InputComponent->BindAction("ReturnOrOpenInGameMenuUI",IE_Released,this,&ThisClass::ReturnOrOpenInGameMenuUI);
-	InputComponent->BindAction("DialogueRecord",IE_Pressed,this,&ThisClass::DialogueRecord);
+	InputComponent->BindAction("QuitGame", IE_Pressed, this, &ThisClass::QuitGame);
+	InputComponent->BindAction("ReturnOrOpenInGameMenuUI", IE_Released, this, &ThisClass::ReturnOrOpenInGameMenuUI);
+	InputComponent->BindAction("DialogueRecord", IE_Pressed, this, &ThisClass::DialogueRecord);
 }
 
 void ASW_PlayerController::ReturnOrOpenInGameMenuUI()
 {
-	if (CanPressKey())  // 检查按键是否可以被触发
+	if (!ScriptManager)
 	{
-		LastKeyPressTime = GetWorld()->GetTimeSeconds();  // 更新按键时间
-		bIsOnCooldown = true;  // 设置冷却标志，防止短时间内重复按键
+		return;
+	}
 
+	if (CanPressKey())
+	{
+		LastKeyPressTime = GetWorld()->GetTimeSeconds();
+		bIsOnCooldown = true;
 		HUD = Cast<ASW_HUD>(GetHUD());
-		
 
 		if (ScriptManager->WidgetState == SettingUI || ScriptManager->WidgetState == InGameSetting)
 		{
@@ -46,27 +49,18 @@ void ASW_PlayerController::ReturnOrOpenInGameMenuUI()
 		{
 			HUD->AlbumUI->PlayWidgetFade.Broadcast(true);
 		}
-		else if (ScriptManager->WidgetState == SaveOrLoad)
+		else if (ScriptManager->WidgetState == SaveOrLoad || ScriptManager->WidgetState == InGameSaveOrLoad)
 		{
 			HUD->ContinueUI->PlayWidgetFade.Broadcast(true);
 		}
-		else if (ScriptManager->WidgetState == InGameSaveOrLoad)
-		{
-			HUD->ContinueUI->PlayWidgetFade.Broadcast(true);
-		}
-		else if (ScriptManager->WidgetState == InGame )
+		else if (ScriptManager->WidgetState == InGame)
 		{
 			InGameMenu.Broadcast(bIsMenuExist);
 		}
-		else if (ScriptManager->WidgetState == BackLog)
+		else if (ScriptManager->WidgetState == BackLog && bIsLogExist)
 		{
-			//当BackLog存在时，右键消失
-			if (bIsLogExist)
-			{
-				Log.Broadcast(bIsLogExist);
-			}
+			Log.Broadcast(bIsLogExist);
 		}
-		
 	}
 	else
 	{
@@ -83,46 +77,43 @@ void ASW_PlayerController::BeginPlay()
 
 void ASW_PlayerController::DialogueRecord()
 {
+	if (!ScriptManager)
+	{
+		return;
+	}
+
 	if (CanPressKey() && ScriptManager->WidgetState == InGame)
 	{
-		LastKeyPressTime = GetWorld()->GetTimeSeconds();  // 更新按键时间
+		LastKeyPressTime = GetWorld()->GetTimeSeconds();
 		bIsOnCooldown = true;
 
-		//当BackLog不存在时，推滑轮出现
 		if (!bIsLogExist)
 		{
 			Log.Broadcast(bIsLogExist);
 		}
-		//GEngine->AddOnScreenDebugMessage(1,1.f,FColor::Red,"DialogueRecord");
 	}
-	
 }
 
 bool ASW_PlayerController::CanPressKey()
 {
-	// 当前时间和上次按键时间的时间差
-	float TimeSinceLastPress = GetWorld()->GetTimeSeconds() - LastKeyPressTime;
-
-	// 如果冷却时间已经超过
+	const float TimeSinceLastPress = GetWorld()->GetTimeSeconds() - LastKeyPressTime;
 	if (bIsOnCooldown && TimeSinceLastPress >= CooldownTime)
 	{
-		// 冷却结束，重置冷却状态
 		bIsOnCooldown = false;
 	}
 
-	// 如果没有在冷却状态，允许按键
 	return !bIsOnCooldown;
 }
 
 void ASW_PlayerController::QuitGame()
 {
-	if (QuitGameUI ==nullptr)
+	if (QuitGameUI == nullptr)
 	{
-		QuitGameUI=CreateWidget<USW_UIBase>(this,BP_QuitGameUIClass);
+		QuitGameUI = CreateWidget<USW_UIBase>(this, BP_QuitGameUIClass);
 	}
+
 	if (!QuitGameUI->IsInViewport())
 	{
 		QuitGameUI->AddToViewport(2);
-		//QuitGameUI->PlayAnimationReverse(QuitGameUI->Fade);
 	}
 }

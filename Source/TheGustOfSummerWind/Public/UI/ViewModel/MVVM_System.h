@@ -70,22 +70,10 @@ private:
 	TMap<int32,UMVVM_CGSlot*>CGSlots;
 
 	UPROPERTY()
-	TObjectPtr<UMVVM_CGSlot>CGSlot_0;
-	UPROPERTY()
-	TObjectPtr<UMVVM_CGSlot>CGSlot_1;
-	UPROPERTY()
-	TObjectPtr<UMVVM_CGSlot>CGSlot_2;
-	UPROPERTY()
-	TObjectPtr<UMVVM_CGSlot>CGSlot_3;
-	UPROPERTY()
-	TObjectPtr<UMVVM_CGSlot>CGSlot_4;
-	UPROPERTY()
-	TObjectPtr<UMVVM_CGSlot>CGSlot_5;
-	UPROPERTY()
-	TObjectPtr<UMVVM_CGSlot>CGSlot_6;
-
-	UPROPERTY()
 	TObjectPtr<UMVVM_SettingSlot>SettingSlot;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Album")
+	int32 DefaultCGSlotCount = 6;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,FieldNotify,Setter,Getter,meta=(AllowPrivateAccess="true"))
 	int32 NumLoadSlots;

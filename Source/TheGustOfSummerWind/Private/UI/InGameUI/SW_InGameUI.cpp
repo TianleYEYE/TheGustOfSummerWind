@@ -7,104 +7,115 @@
 #include "Game/SW_HUD.h"
 
 
-
 void USW_InGameUI::NativeConstruct()
 {
 	Super::NativeConstruct();
-	
-	//初始化
 	InitializeGame();
 }
 
-
 void USW_InGameUI::InitializeGame()
 {
-	//获取场景中的ScriptManager
 	ScriptManager = GetScriptManager();
-	//下一段对话按钮绑定函数
-	BP_NextDialog->EntrustDelegated.AddDynamic(this,&USW_InGameUI::PressBTN_NEXT);
+	if (BP_NextDialog)
+	{
+		BP_NextDialog->EntrustDelegated.AddDynamic(this, &USW_InGameUI::PressBTN_NEXT);
+	}
 }
 
 void USW_InGameUI::PressBTN_NEXT(int32 InRow)
 {
 	ReadDialog();
-	
 }
 
 void USW_InGameUI::ReadDialog()
 {
 	SwitchChapter();
 	ScriptManager = GetScriptManager();
-	UpdateStruct();
-	
-	//读表中的对话内容
-	BP_DialogBox->SetDialogText(DialogStruct->Dialog);
+	if (!ScriptManager)
+	{
+		return;
+	}
 
-	SetCharacter.Broadcast(*DialogStruct,*PreviousDialogStruct);
-	
+	UpdateStruct();
+	if (!DialogStruct || !PreviousDialogStruct || !BP_DialogBox)
+	{
+		return;
+	}
+
+	BP_DialogBox->SetDialogText(DialogStruct->Dialog);
+	SetCharacter.Broadcast(*DialogStruct, *PreviousDialogStruct);
+
 	SetName(DialogStruct);
 	SetBackground(DialogStruct);
 	SetMusic(DialogStruct);
 	SetConversationalVoice(DialogStruct);
-	DialogueRecord.Broadcast(DialogStruct->Dialog,DialogStruct->Name);
-	
-	CurrentIndex=0;
+	DialogueRecord.Broadcast(DialogStruct->Dialog, DialogStruct->Name);
+
+	CurrentIndex = 0;
 	ScriptManager->rowDialog++;
-	
 }
 
 void USW_InGameUI::UpdateStruct()
 {
-	DialogStruct = ScriptManager->GetDialogStruct();
-	if(ScriptManager->GetPreviousDialogStruct())
+	if (!ScriptManager)
 	{
-		PreviousDialogStruct = ScriptManager->GetPreviousDialogStruct();
+		DialogStruct = nullptr;
+		PreviousDialogStruct = nullptr;
+		return;
 	}
-	else
+
+	DialogStruct = ScriptManager->GetDialogStruct();
+	PreviousDialogStruct = ScriptManager->GetPreviousDialogStruct();
+	if (!PreviousDialogStruct)
 	{
-		PreviousDialogStruct =new FDialogStruct();
+		PreviousDialogStruct = DialogStruct;
 	}
 }
 
-void USW_InGameUI::SetName(FDialogStruct *dialogRow)
+void USW_InGameUI::SetName(FDialogStruct* dialogRow)
 {
+	if (!dialogRow)
+	{
+		return;
+	}
+
 	if (dialogRow->Name.IsEmpty())
 	{
-		NameBoxBackground->SetBrushColor(FColor(0.0f,0.0f,0.0f,0.0f));
-		NameBoxBackground->SetContentColorAndOpacity(FColor(0.0f,0.0f,0.0f,0.0f));
+		NameBoxBackground->SetBrushColor(FColor(0.0f, 0.0f, 0.0f, 0.0f));
+		NameBoxBackground->SetContentColorAndOpacity(FColor(0.0f, 0.0f, 0.0f, 0.0f));
 	}
 	else
 	{
-		NameBoxBackground->SetBrushColor(FColor(255.0f,255.0f,255.0f,255.0f));
-		NameBoxBackground->SetContentColorAndOpacity(FColor(255.0f,255.0f,255.0f,255.0f));
+		NameBoxBackground->SetBrushColor(FColor(255.0f, 255.0f, 255.0f, 255.0f));
+		NameBoxBackground->SetContentColorAndOpacity(FColor(255.0f, 255.0f, 255.0f, 255.0f));
 		TextBlock_Name->SetText(dialogRow->Name);
 	}
 }
 
-void USW_InGameUI::SetBackground(FDialogStruct *dialogRow)
+void USW_InGameUI::SetBackground(FDialogStruct* dialogRow)
 {
-	TEX_Background->SetBrushFromTexture(dialogRow->Background,false);
-
+	if (dialogRow)
+	{
+		TEX_Background->SetBrushFromTexture(dialogRow->Background, false);
+	}
 }
 
-void USW_InGameUI::SetMusic(FDialogStruct *dialogRow)
+void USW_InGameUI::SetMusic(FDialogStruct* dialogRow)
 {
-	if (dialogRow->BackgroundSound!=nullptr)
+	if (dialogRow && dialogRow->BackgroundSound != nullptr)
 	{
 		ScriptManager->BackgroundMusic = dialogRow->BackgroundSound;
-		//SetSoundMixClassOver
 		ScriptManager->AudioPlayer->Stop();
 		ScriptManager->AudioPlayer->SetSound(dialogRow->BackgroundSound);
 		ScriptManager->AudioPlayer->Play();
 	}
-	
 }
 
-void USW_InGameUI::SetConversationalVoice(FDialogStruct *dialogRow)
+void USW_InGameUI::SetConversationalVoice(FDialogStruct* dialogRow)
 {
-	if (dialogRow->ConversationalVoice!=nullptr)
+	if (dialogRow && dialogRow->ConversationalVoice != nullptr)
 	{
-		if (ScriptManager->ConversationalVoicePlayer!=nullptr)
+		if (ScriptManager->ConversationalVoicePlayer != nullptr)
 		{
 			ScriptManager->ConversationalVoicePlayer->Stop();
 		}
@@ -115,17 +126,21 @@ void USW_InGameUI::SetConversationalVoice(FDialogStruct *dialogRow)
 
 void USW_InGameUI::SwitchChapter()
 {
-	if (ScriptManager->rowDialog == ScriptManager->GetMaxDialogIndex() && ScriptManager->CurrentChapter < 15)
+	if (!ScriptManager)
 	{
-		ScriptManager->rowDialog = 0;
-		ScriptManager->CurrentChapter++;
-		SwitchChapterCG.Broadcast();
-		UDataTable * CurrentChapter = ScriptManager->GetDataTableByIndex(ScriptManager->CurrentChapter);
-		ScriptManager->DataTable = CurrentChapter;
+		return;
 	}
 
 	ScriptManager->CurrentChapter = ScriptManager->GetDataTableIndex(ScriptManager->DataTable);
+	if (ScriptManager->rowDialog == ScriptManager->GetMaxDialogIndex() && ScriptManager->CurrentChapter >= 0)
+	{
+		UDataTable* NextChapter = ScriptManager->GetDataTableByIndex(ScriptManager->CurrentChapter + 1);
+		if (NextChapter)
+		{
+			ScriptManager->rowDialog = 0;
+			ScriptManager->CurrentChapter++;
+			SwitchChapterCG.Broadcast();
+			ScriptManager->DataTable = NextChapter;
+		}
+	}
 }
-
-
-

@@ -10,85 +10,81 @@
 
 void ASW_GameMode::SaveSystemData(UMVVM_System* MVVMSystem)
 {
-	if (UGameplayStatics::DoesSaveGameExist(FString("SystemData"), 0))
-	{
-		UGameplayStatics::DeleteGameInSlot(FString("SystemData"), 0);
-	}
-
 	USaveGame* SaveGameObject = UGameplayStatics::CreateSaveGameObject(SystemSaveGameClass);
 	USW_SystemData* SystemDataSaveGame = Cast<USW_SystemData>(SaveGameObject);
+	if (!SystemDataSaveGame || !MVVMSystem || !MVVMSystem->GetSettingSlot())
+	{
+		return;
+	}
 
 	for (const TPair<int32, UMVVM_CGSlot*>& CGSlotPair : MVVMSystem->GetCGSlots())
 	{
 		UMVVM_CGSlot* CGSlot = CGSlotPair.Value;
 		if (CGSlot)
 		{
-			SystemDataSaveGame->CGSlotData.Add(CGSlotPair.Key, FCGSlotData{ CGSlot->GetCGSlotName(), CGSlot->SlotStatus });
+			SystemDataSaveGame->CGSlotData.Add(CGSlotPair.Key, FCGSlotData{CGSlot->GetCGSlotName(), CGSlot->SlotStatus});
 		}
 	}
 
-	// 确保每次都从 SettingSlot 获取最新的值
 	SystemDataSaveGame->TextDisplaySpeed = MVVMSystem->GetSettingSlot()->GetTextDisplaySpeed();
 	SystemDataSaveGame->MasterVolume = MVVMSystem->GetSettingSlot()->GetMasterVolume();
 	SystemDataSaveGame->SoundEffectVolume = MVVMSystem->GetSettingSlot()->GetSoundEffectVolume();
-	SystemDataSaveGame->ConversationalVoice =MVVMSystem->GetSettingSlot()->GetConversationalVoice();
-	
-	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("TextDisplaySpeed : %f, MasterVolume: %f"), SystemDataSaveGame->TextDisplaySpeed, SystemDataSaveGame->MasterVolume));
+	SystemDataSaveGame->ConversationalVoice = MVVMSystem->GetSettingSlot()->GetConversationalVoice();
 
-	// 使用固定的保存名称或添加一个方法获取名称
-	FString SaveSlotName = TEXT("SystemData");
+	const FString SaveSlotName = TEXT("SystemData");
 	UGameplayStatics::SaveGameToSlot(SystemDataSaveGame, SaveSlotName, 0);
-
-	// 调试信息
-	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Saving CGSlot Data with updated TextDisplaySpeed and MasterVolume"));
 }
 
 void ASW_GameMode::SaveSlotData(UMVVM_LoadSlot* LoadSlot, int32 SlotIndex)
 {
-	if (UGameplayStatics::DoesSaveGameExist(LoadSlot->GetLoadSlotName(),SlotIndex))
+	USaveGame* SaveGameObject = UGameplayStatics::CreateSaveGameObject(LoadScreenSaveGameClass);
+	USW_SaveGame* LoadScreenSaveGame = Cast<USW_SaveGame>(SaveGameObject);
+	if (!LoadScreenSaveGame || !LoadSlot)
 	{
-		UGameplayStatics::DeleteGameInSlot(LoadSlot->GetLoadSlotName(),SlotIndex);
+		return;
 	}
-	USaveGame * SaveGameObject =UGameplayStatics::CreateSaveGameObject(LoadScreenSaveGameClass);
-	USW_SaveGame * LoadScreenSaveGame = Cast<USW_SaveGame>(SaveGameObject);
-	LoadScreenSaveGame -> DataTable = LoadSlot -> GetDataTable();
-	LoadScreenSaveGame -> BackgroundMusic = LoadSlot ->GetBackgroundMusic();
-	LoadScreenSaveGame -> ChapterName = LoadSlot ->GetChapterName();
-	LoadScreenSaveGame -> RowDialog = LoadSlot ->GetRowDialog();
-	LoadScreenSaveGame -> DateTime = LoadSlot ->GetDateTime();
-	LoadScreenSaveGame -> SaveSlotStatus= Load;
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("DataTable : %s , RowDialog: %d"),*LoadScreenSaveGame->DataTable->GetName() , LoadScreenSaveGame->RowDialog));
-	UGameplayStatics::SaveGameToSlot(LoadScreenSaveGame,LoadSlot->GetLoadSlotName(),SlotIndex);
+
+	LoadScreenSaveGame->DataTable = LoadSlot->GetDataTable();
+	LoadScreenSaveGame->BackgroundMusic = LoadSlot->GetBackgroundMusic();
+	LoadScreenSaveGame->ChapterName = LoadSlot->GetChapterName();
+	LoadScreenSaveGame->RowDialog = LoadSlot->GetRowDialog();
+	LoadScreenSaveGame->DateTime = LoadSlot->GetDateTime();
+	LoadScreenSaveGame->SaveSlotStatus = Load;
+
+	if (LoadScreenSaveGame->DataTable)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("DataTable : %s , RowDialog: %d"), *LoadScreenSaveGame->DataTable->GetName(), LoadScreenSaveGame->RowDialog));
+	}
+
+	UGameplayStatics::SaveGameToSlot(LoadScreenSaveGame, LoadSlot->GetLoadSlotName(), SlotIndex);
 }
 
 USW_SaveGame* ASW_GameMode::GetSaveSlotData(const FString& SlotName, int32 SlotIndex) const
 {
-	USaveGame* SaveGameObject;
-	if (UGameplayStatics::DoesSaveGameExist(SlotName,SlotIndex))
+	USaveGame* SaveGameObject = nullptr;
+	if (UGameplayStatics::DoesSaveGameExist(SlotName, SlotIndex))
 	{
-		SaveGameObject = UGameplayStatics::LoadGameFromSlot(SlotName,SlotIndex);
+		SaveGameObject = UGameplayStatics::LoadGameFromSlot(SlotName, SlotIndex);
 	}
 	else
 	{
 		SaveGameObject = UGameplayStatics::CreateSaveGameObject(LoadScreenSaveGameClass);
 	}
-	USW_SaveGame* SaveGame = Cast<USW_SaveGame>(SaveGameObject);
-	return SaveGame;
+
+	return Cast<USW_SaveGame>(SaveGameObject);
 }
 
 USW_SystemData* ASW_GameMode::GetCGSlotData() const
 {
-	USaveGame* SaveGameObject;
-	if (UGameplayStatics::DoesSaveGameExist("SystemData",0))
+	USaveGame* SaveGameObject = nullptr;
+	if (UGameplayStatics::DoesSaveGameExist(TEXT("SystemData"), 0))
 	{
-		SaveGameObject = UGameplayStatics::LoadGameFromSlot("SystemData",0);
+		SaveGameObject = UGameplayStatics::LoadGameFromSlot(TEXT("SystemData"), 0);
 	}
 	else
 	{
 		SaveGameObject = UGameplayStatics::CreateSaveGameObject(SystemSaveGameClass);
 	}
-	USW_SystemData* SaveGame = Cast<USW_SystemData>(SaveGameObject);
-	// // 加载时
-	// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("Loading CGSlot Data"));
-	return SaveGame;
+
+	return Cast<USW_SystemData>(SaveGameObject);
 }

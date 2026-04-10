@@ -7,7 +7,12 @@
 
 ASW_ScriptManager* USW_UIBase::GetScriptManager()
 {
-	auto TempActor = UGameplayStatics::GetActorOfClass(GetWorld(),ScriptManager->StaticClass());
+	if (ScriptManager)
+	{
+		return ScriptManager;
+	}
+
+	AActor* TempActor = UGameplayStatics::GetActorOfClass(GetWorld(), ASW_ScriptManager::StaticClass());
 	if (TempActor)
 	{
 		ScriptManager= Cast<ASW_ScriptManager>(TempActor);

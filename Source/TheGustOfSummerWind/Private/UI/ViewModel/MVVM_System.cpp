@@ -11,8 +11,8 @@
 
 namespace
 {
-constexpr float MinSettingVolume = 0.0f;
-constexpr float MaxSettingVolume = 1.0f;
+constexpr float MinSystemSettingVolume = 0.0f;
+constexpr float MaxSystemSettingVolume = 1.0f;
 constexpr int32 DefaultScreenWidth = 1920;
 constexpr int32 DefaultScreenHeight = 1080;
 
@@ -88,7 +88,7 @@ void UMVVM_System::MasterVolumeData(float InMasterVolume)
 		return;
 	}
 
-	SettingSlot->SetMasterVolume(FMath::Clamp(InMasterVolume, MinSettingVolume, MaxSettingVolume));
+	SettingSlot->SetMasterVolume(FMath::Clamp(InMasterVolume, MinSystemSettingVolume, MaxSystemSettingVolume));
 	ApplyCurrentSettings(true);
 }
 
@@ -99,7 +99,7 @@ void UMVVM_System::SoundEffectVolumeData(float InSoundEffectVolume)
 		return;
 	}
 
-	SettingSlot->SetSoundEffectVolume(FMath::Clamp(InSoundEffectVolume, MinSettingVolume, MaxSettingVolume));
+	SettingSlot->SetSoundEffectVolume(FMath::Clamp(InSoundEffectVolume, MinSystemSettingVolume, MaxSystemSettingVolume));
 	ApplyCurrentSettings(true);
 }
 
@@ -110,7 +110,7 @@ void UMVVM_System::ConversationalVoiceVolumeData(float InConversationalVoice)
 		return;
 	}
 
-	SettingSlot->SetConversationalVoice(FMath::Clamp(InConversationalVoice, MinSettingVolume, MaxSettingVolume));
+	SettingSlot->SetConversationalVoice(FMath::Clamp(InConversationalVoice, MinSystemSettingVolume, MaxSystemSettingVolume));
 	ApplyCurrentSettings(true);
 }
 
@@ -149,7 +149,7 @@ void UMVVM_System::ApplySoundClassVolume(USoundMix* InSoundMix, USoundClass* InS
 	}
 
 	UGameplayStatics::PushSoundMixModifier(this, InSoundMix);
-	UGameplayStatics::SetSoundMixClassOverride(this, InSoundMix, InSoundClass, FMath::Clamp(InVolume, MinSettingVolume, MaxSettingVolume), 1.0f, 0.0f, bApplyToChildren);
+	UGameplayStatics::SetSoundMixClassOverride(this, InSoundMix, InSoundClass, FMath::Clamp(InVolume, MinSystemSettingVolume, MaxSystemSettingVolume), 1.0f, 0.0f, bApplyToChildren);
 }
 
 void UMVVM_System::ApplyCurrentSettings(bool bSaveAfterApply)

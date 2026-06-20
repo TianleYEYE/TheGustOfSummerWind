@@ -18,7 +18,7 @@ constexpr TCHAR AutoButtonPropertyName[] = TEXT("BP_Auto");
 constexpr TCHAR SkipButtonPropertyName[] = TEXT("BP_Skip");
 constexpr TCHAR ButtonContainerPropertyName[] = TEXT("BP_ButtonOfInGameUI");
 
-UObject* GetObjectPropertyValue(UObject* Owner, const FName PropertyName)
+UObject* GetInGameUIObjectPropertyValue(UObject* Owner, const FName PropertyName)
 {
 	if (!Owner)
 	{
@@ -29,7 +29,7 @@ UObject* GetObjectPropertyValue(UObject* Owner, const FName PropertyName)
 	return ObjectProperty ? ObjectProperty->GetObjectPropertyValue_InContainer(Owner) : nullptr;
 }
 
-bool GetBoolPropertyValue(const UObject* Owner, const FName PropertyName)
+bool GetInGameUIBoolPropertyValue(const UObject* Owner, const FName PropertyName)
 {
 	if (!Owner)
 	{
@@ -40,7 +40,7 @@ bool GetBoolPropertyValue(const UObject* Owner, const FName PropertyName)
 	return BoolProperty ? BoolProperty->GetPropertyValue_InContainer(Owner) : false;
 }
 
-void SetBoolPropertyValue(UObject* Owner, const FName PropertyName, const bool bValue)
+void SetInGameUIBoolPropertyValue(UObject* Owner, const FName PropertyName, const bool bValue)
 {
 	if (!Owner)
 	{
@@ -417,7 +417,7 @@ bool USW_InGameUI::JumpToBacklogEntry(const FSW_BacklogEntry& Entry)
 	ScriptManager->SetRowDialog(Entry.RowIndex);
 	AdvanceDialogImmediately();
 
-	if (UWidget* BacklogWidget = Cast<UWidget>(GetObjectPropertyValue(this, TEXT("BP_BackLog"))))
+	if (UWidget* BacklogWidget = Cast<UWidget>(GetInGameUIObjectPropertyValue(this, TEXT("BP_BackLog"))))
 	{
 		BacklogWidget->RemoveFromParent();
 	}
@@ -487,7 +487,7 @@ bool USW_InGameUI::CanAdvanceDialog() const
 
 bool USW_InGameUI::IsAdvanceAnimationPlaying() const
 {
-	return bIsPlayAnimation || GetBoolPropertyValue(this, TEXT("IsPlayAnimation"));
+	return bIsPlayAnimation || GetInGameUIBoolPropertyValue(this, TEXT("IsPlayAnimation"));
 }
 
 void USW_InGameUI::SyncAdvanceModeFromBlueprintButtons()
@@ -529,16 +529,16 @@ void USW_InGameUI::SyncAdvanceModeFromBlueprintButtons()
 
 bool USW_InGameUI::IsBlueprintModeButtonActivated(const FName ButtonName) const
 {
-	UObject* ButtonContainer = GetObjectPropertyValue(const_cast<USW_InGameUI*>(this), ButtonContainerPropertyName);
-	UObject* ButtonWidget = GetObjectPropertyValue(ButtonContainer, ButtonName);
-	return GetBoolPropertyValue(ButtonWidget, TEXT("bIsActivated"));
+	UObject* ButtonContainer = GetInGameUIObjectPropertyValue(const_cast<USW_InGameUI*>(this), ButtonContainerPropertyName);
+	UObject* ButtonWidget = GetInGameUIObjectPropertyValue(ButtonContainer, ButtonName);
+	return GetInGameUIBoolPropertyValue(ButtonWidget, TEXT("bIsActivated"));
 }
 
 void USW_InGameUI::SetBlueprintModeButtonActivated(const FName ButtonName, const bool bActivated)
 {
-	UObject* ButtonContainer = GetObjectPropertyValue(this, ButtonContainerPropertyName);
-	UObject* ButtonWidget = GetObjectPropertyValue(ButtonContainer, ButtonName);
-	SetBoolPropertyValue(ButtonWidget, TEXT("bIsActivated"), bActivated);
+	UObject* ButtonContainer = GetInGameUIObjectPropertyValue(this, ButtonContainerPropertyName);
+	UObject* ButtonWidget = GetInGameUIObjectPropertyValue(ButtonContainer, ButtonName);
+	SetInGameUIBoolPropertyValue(ButtonWidget, TEXT("bIsActivated"), bActivated);
 
 	if (UWidget* Widget = Cast<UWidget>(ButtonWidget))
 	{
@@ -548,9 +548,9 @@ void USW_InGameUI::SetBlueprintModeButtonActivated(const FName ButtonName, const
 
 void USW_InGameUI::UpdateModeButtonFeedback() const
 {
-	UObject* ButtonContainer = GetObjectPropertyValue(const_cast<USW_InGameUI*>(this), ButtonContainerPropertyName);
-	UObject* AutoButton = GetObjectPropertyValue(ButtonContainer, AutoButtonPropertyName);
-	UObject* SkipButton = GetObjectPropertyValue(ButtonContainer, SkipButtonPropertyName);
+	UObject* ButtonContainer = GetInGameUIObjectPropertyValue(const_cast<USW_InGameUI*>(this), ButtonContainerPropertyName);
+	UObject* AutoButton = GetInGameUIObjectPropertyValue(ButtonContainer, AutoButtonPropertyName);
+	UObject* SkipButton = GetInGameUIObjectPropertyValue(ButtonContainer, SkipButtonPropertyName);
 
 	if (UWidget* AutoWidget = Cast<UWidget>(AutoButton))
 	{

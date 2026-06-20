@@ -72,6 +72,21 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void LoadData();
 
+	UFUNCTION(BlueprintCallable, Category = "System Settings")
+	void ApplyRuntimeSettings();
+
+	UFUNCTION(BlueprintCallable, BlueprintSetter, Category = "System Settings")
+	void SetTextDisplaySpeed(float InTextDisplaySpeed);
+
+	UFUNCTION(BlueprintCallable, BlueprintSetter, Category = "System Settings")
+	void SetMasterVolume(float InMasterVolume);
+
+	UFUNCTION(BlueprintCallable, BlueprintSetter, Category = "System Settings")
+	void SetSoundEffectVolume(float InSoundEffectVolume);
+
+	UFUNCTION(BlueprintCallable, BlueprintSetter, Category = "System Settings")
+	void SetConversationalVoice(float InConversationalVoice);
+
 	void SetRowDialog(int EnterRowDialog);
 	
 	int GetRowDialog() const {return rowDialog ;}
@@ -102,16 +117,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 	UDataTable* GetDataTableByIndex(int32 Index);
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, BlueprintSetter = SetTextDisplaySpeed, Category = "System Settings")
 	float TextDisplaySpeed = 0.1f;
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, BlueprintSetter = SetMasterVolume, Category = "System Settings")
 	float MasterVolume = 0.5f;
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, BlueprintSetter = SetSoundEffectVolume, Category = "System Settings")
 	float SoundEffectVolume = 0.5f;
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, BlueprintSetter = SetConversationalVoice, Category = "System Settings")
 	float ConversationalVoice = 0.5f;
 
 

@@ -8,6 +8,9 @@
 #include "MVVM_SettingSlot.h"
 #include "MVVM_System.generated.h"
 
+class USoundClass;
+class USoundMix;
+
 USTRUCT(BlueprintType)
 struct THEGUSTOFSUMMERWIND_API FCGSlotData
 {
@@ -17,7 +20,7 @@ struct THEGUSTOFSUMMERWIND_API FCGSlotData
 	FString Name;
 
 	UPROPERTY()
-	TEnumAsByte<EAlbumStatus> AlbumStatus;
+	TEnumAsByte<EAlbumStatus> AlbumStatus = NotUnlocked;
 };
 
 /**
@@ -54,11 +57,40 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ConversationalVoiceVolumeData(float InConversationalVoice);
+
+	UFUNCTION(BlueprintCallable)
+	void ScreenResolutionData(FIntPoint InScreenResolution);
+
+	UFUNCTION(BlueprintCallable)
+	void WindowModeData(TEnumAsByte<EWindowMode::Type> InWindowMode);
+
+	UFUNCTION(BlueprintCallable)
+	void ApplySoundClassVolume(USoundMix* InSoundMix, USoundClass* InSoundClass, float InVolume, bool bApplyToChildren = true);
+
+	UFUNCTION(BlueprintCallable)
+	void ApplyCurrentSettings(bool bSaveAfterApply = true);
+
+	UFUNCTION(BlueprintCallable)
+	void SaveCurrentSettings();
+
+	UFUNCTION(BlueprintCallable)
+	void SyncSettingSlotFromRuntime();
+
+	UFUNCTION(BlueprintPure)
+	TArray<FIntPoint> GetSupportedSixteenByNineResolutions() const;
+
+	UFUNCTION(BlueprintPure)
+	FIntPoint GetCurrentScreenResolution() const;
+
+	UFUNCTION(BlueprintPure)
+	TEnumAsByte<EWindowMode::Type> GetCurrentWindowMode() const;
 	
 	UFUNCTION(BlueprintCallable)
 	void LoadData();
 	
 	void SetNumLoadSlots(int32 InNumLoadSlots);
+
+	static bool IsSixteenByNineResolution(const FIntPoint& Resolution);
 
 	int GetNumLoadSlots() const {return NumLoadSlots;}
 	
@@ -66,11 +98,30 @@ public:
 
 	UMVVM_SettingSlot *GetSettingSlot () const {return SettingSlot;}
 private:
+	void ApplyVideoSettings() const;
+	void ApplyAudioSettings();
+	void ApplyRuntimeSettings() const;
+	void SaveSettingSlot();
+	class ASW_GameMode* GetSWGameMode() const;
+	class ASW_ScriptManager* GetScriptManager() const;
+
 	UPROPERTY()
 	TMap<int32,UMVVM_CGSlot*>CGSlots;
 
 	UPROPERTY()
 	TObjectPtr<UMVVM_SettingSlot>SettingSlot;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings|Audio", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USoundMix> GlobalSoundMix;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings|Audio", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USoundClass> MasterSoundClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings|Audio", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USoundClass> SoundEffectSoundClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Settings|Audio", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USoundClass> ConversationalVoiceSoundClass;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Album")
 	int32 DefaultCGSlotCount = 6;

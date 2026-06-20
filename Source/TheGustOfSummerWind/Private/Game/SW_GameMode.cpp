@@ -10,13 +10,13 @@
 
 void ASW_GameMode::SaveSystemData(UMVVM_System* MVVMSystem)
 {
-	USaveGame* SaveGameObject = UGameplayStatics::CreateSaveGameObject(SystemSaveGameClass);
-	USW_SystemData* SystemDataSaveGame = Cast<USW_SystemData>(SaveGameObject);
+	USW_SystemData* SystemDataSaveGame = LoadOrCreateSystemData();
 	if (!SystemDataSaveGame || !MVVMSystem || !MVVMSystem->GetSettingSlot())
 	{
 		return;
 	}
 
+	SystemDataSaveGame->CGSlotData.Reset();
 	for (const TPair<int32, UMVVM_CGSlot*>& CGSlotPair : MVVMSystem->GetCGSlots())
 	{
 		UMVVM_CGSlot* CGSlot = CGSlotPair.Value;
@@ -30,9 +30,10 @@ void ASW_GameMode::SaveSystemData(UMVVM_System* MVVMSystem)
 	SystemDataSaveGame->MasterVolume = MVVMSystem->GetSettingSlot()->GetMasterVolume();
 	SystemDataSaveGame->SoundEffectVolume = MVVMSystem->GetSettingSlot()->GetSoundEffectVolume();
 	SystemDataSaveGame->ConversationalVoice = MVVMSystem->GetSettingSlot()->GetConversationalVoice();
+	SystemDataSaveGame->ScreenResolution = MVVMSystem->GetSettingSlot()->GetScreenResolution();
+	SystemDataSaveGame->WindowMode = MVVMSystem->GetSettingSlot()->GetWindowMode();
 
-	const FString SaveSlotName = TEXT("SystemData");
-	UGameplayStatics::SaveGameToSlot(SystemDataSaveGame, SaveSlotName, 0);
+	SaveSystemDataObject(SystemDataSaveGame);
 }
 
 void ASW_GameMode::SaveSlotData(UMVVM_LoadSlot* LoadSlot, int32 SlotIndex)
@@ -47,7 +48,7 @@ void ASW_GameMode::SaveSlotData(UMVVM_LoadSlot* LoadSlot, int32 SlotIndex)
 	LoadScreenSaveGame->DataTable = LoadSlot->GetDataTable();
 	LoadScreenSaveGame->BackgroundMusic = LoadSlot->GetBackgroundMusic();
 	LoadScreenSaveGame->ChapterName = LoadSlot->GetChapterName();
-	LoadScreenSaveGame->RowDialog = LoadSlot->GetRowDialog();
+	LoadScreenSaveGame->RowDialog = FMath::Max(0, LoadSlot->GetRowDialog());
 	LoadScreenSaveGame->DateTime = LoadSlot->GetDateTime();
 	LoadScreenSaveGame->SaveSlotStatus = Load;
 
@@ -76,6 +77,45 @@ USW_SaveGame* ASW_GameMode::GetSaveSlotData(const FString& SlotName, int32 SlotI
 
 USW_SystemData* ASW_GameMode::GetCGSlotData() const
 {
+	return LoadOrCreateSystemData();
+}
+
+bool ASW_GameMode::IsDialogKeyRead(const FName DialogKey) const
+{
+	if (DialogKey.IsNone())
+	{
+		return false;
+	}
+
+	const USW_SystemData* SystemData = LoadOrCreateSystemData();
+	return SystemData && SystemData->ReadDialogKeys.Contains(DialogKey);
+}
+
+bool ASW_GameMode::AddReadDialogKey(const FName DialogKey) const
+{
+	if (DialogKey.IsNone())
+	{
+		return false;
+	}
+
+	USW_SystemData* SystemData = LoadOrCreateSystemData();
+	if (!SystemData)
+	{
+		return false;
+	}
+
+	if (SystemData->ReadDialogKeys.Contains(DialogKey))
+	{
+		return true;
+	}
+
+	SystemData->ReadDialogKeys.Add(DialogKey);
+	SaveSystemDataObject(SystemData);
+	return true;
+}
+
+USW_SystemData* ASW_GameMode::LoadOrCreateSystemData() const
+{
 	USaveGame* SaveGameObject = nullptr;
 	if (UGameplayStatics::DoesSaveGameExist(TEXT("SystemData"), 0))
 	{
@@ -83,8 +123,19 @@ USW_SystemData* ASW_GameMode::GetCGSlotData() const
 	}
 	else
 	{
-		SaveGameObject = UGameplayStatics::CreateSaveGameObject(SystemSaveGameClass);
+		UClass* SaveGameClass = SystemSaveGameClass ? SystemSaveGameClass.Get() : USW_SystemData::StaticClass();
+		SaveGameObject = UGameplayStatics::CreateSaveGameObject(SaveGameClass);
 	}
 
 	return Cast<USW_SystemData>(SaveGameObject);
+}
+
+void ASW_GameMode::SaveSystemDataObject(USW_SystemData* SystemData) const
+{
+	if (!SystemData)
+	{
+		return;
+	}
+
+	UGameplayStatics::SaveGameToSlot(SystemData, TEXT("SystemData"), 0);
 }

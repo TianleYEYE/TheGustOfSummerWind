@@ -27,6 +27,18 @@
 			"Enabled": true
 		},
 		{
+			"Name": "EnhancedInput",
+			"Enabled": true
+		},
+		{
+			"Name": "EditorScriptingUtilities",
+			"Enabled": true
+		},
+		{
+			"Name": "UnrealClaude",
+			"Enabled": true
+		},
+		{
 			"Name": "DreamTools",
 			"Enabled": false,
 			"MarketplaceURL": "https://gitee.com/dreammoonst/unreal-dreamtools"

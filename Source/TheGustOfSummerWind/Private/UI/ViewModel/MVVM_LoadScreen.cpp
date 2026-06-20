@@ -4,7 +4,9 @@
 #include "UI/ViewModel/MVVM_LoadScreen.h"
 
 #include "Game/SW_GameMode.h"
+#include "Game/SW_HUD.h"
 #include "Kismet/GameplayStatics.h"
+#include "UI/InGameUI/SW_InGameUI.h"
 #include "UI/ViewModel/MVVM_LoadSlot.h"
 
 void UMVVM_LoadScreen::InitializeLoadSlots()
@@ -98,6 +100,17 @@ void UMVVM_LoadScreen::PlayButtonPressed(int32 Slot)
 	}
 
 	UMVVM_LoadSlot* LoadSlot = *FoundLoadSlot;
+	if (APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this, 0))
+	{
+		if (ASW_HUD* SWHUD = Cast<ASW_HUD>(PlayerController->GetHUD()))
+		{
+			if (SWHUD->InGameUI)
+			{
+				SWHUD->InGameUI->PrepareLoadedGameState(LoadSlot->GetRowDialog(), LoadSlot->GetDataTable(), LoadSlot->GetBackgroundMusic());
+			}
+		}
+	}
+
 	PlayButton.Broadcast(LoadSlot->GetRowDialog(), LoadSlot->GetDataTable(), LoadSlot->GetBackgroundMusic());
 }
 

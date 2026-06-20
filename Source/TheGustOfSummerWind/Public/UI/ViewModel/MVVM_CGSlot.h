@@ -30,7 +30,7 @@ public:
 	FSetCGLock SetCGLock;
 	
 	UPROPERTY()
-	TEnumAsByte<EAlbumStatus> SlotStatus;
+	TEnumAsByte<EAlbumStatus> SlotStatus = NotUnlocked;
 	
 	void SetCGSlotName(FString InCGSlotName);
 

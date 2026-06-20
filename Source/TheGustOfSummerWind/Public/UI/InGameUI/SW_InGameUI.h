@@ -4,7 +4,9 @@
 #include "SW_CharacterPortraits.h"
 #include "SW_DialogBox.h"
 #include "Components/Border.h"
+#include "Components/Image.h"
 #include "Components/TextBlock.h"
+#include "DataStruct/BacklogEntry.h"
 #include "UI/SW_UIBase.h"
 #include "UI/Button/BTN_ButtonInGame/BTN_NextDialog.h"
 #include "DataStruct\DialogStruct.h"
@@ -12,8 +14,21 @@
 #include "SW_InGameUI.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDialogueRecord,FText,readText,FText,readName);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FBacklogEntryRecorded, FSW_BacklogEntry, Entry);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FBacklogCleared);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FSetCharacter,FDialogStruct,DialogStruct,FDialogStruct,PreviousDialogStruct);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FSwitchChapterCG);
+
+UENUM(BlueprintType)
+enum class EDialogAdvanceMode : uint8
+{
+	Manual,
+	Auto,
+	Skip
+};
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDialogAdvanceModeChanged, EDialogAdvanceMode, AdvanceMode);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSkipStopped, FText, Reason);
 
 UCLASS()
 class THEGUSTOFSUMMERWIND_API USW_InGameUI : public USW_UIBase
@@ -21,6 +36,7 @@ class THEGUSTOFSUMMERWIND_API USW_InGameUI : public USW_UIBase
 	GENERATED_BODY()
 public:
 	virtual void NativeConstruct() override;
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,meta=(BindWidget))
 	TObjectPtr<UTextBlock>TextBlock_Name;
@@ -71,6 +87,58 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ReadDialog();
+
+	UFUNCTION(BlueprintCallable, Category = "Dialog")
+	void RequestAdvanceDialog(bool bManualRequest = true);
+
+	UFUNCTION(BlueprintCallable, Category = "Dialog")
+	void ToggleAutoMode();
+
+	UFUNCTION(BlueprintCallable, Category = "Dialog")
+	void ToggleSkipMode();
+
+	UFUNCTION(BlueprintCallable, Category = "Dialog")
+	void StopAutoMode();
+
+	UFUNCTION(BlueprintCallable, Category = "Dialog")
+	void StopSkipMode();
+
+	UFUNCTION(BlueprintCallable, Category = "Dialog")
+	void SetAdvanceMode(EDialogAdvanceMode NewAdvanceMode);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Dialog")
+	EDialogAdvanceMode GetAdvanceMode() const { return AdvanceMode; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Dialog")
+	bool IsAutoModeActive() const { return AdvanceMode == EDialogAdvanceMode::Auto; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Dialog")
+	bool IsSkipModeActive() const { return AdvanceMode == EDialogAdvanceMode::Skip; }
+
+	UFUNCTION(BlueprintCallable, Category = "Dialog")
+	void MarkDialogueAdvanceLocked(float LockSeconds);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Backlog")
+	TArray<FSW_BacklogEntry> GetBacklogEntries() const { return BacklogEntries; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Backlog")
+	int32 GetBacklogEntryCount() const { return BacklogEntries.Num(); }
+
+	UFUNCTION(BlueprintCallable, Category = "Backlog")
+	bool GetBacklogEntryAt(int32 Index, FSW_BacklogEntry& OutEntry) const;
+
+	UFUNCTION(BlueprintCallable, Category = "Backlog")
+	void ClearBacklog();
+
+	UFUNCTION(BlueprintCallable, Category = "SaveGame")
+	void PrepareLoadedGameState(int32 LoadedRowDialog, UDataTable* LoadedDataTable, USoundBase* LoadedBackgroundMusic);
+
+	UFUNCTION(BlueprintCallable, Category = "Backlog")
+	bool JumpToBacklogEntry(const FSW_BacklogEntry& Entry);
+
+	UFUNCTION(BlueprintCallable, Category = "Backlog")
+	bool JumpToBacklogIndex(int32 Index);
+
 	//设置前后结构体
 	void UpdateStruct();
 	//设置对话角色姓名
@@ -87,6 +155,18 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FDialogueRecord DialogueRecord;
+
+	UPROPERTY(BlueprintAssignable, Category = "Backlog")
+	FBacklogEntryRecorded BacklogEntryRecorded;
+
+	UPROPERTY(BlueprintAssignable, Category = "Backlog")
+	FBacklogCleared BacklogCleared;
+
+	UPROPERTY(BlueprintAssignable, Category = "Dialog")
+	FDialogAdvanceModeChanged AdvanceModeChanged;
+
+	UPROPERTY(BlueprintAssignable, Category = "Dialog")
+	FSkipStopped SkipStopped;
 	
 
 	FDialogStruct *PreviousDialogStruct;
@@ -103,5 +183,66 @@ public:
 	TObjectPtr<UDataTable>DialogDataTable;
 
 	FDialogStruct *DialogStruct;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialog|Auto")
+	float AutoBaseDelay = 0.8f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialog|Auto")
+	float AutoPerCharacterDelay = 0.045f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialog|Auto")
+	float AutoVoiceTailDelay = 0.25f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialog|Auto")
+	float AutoMinDelay = 1.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialog|Auto")
+	float AutoMaxDelay = 8.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialog|Skip")
+	float SkipInterval = 0.12f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialog|Skip")
+	bool bSkipOnlyReadDialog = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialog")
+	bool bCompleteTextBeforeAdvance = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialog")
+	float ChapterSwitchAdvanceLockSeconds = 1.2f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Backlog", meta = (ClampMin = "0"))
+	int32 MaxBacklogEntries = 300;
+
+private:
+	void AdvanceDialogImmediately();
+	bool TryStartChapterSwitch();
+	bool CanAdvanceDialog() const;
+	bool IsAdvanceAnimationPlaying() const;
+	void SyncAdvanceModeFromBlueprintButtons();
+	bool IsBlueprintModeButtonActivated(FName ButtonName) const;
+	void SetBlueprintModeButtonActivated(FName ButtonName, bool bActivated);
+	void UpdateModeButtonFeedback() const;
+	void ConfigureLegacyBacklogEntryWidgetJumps();
+	void LoadPersistentDialogState();
+	FName GetCurrentDialogReadKey() const;
+	bool IsCurrentDialogRead() const;
+	FName MarkCurrentDialogRead();
+	bool AddBacklogEntry(const FDialogStruct& InDialogStruct, FName DialogKey);
+	float CalculateAutoDelay(const FDialogStruct& InDialogStruct) const;
+	void RefreshAutoAdvanceTime(const FDialogStruct& InDialogStruct);
+
+	UPROPERTY(Transient, BlueprintReadOnly, Category = "Dialog", meta = (AllowPrivateAccess = "true"))
+	EDialogAdvanceMode AdvanceMode = EDialogAdvanceMode::Manual;
+
+	TSet<FName> ReadDialogKeys;
+
+	UPROPERTY(Transient)
+	TArray<FSW_BacklogEntry> BacklogEntries;
+
+	float NextAutoAdvanceTime = 0.0f;
+	float NextSkipAdvanceTime = 0.0f;
+	float AdvanceLockedUntilTime = 0.0f;
+	bool bIsSyncingBlueprintModeState = false;
 	
 };

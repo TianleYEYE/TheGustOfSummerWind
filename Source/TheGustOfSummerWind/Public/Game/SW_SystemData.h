@@ -34,4 +34,13 @@ public:
 	
 	UPROPERTY()
 	float ConversationalVoice = 0.5f;
+
+	UPROPERTY()
+	FIntPoint ScreenResolution = FIntPoint(1920, 1080);
+
+	UPROPERTY()
+	int32 WindowMode = EWindowMode::WindowedFullscreen;
+
+	UPROPERTY()
+	TSet<FName> ReadDialogKeys;
 };

@@ -6,6 +6,12 @@
 #include "Game/SW_GameMode.h"
 #include "Kismet/GameplayStatics.h"
 
+namespace
+{
+constexpr float MinSettingVolume = 0.0f;
+constexpr float MaxSettingVolume = 1.0f;
+constexpr float MinTextDisplaySpeed = 0.0f;
+}
 
 ASW_ScriptManager::ASW_ScriptManager()
 {
@@ -56,6 +62,49 @@ void ASW_ScriptManager::LoadData()
 	MasterVolume = SaveObject->MasterVolume;
 	SoundEffectVolume = SaveObject->SoundEffectVolume;
 	ConversationalVoice = SaveObject->ConversationalVoice;
+
+	ApplyRuntimeSettings();
+}
+
+void ASW_ScriptManager::ApplyRuntimeSettings()
+{
+	TextDisplaySpeed = FMath::Max(MinTextDisplaySpeed, TextDisplaySpeed);
+	MasterVolume = FMath::Clamp(MasterVolume, MinSettingVolume, MaxSettingVolume);
+	SoundEffectVolume = FMath::Clamp(SoundEffectVolume, MinSettingVolume, MaxSettingVolume);
+	ConversationalVoice = FMath::Clamp(ConversationalVoice, MinSettingVolume, MaxSettingVolume);
+
+	if (AudioPlayer)
+	{
+		AudioPlayer->SetVolumeMultiplier(MasterVolume);
+	}
+
+	if (ConversationalVoicePlayer)
+	{
+		ConversationalVoicePlayer->SetVolumeMultiplier(MasterVolume * ConversationalVoice);
+	}
+}
+
+void ASW_ScriptManager::SetTextDisplaySpeed(float InTextDisplaySpeed)
+{
+	TextDisplaySpeed = FMath::Max(MinTextDisplaySpeed, InTextDisplaySpeed);
+}
+
+void ASW_ScriptManager::SetMasterVolume(float InMasterVolume)
+{
+	MasterVolume = FMath::Clamp(InMasterVolume, MinSettingVolume, MaxSettingVolume);
+	ApplyRuntimeSettings();
+}
+
+void ASW_ScriptManager::SetSoundEffectVolume(float InSoundEffectVolume)
+{
+	SoundEffectVolume = FMath::Clamp(InSoundEffectVolume, MinSettingVolume, MaxSettingVolume);
+	ApplyRuntimeSettings();
+}
+
+void ASW_ScriptManager::SetConversationalVoice(float InConversationalVoice)
+{
+	ConversationalVoice = FMath::Clamp(InConversationalVoice, MinSettingVolume, MaxSettingVolume);
+	ApplyRuntimeSettings();
 }
 
 void ASW_ScriptManager::SetRowDialog(int EnterRowDialog)

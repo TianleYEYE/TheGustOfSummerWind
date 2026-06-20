@@ -24,3 +24,13 @@ void UMVVM_SettingSlot::SetConversationalVoice(float InConversationalVoice)
 	UE_MVVM_SET_PROPERTY_VALUE(ConversationalVoice,InConversationalVoice);
 }
 
+void UMVVM_SettingSlot::SetScreenResolution(const FIntPoint& InScreenResolution)
+{
+	UE_MVVM_SET_PROPERTY_VALUE(ScreenResolution, InScreenResolution);
+}
+
+void UMVVM_SettingSlot::SetWindowMode(EWindowMode::Type InWindowMode)
+{
+	UE_MVVM_SET_PROPERTY_VALUE(WindowMode, InWindowMode);
+}
+

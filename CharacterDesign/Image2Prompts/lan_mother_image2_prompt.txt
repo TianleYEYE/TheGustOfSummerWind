@@ -1,0 +1,19 @@
+Use the input image only as a style, composition, and quality reference: clean cel-shaded visual novel character turnaround, crisp anime lineart, flat clean colors, soft early-2000s Japanese romance VN feeling, plain light background, three full-body views arranged left to right.
+
+Create a new character three-view design sheet for: 岚母 / Lan's Mother
+
+Character design:
+岚的母亲，中年山镇女性。中长棕发简单束起，灰米色朴素上衣，深色裙或裤，普通鞋。气质温和但有距离感，现实家庭感。
+
+Required layout:
+- Exactly three full-body figures only: front view, side profile view, back view.
+- Same character, same outfit, same proportions across all three views.
+- Clean readable silhouette, sharp edges, flat cel shading, tidy color blocks.
+- Full body visible from head to feet, no cropping.
+- Plain white or very light neutral background.
+- No labels, no text, no watermark, no extra props floating separately, no extra headshots, no additional characters.
+
+Important:
+- Match the reference image's polished cel-shaded three-view presentation quality.
+- Do not copy Lan's identity, white dress, red bow, or hairstyle unless the character description explicitly asks for it.
+- Keep the design modest and suitable for a visual novel character reference sheet.

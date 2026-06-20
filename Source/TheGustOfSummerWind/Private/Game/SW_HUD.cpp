@@ -2,16 +2,12 @@
 
 
 #include "TheGustOfSummerWind\Public\Game\SW_HUD.h"
-#include "GameFramework/GameUserSettings.h"
 #include "UI/ViewModel/MVVM_LoadScreen.h"
 
 
 void ASW_HUD::BeginPlay()
 {
 	Super::BeginPlay();
-
-	UGameUserSettings::GetGameUserSettings()->LoadSettings();
-	UGameUserSettings::GetGameUserSettings()->ApplyResolutionSettings(false);
 	
 	LoadScreenViewModel = NewObject<UMVVM_LoadScreen>(this,LoadScreenViewModelClass);
 	LoadScreenViewModel->InitializeLoadSlots();
@@ -27,5 +23,4 @@ void ASW_HUD::BeginPlay()
 
 	
 }
-
 

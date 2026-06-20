@@ -6,7 +6,11 @@
 void UBTN_NextDialog::NativeConstruct()
 {
 	Super::NativeConstruct();
-	BTN_NextDialog->OnClicked.AddDynamic(this,&UBTN_NextDialog::DelegatedAgent);
+	if (BTN_NextDialog)
+	{
+		BTN_NextDialog->OnClicked.RemoveDynamic(this, &UBTN_NextDialog::DelegatedAgent);
+		BTN_NextDialog->OnClicked.AddUniqueDynamic(this, &UBTN_NextDialog::DelegatedAgent);
+	}
 	
 }
 

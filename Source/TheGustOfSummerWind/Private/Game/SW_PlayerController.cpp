@@ -42,8 +42,20 @@ void ASW_PlayerController::ReturnOrOpenInGameMenuUI()
 
 		if (ScriptManager->WidgetState == SettingUI || ScriptManager->WidgetState == InGameSetting)
 		{
-			HUD->SettingUI->PlayWidgetFade.Broadcast(true);
-			UGameUserSettings::GetGameUserSettings()->SaveSettings();
+			if (HUD && HUD->SettingUI)
+			{
+				HUD->SettingUI->PlayWidgetFade.Broadcast(true);
+			}
+
+			if (HUD && HUD->SystemViewModel)
+			{
+				HUD->SystemViewModel->SyncSettingSlotFromRuntime();
+				HUD->SystemViewModel->ApplyCurrentSettings(true);
+			}
+			else if (UGameUserSettings* GameUserSettings = UGameUserSettings::GetGameUserSettings())
+			{
+				GameUserSettings->SaveSettings();
+			}
 		}
 		else if (ScriptManager->WidgetState == AlbumUI)
 		{

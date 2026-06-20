@@ -20,6 +20,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetDialogText(FText &Text);
 
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Dialog")
+	bool IsDialogTextRevealing() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Dialog")
+	void CompleteDialogTextReveal();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Dialog")
+	int32 GetCurrentDialogTextLength() const;
+
 	UPROPERTY(BlueprintAssignable, Category = "MyDelegate")
 	FUpdateText UpdateDialogText; 
 	
@@ -28,4 +37,7 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	FTimerHandle UpdataTextHandle;
 
+private:
+	UPROPERTY(Transient)
+	FText CurrentDialogText;
 };

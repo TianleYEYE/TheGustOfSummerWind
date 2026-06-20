@@ -1,0 +1,59 @@
+{
+  "character": "Arashi",
+  "character_cn": "岚",
+  "pose": "pose00_reference",
+  "status": "validated_layered",
+  "unreal_texture_package": "/Game/Assets/VerticalPainting/Lan",
+  "dialog_struct_fields": {
+    "body": "CurrentSprite",
+    "expression": "Face"
+  },
+  "body": {
+    "id": "base_noface",
+    "unreal_object_path": "/Game/Assets/VerticalPainting/Lan/无脸.无脸",
+    "source_png": "output/arashi_layered_assets/pose00_reference_1024/pose00_reference_1024_base_noface.png",
+    "source_role": "locked action base"
+  },
+  "expressions": {
+    "default": {
+      "unreal_object_path": "/Game/Assets/VerticalPainting/Lan/默认png.默认png",
+      "source_png": "output/arashi_layered_assets/pose00_reference_1024/pose00_reference_1024_expression_default.png",
+      "preview_png": "output/arashi_layered_assets/pose00_reference_1024/pose00_reference_1024_default_preview.png",
+      "usage_note": "soft default smile; use for neutral/ordinary dialogue"
+    },
+    "thinking": {
+      "unreal_object_path": "/Game/Assets/VerticalPainting/Lan/思考表情png.思考表情png",
+      "source_png": "output/arashi_layered_assets/pose00_reference_1024/pose00_reference_1024_expression_thinking.png",
+      "preview_png": "output/arashi_layered_assets/pose00_reference_1024/pose00_reference_1024_thinking_preview.png",
+      "usage_note": "thinking or slightly uneasy expression"
+    },
+    "dejected": {
+      "unreal_object_path": "/Game/Assets/VerticalPainting/Lan/沮丧表情png.沮丧表情png",
+      "source_png": "output/arashi_layered_assets/pose00_reference_1024/pose00_reference_1024_expression_dejected.png",
+      "preview_png": "output/arashi_layered_assets/pose00_reference_1024/pose00_reference_1024_dejected_preview.png",
+      "usage_note": "dejected/worried expression"
+    }
+  },
+  "dialog_data_examples": [
+    {
+      "expression": "default",
+      "CurrentSprite": "/Game/Assets/VerticalPainting/Lan/无脸.无脸",
+      "Face": "/Game/Assets/VerticalPainting/Lan/默认png.默认png"
+    },
+    {
+      "expression": "thinking",
+      "CurrentSprite": "/Game/Assets/VerticalPainting/Lan/无脸.无脸",
+      "Face": "/Game/Assets/VerticalPainting/Lan/思考表情png.思考表情png"
+    },
+    {
+      "expression": "dejected",
+      "CurrentSprite": "/Game/Assets/VerticalPainting/Lan/无脸.无脸",
+      "Face": "/Game/Assets/VerticalPainting/Lan/沮丧表情png.沮丧表情png"
+    }
+  ],
+  "validation": {
+    "source_report": "C:/Users/Administrator/Pictures/The Guest Of Summer Wind/Arashi_Layered_Production/layered_validation_report.md",
+    "latest_result": "OK 47 / Errors 0",
+    "rule": "Use one CurrentSprite base with one Face expression overlay. Do not use legacy full-composite references as expression layers."
+  }
+}

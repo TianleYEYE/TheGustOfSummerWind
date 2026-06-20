@@ -29,4 +29,14 @@ public:
 	void SaveSlotData(UMVVM_LoadSlot* LoadSlot,int32 SlotIndex);
 	USW_SaveGame* GetSaveSlotData(const FString& SlotName,int32 SlotIndex) const;
 	USW_SystemData* GetCGSlotData() const;
+
+	UFUNCTION(BlueprintCallable, Category = "System Data")
+	bool IsDialogKeyRead(FName DialogKey) const;
+
+	UFUNCTION(BlueprintCallable, Category = "System Data")
+	bool AddReadDialogKey(FName DialogKey) const;
+
+private:
+	USW_SystemData* LoadOrCreateSystemData() const;
+	void SaveSystemDataObject(USW_SystemData* SystemData) const;
 };

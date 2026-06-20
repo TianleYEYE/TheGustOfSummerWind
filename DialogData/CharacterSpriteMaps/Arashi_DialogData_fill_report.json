@@ -1,0 +1,527 @@
+{
+  "mode": "applied-status",
+  "backup_dir": "D:\\Unreal Projects\\TheGustOfSummerWind\\DialogData\\_backup_arashi_layered_sprite_fill_20260620_133133",
+  "current_sprite": "/Game/Assets/VerticalPainting/Lan/无脸.无脸",
+  "faces": {
+    "default": "/Game/Assets/VerticalPainting/Lan/默认png.默认png",
+    "thinking": "/Game/Assets/VerticalPainting/Lan/思考表情png.思考表情png",
+    "dejected": "/Game/Assets/VerticalPainting/Lan/沮丧表情png.沮丧表情png"
+  },
+  "updated_files": [
+    {
+      "file": "DialogDataTable_1.CSV",
+      "changed": 7,
+      "expression_counts": {
+        "default": 2,
+        "thinking": 5,
+        "dejected": 0
+      }
+    },
+    {
+      "file": "DialogDataTable_10.csv",
+      "changed": 5,
+      "expression_counts": {
+        "default": 1,
+        "thinking": 4,
+        "dejected": 0
+      }
+    },
+    {
+      "file": "DialogDataTable_12.csv",
+      "changed": 8,
+      "expression_counts": {
+        "default": 5,
+        "thinking": 1,
+        "dejected": 2
+      }
+    },
+    {
+      "file": "DialogDataTable_13.csv",
+      "changed": 7,
+      "expression_counts": {
+        "default": 4,
+        "thinking": 3,
+        "dejected": 0
+      }
+    },
+    {
+      "file": "DialogDataTable_3.csv",
+      "changed": 2,
+      "expression_counts": {
+        "default": 1,
+        "thinking": 1,
+        "dejected": 0
+      }
+    },
+    {
+      "file": "DialogDataTable_4.csv",
+      "changed": 8,
+      "expression_counts": {
+        "default": 3,
+        "thinking": 5,
+        "dejected": 0
+      }
+    },
+    {
+      "file": "DialogDataTable_5.csv",
+      "changed": 5,
+      "expression_counts": {
+        "default": 5,
+        "thinking": 0,
+        "dejected": 0
+      }
+    },
+    {
+      "file": "DialogDataTable_6.csv",
+      "changed": 3,
+      "expression_counts": {
+        "default": 2,
+        "thinking": 0,
+        "dejected": 1
+      }
+    },
+    {
+      "file": "DialogDataTable_7.csv",
+      "changed": 7,
+      "expression_counts": {
+        "default": 5,
+        "thinking": 2,
+        "dejected": 0
+      }
+    },
+    {
+      "file": "DialogDataTable_8.csv",
+      "changed": 4,
+      "expression_counts": {
+        "default": 3,
+        "thinking": 1,
+        "dejected": 0
+      }
+    },
+    {
+      "file": "DialogDataTable_9.csv",
+      "changed": 10,
+      "expression_counts": {
+        "default": 7,
+        "thinking": 3,
+        "dejected": 0
+      }
+    }
+  ],
+  "skipped_files": [
+    {
+      "file": "DialogDataTable_2.csv",
+      "reason": "missing CurrentSprite/Face columns",
+      "fields": [
+        "",
+        "Name",
+        "Dialog",
+        "Conversational voice",
+        "",
+        "Background",
+        "BackgroundSound",
+        "Face_1",
+        "Face_2"
+      ],
+      "lan_rows": 5
+    }
+  ],
+  "updated_rows": [
+    {
+      "file": "DialogDataTable_1.CSV",
+      "row_id": "57",
+      "expression": "thinking",
+      "dialog": "岚……我的名字"
+    },
+    {
+      "file": "DialogDataTable_1.CSV",
+      "row_id": "59",
+      "expression": "thinking",
+      "dialog": "那本书，我还能再看吗？"
+    },
+    {
+      "file": "DialogDataTable_1.CSV",
+      "row_id": "63",
+      "expression": "thinking",
+      "dialog": "大城市，是不是有很高的房子"
+    },
+    {
+      "file": "DialogDataTable_1.CSV",
+      "row_id": "65",
+      "expression": "thinking",
+      "dialog": "是不是有很多车"
+    },
+    {
+      "file": "DialogDataTable_1.CSV",
+      "row_id": "67",
+      "expression": "thinking",
+      "dialog": "是不是随时都可以洗热水澡"
+    },
+    {
+      "file": "DialogDataTable_1.CSV",
+      "row_id": "69",
+      "expression": "default",
+      "dialog": "嗯"
+    },
+    {
+      "file": "DialogDataTable_1.CSV",
+      "row_id": "73",
+      "expression": "default",
+      "dialog": "嗯"
+    },
+    {
+      "file": "DialogDataTable_10.csv",
+      "row_id": "8",
+      "expression": "default",
+      "dialog": "要不你帮我补课吧"
+    },
+    {
+      "file": "DialogDataTable_10.csv",
+      "row_id": "46",
+      "expression": "thinking",
+      "dialog": "说我这期期末考还是这个成绩，就要……"
+    },
+    {
+      "file": "DialogDataTable_10.csv",
+      "row_id": "48",
+      "expression": "thinking",
+      "dialog": "还有……"
+    },
+    {
+      "file": "DialogDataTable_10.csv",
+      "row_id": "49",
+      "expression": "thinking",
+      "dialog": "他们觉得这是我谈恋爱引起的……"
+    },
+    {
+      "file": "DialogDataTable_10.csv",
+      "row_id": "51",
+      "expression": "thinking",
+      "dialog": "所以……"
+    },
+    {
+      "file": "DialogDataTable_12.csv",
+      "row_id": "69",
+      "expression": "default",
+      "dialog": "喂我做饭不好吃啊！"
+    },
+    {
+      "file": "DialogDataTable_12.csv",
+      "row_id": "71",
+      "expression": "thinking",
+      "dialog": "不过我真的学了怎么做小吃，嘿嘿"
+    },
+    {
+      "file": "DialogDataTable_12.csv",
+      "row_id": "84",
+      "expression": "dejected",
+      "dialog": "其实我也考虑过去职高，毕竟没办法……"
+    },
+    {
+      "file": "DialogDataTable_12.csv",
+      "row_id": "86",
+      "expression": "dejected",
+      "dialog": "这没办法，活在世上很多事都由不得我们"
+    },
+    {
+      "file": "DialogDataTable_12.csv",
+      "row_id": "115",
+      "expression": "default",
+      "dialog": "我还是觉得月你应该去更好的学校——来"
+    },
+    {
+      "file": "DialogDataTable_12.csv",
+      "row_id": "132",
+      "expression": "default",
+      "dialog": "祝贺阿月考上酒吧舞大学啦！"
+    },
+    {
+      "file": "DialogDataTable_12.csv",
+      "row_id": "134",
+      "expression": "default",
+      "dialog": "月我给你准备了礼物，猜猜是什么"
+    },
+    {
+      "file": "DialogDataTable_12.csv",
+      "row_id": "136",
+      "expression": "default",
+      "dialog": "邦邦卡邦！"
+    },
+    {
+      "file": "DialogDataTable_13.csv",
+      "row_id": "5",
+      "expression": "default",
+      "dialog": "和想象中的不一样！"
+    },
+    {
+      "file": "DialogDataTable_13.csv",
+      "row_id": "20",
+      "expression": "default",
+      "dialog": "哇，月的表情好恶心"
+    },
+    {
+      "file": "DialogDataTable_13.csv",
+      "row_id": "22",
+      "expression": "thinking",
+      "dialog": "有吗？"
+    },
+    {
+      "file": "DialogDataTable_13.csv",
+      "row_id": "45",
+      "expression": "default",
+      "dialog": "下次再来时，希望你的技术有长进"
+    },
+    {
+      "file": "DialogDataTable_13.csv",
+      "row_id": "57",
+      "expression": "thinking",
+      "dialog": "晚上去哪里吃？"
+    },
+    {
+      "file": "DialogDataTable_13.csv",
+      "row_id": "73",
+      "expression": "thinking",
+      "dialog": "您似乎有个女朋友，这可是个难事"
+    },
+    {
+      "file": "DialogDataTable_13.csv",
+      "row_id": "76",
+      "expression": "default",
+      "dialog": "起来——"
+    },
+    {
+      "file": "DialogDataTable_3.csv",
+      "row_id": "37",
+      "expression": "thinking",
+      "dialog": "月，有个问题"
+    },
+    {
+      "file": "DialogDataTable_3.csv",
+      "row_id": "53",
+      "expression": "default",
+      "dialog": "错过了这次就难有下次了"
+    },
+    {
+      "file": "DialogDataTable_4.csv",
+      "row_id": "24",
+      "expression": "default",
+      "dialog": "你还是一个人啊"
+    },
+    {
+      "file": "DialogDataTable_4.csv",
+      "row_id": "34",
+      "expression": "default",
+      "dialog": "当然有了"
+    },
+    {
+      "file": "DialogDataTable_4.csv",
+      "row_id": "60",
+      "expression": "thinking",
+      "dialog": "月，那碟片是什么？"
+    },
+    {
+      "file": "DialogDataTable_4.csv",
+      "row_id": "62",
+      "expression": "thinking",
+      "dialog": "不知道啊！"
+    },
+    {
+      "file": "DialogDataTable_4.csv",
+      "row_id": "65",
+      "expression": "thinking",
+      "dialog": "感觉，都是感觉"
+    },
+    {
+      "file": "DialogDataTable_4.csv",
+      "row_id": "67",
+      "expression": "thinking",
+      "dialog": "有吗？"
+    },
+    {
+      "file": "DialogDataTable_4.csv",
+      "row_id": "106",
+      "expression": "thinking",
+      "dialog": "月，我们来做碟片上的那个吧"
+    },
+    {
+      "file": "DialogDataTable_4.csv",
+      "row_id": "108",
+      "expression": "default",
+      "dialog": "啊——"
+    },
+    {
+      "file": "DialogDataTable_5.csv",
+      "row_id": "45",
+      "expression": "default",
+      "dialog": "听见你的声音我也很开心"
+    },
+    {
+      "file": "DialogDataTable_5.csv",
+      "row_id": "47",
+      "expression": "default",
+      "dialog": "我们再多聊一会儿吧"
+    },
+    {
+      "file": "DialogDataTable_5.csv",
+      "row_id": "96",
+      "expression": "default",
+      "dialog": "哇，真的能看到诶"
+    },
+    {
+      "file": "DialogDataTable_5.csv",
+      "row_id": "106",
+      "expression": "default",
+      "dialog": "喂爷爷"
+    },
+    {
+      "file": "DialogDataTable_5.csv",
+      "row_id": "108",
+      "expression": "default",
+      "dialog": "原来你还化妆了啊"
+    },
+    {
+      "file": "DialogDataTable_6.csv",
+      "row_id": "80",
+      "expression": "default",
+      "dialog": "是学校附近的旅馆"
+    },
+    {
+      "file": "DialogDataTable_6.csv",
+      "row_id": "82",
+      "expression": "dejected",
+      "dialog": "我父母这些天回来了，只能委屈你一下了"
+    },
+    {
+      "file": "DialogDataTable_6.csv",
+      "row_id": "169",
+      "expression": "default",
+      "dialog": "我愿意"
+    },
+    {
+      "file": "DialogDataTable_7.csv",
+      "row_id": "1",
+      "expression": "default",
+      "dialog": "所以你还是打算考我这边的高中"
+    },
+    {
+      "file": "DialogDataTable_7.csv",
+      "row_id": "3",
+      "expression": "default",
+      "dialog": "毕竟想每天都看见你嘛"
+    },
+    {
+      "file": "DialogDataTable_7.csv",
+      "row_id": "26",
+      "expression": "default",
+      "dialog": "好"
+    },
+    {
+      "file": "DialogDataTable_7.csv",
+      "row_id": "86",
+      "expression": "default",
+      "dialog": "就是想叫你"
+    },
+    {
+      "file": "DialogDataTable_7.csv",
+      "row_id": "88",
+      "expression": "thinking",
+      "dialog": "其实之前有人向我表白了"
+    },
+    {
+      "file": "DialogDataTable_7.csv",
+      "row_id": "93",
+      "expression": "default",
+      "dialog": "说一下嘛"
+    },
+    {
+      "file": "DialogDataTable_7.csv",
+      "row_id": "95",
+      "expression": "thinking",
+      "dialog": "其实在这边我还是蛮受欢迎的"
+    },
+    {
+      "file": "DialogDataTable_8.csv",
+      "row_id": "11",
+      "expression": "default",
+      "dialog": "嗯"
+    },
+    {
+      "file": "DialogDataTable_8.csv",
+      "row_id": "33",
+      "expression": "default",
+      "dialog": "这不是以防万一嘛"
+    },
+    {
+      "file": "DialogDataTable_8.csv",
+      "row_id": "80",
+      "expression": "thinking",
+      "dialog": "月，你休息好了吗？"
+    },
+    {
+      "file": "DialogDataTable_8.csv",
+      "row_id": "82",
+      "expression": "default",
+      "dialog": "嗯"
+    },
+    {
+      "file": "DialogDataTable_9.csv",
+      "row_id": "1",
+      "expression": "thinking",
+      "dialog": "话说，岚你还没有在城市里逛过吧？"
+    },
+    {
+      "file": "DialogDataTable_9.csv",
+      "row_id": "3",
+      "expression": "default",
+      "dialog": "好像是哦，来了之后就一直在忙学校方面的事情，还没有好好地欣赏过这个城市"
+    },
+    {
+      "file": "DialogDataTable_9.csv",
+      "row_id": "18",
+      "expression": "thinking",
+      "dialog": "嘿嘿……最喜欢月了……"
+    },
+    {
+      "file": "DialogDataTable_9.csv",
+      "row_id": "20",
+      "expression": "default",
+      "dialog": "出发！"
+    },
+    {
+      "file": "DialogDataTable_9.csv",
+      "row_id": "28",
+      "expression": "default",
+      "dialog": "慢点儿，我先歇会儿"
+    },
+    {
+      "file": "DialogDataTable_9.csv",
+      "row_id": "37",
+      "expression": "thinking",
+      "dialog": "……"
+    },
+    {
+      "file": "DialogDataTable_9.csv",
+      "row_id": "39",
+      "expression": "default",
+      "dialog": "那是什么，我们去玩儿吧！"
+    },
+    {
+      "file": "DialogDataTable_9.csv",
+      "row_id": "61",
+      "expression": "default",
+      "dialog": "苦嘛，上次都还是硬着头皮喝完的"
+    },
+    {
+      "file": "DialogDataTable_9.csv",
+      "row_id": "66",
+      "expression": "default",
+      "dialog": "看什么呢，笑的这么开心"
+    },
+    {
+      "file": "DialogDataTable_9.csv",
+      "row_id": "73",
+      "expression": "default",
+      "dialog": "好喜欢你"
+    }
+  ]
+}

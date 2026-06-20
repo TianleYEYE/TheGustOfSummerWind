@@ -13,6 +13,17 @@ Build
 *.sln
 *.vsconfig
 
+# Local/generated workspaces
+tmp/
+output/
+
+# Python/script byproducts
+__pycache__/
+*.pyc
+
+# Local logs
+*.log
+*.err.log
 
 
 

@@ -17,6 +17,10 @@ Build
 tmp/
 output/
 
+# Batch-edit backup snapshots
+_backup_*/
+**/_backup_*/
+
 # Python/script byproducts
 __pycache__/
 *.pyc
@@ -24,7 +28,6 @@ __pycache__/
 # Local logs
 *.log
 *.err.log
-
 
 
 

@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BTN_ButtonBase.h"
-#include "../../../../../../UE_5.3/Engine/Source/Runtime/UMG/Public/Components/Button.h"
+#include "Components/Button.h"
 #include "BTN_Return.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FEntrustReturn)

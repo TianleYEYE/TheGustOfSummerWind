@@ -10,9 +10,10 @@ void UBTN_NewGame::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	BTN_NewGame->OnClicked.AddDynamic(this,&UBTN_NewGame::DelegatedAgentAndPlayAnimation);
-	BindToAnimationFinished(flashing,Flashing);
-	
+	if (BTN_NewGame)
+	{
+		BTN_NewGame->OnClicked.AddUniqueDynamic(this, &UBTN_NewGame::DelegatedAgentAndPlayAnimation);
+	}
 }
 
 void UBTN_NewGame::SetParentSwitcher(UWidgetSwitcher* InSwitcher)
@@ -23,7 +24,8 @@ void UBTN_NewGame::SetParentSwitcher(UWidgetSwitcher* InSwitcher)
 void UBTN_NewGame::DelegatedAgentAndPlayAnimation()
 {
 	NewGame.Broadcast();
-	PlayAnimation(flashing);
+	if (flashing)
+	{
+		PlayAnimation(flashing);
+	}
 }
-
-

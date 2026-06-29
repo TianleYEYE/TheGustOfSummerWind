@@ -1,105 +1,275 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "UI/InGameUI/SW_DialogBox.h"
 
+#include "Blueprint/WidgetTree.h"
+#include "Components/Image.h"
 #include "Components/Widget.h"
 #include "UObject/UnrealType.h"
 
 namespace
 {
-UObject* GetObjectPropertyValue(UObject* Owner, const FName PropertyName)
-{
-	if (!Owner)
-	{
-		return nullptr;
-	}
+const FName AlphaTextSetDialogTextFunctionNames[] = {
+	TEXT("SetDialogText"),
+	TEXT("SetText"),
+	TEXT("Set Text")
+};
 
-	const FObjectPropertyBase* ObjectProperty = FindFProperty<FObjectPropertyBase>(Owner->GetClass(), PropertyName);
-	return ObjectProperty ? ObjectProperty->GetObjectPropertyValue_InContainer(Owner) : nullptr;
-}
-
-bool GetBoolPropertyValue(const UObject* Owner, const FName PropertyName)
+bool GetAlphaTextIsReading(const USW_UIBase* AlphaTextBox)
 {
-	if (!Owner)
+	if (!AlphaTextBox)
 	{
 		return false;
 	}
 
-	const FBoolProperty* BoolProperty = FindFProperty<FBoolProperty>(Owner->GetClass(), PropertyName);
-	return BoolProperty ? BoolProperty->GetPropertyValue_InContainer(Owner) : false;
+	if (const USW_AlphaTextBox* NativeAlphaTextBox = Cast<USW_AlphaTextBox>(AlphaTextBox))
+	{
+		return NativeAlphaTextBox->bIsReading;
+	}
+
+	if (const FBoolProperty* Property = FindFProperty<FBoolProperty>(AlphaTextBox->GetClass(), TEXT("bIsReading")))
+	{
+		return Property->GetPropertyValue_InContainer(AlphaTextBox);
+	}
+
+	return false;
 }
 
-void SetBoolPropertyValue(UObject* Owner, const FName PropertyName, const bool bValue)
+void SetAlphaTextIsReading(USW_UIBase* AlphaTextBox, const bool bIsReading)
 {
-	if (!Owner)
+	if (!AlphaTextBox)
 	{
 		return;
 	}
 
-	if (const FBoolProperty* BoolProperty = FindFProperty<FBoolProperty>(Owner->GetClass(), PropertyName))
+	if (USW_AlphaTextBox* NativeAlphaTextBox = Cast<USW_AlphaTextBox>(AlphaTextBox))
 	{
-		BoolProperty->SetPropertyValue_InContainer(Owner, bValue);
+		NativeAlphaTextBox->bIsReading = bIsReading;
+		return;
+	}
+
+	if (const FBoolProperty* Property = FindFProperty<FBoolProperty>(AlphaTextBox->GetClass(), TEXT("bIsReading")))
+	{
+		Property->SetPropertyValue_InContainer(AlphaTextBox, bIsReading);
+	}
+}
+
+UWidget* GetAlphaTextThrobber(USW_UIBase* AlphaTextBox)
+{
+	if (!AlphaTextBox)
+	{
+		return nullptr;
+	}
+
+	if (USW_AlphaTextBox* NativeAlphaTextBox = Cast<USW_AlphaTextBox>(AlphaTextBox))
+	{
+		if (NativeAlphaTextBox->Throbber)
+		{
+			return NativeAlphaTextBox->Throbber;
+		}
+
+		if (UWidget* NamedThrobber = AlphaTextBox->GetWidgetFromName(TEXT("Throbber")))
+		{
+			NativeAlphaTextBox->Throbber = NamedThrobber;
+			return NamedThrobber;
+		}
+
+		if (UUserWidget* UserWidget = Cast<UUserWidget>(AlphaTextBox))
+		{
+			if (UserWidget->WidgetTree)
+			{
+				UWidget* FallbackThrobber = UserWidget->WidgetTree->ConstructWidget<UImage>(UImage::StaticClass(), TEXT("Throbber_RuntimeFallback"));
+				NativeAlphaTextBox->Throbber = FallbackThrobber;
+				return FallbackThrobber;
+			}
+		}
+
+		return nullptr;
+	}
+
+	if (const FObjectPropertyBase* Property = FindFProperty<FObjectPropertyBase>(AlphaTextBox->GetClass(), TEXT("Throbber")))
+	{
+		if (UWidget* ExistingThrobber = Cast<UWidget>(Property->GetObjectPropertyValue_InContainer(AlphaTextBox)))
+		{
+			return ExistingThrobber;
+		}
+
+		if (UWidget* NamedThrobber = AlphaTextBox->GetWidgetFromName(TEXT("Throbber")))
+		{
+			if (NamedThrobber->IsA(Property->PropertyClass))
+			{
+				Property->SetObjectPropertyValue_InContainer(AlphaTextBox, NamedThrobber);
+			}
+			return NamedThrobber;
+		}
+
+		if (UUserWidget* UserWidget = Cast<UUserWidget>(AlphaTextBox))
+		{
+			if (UserWidget->WidgetTree && Property->PropertyClass && Property->PropertyClass->IsChildOf(UWidget::StaticClass()))
+			{
+				const FName FallbackName = MakeUniqueObjectName(UserWidget->WidgetTree, Property->PropertyClass, TEXT("Throbber_RuntimeFallback"));
+				UWidget* FallbackThrobber = UserWidget->WidgetTree->ConstructWidget<UWidget>(Property->PropertyClass, FallbackName);
+				Property->SetObjectPropertyValue_InContainer(AlphaTextBox, FallbackThrobber);
+				return FallbackThrobber;
+			}
+		}
+	}
+
+	return nullptr;
+}
+
+void SetAlphaTextChildrenVisibility(USW_UIBase* AlphaTextBox, const ESlateVisibility Visibility)
+{
+	if (!AlphaTextBox)
+	{
+		return;
+	}
+
+	if (USW_AlphaTextBox* NativeAlphaTextBox = Cast<USW_AlphaTextBox>(AlphaTextBox))
+	{
+		for (const TObjectPtr<UWidget>& TextWidget : NativeAlphaTextBox->BP_AlphaTextSingle)
+		{
+			if (TextWidget)
+			{
+				TextWidget->SetVisibility(Visibility);
+			}
+		}
+		return;
+	}
+
+	const FArrayProperty* ArrayProperty = FindFProperty<FArrayProperty>(AlphaTextBox->GetClass(), TEXT("BP_AlphaTextSingle"));
+	if (!ArrayProperty)
+	{
+		return;
+	}
+
+	const FObjectPropertyBase* InnerProperty = CastField<FObjectPropertyBase>(ArrayProperty->Inner);
+	if (!InnerProperty)
+	{
+		return;
+	}
+
+	FScriptArrayHelper ArrayHelper(ArrayProperty, ArrayProperty->ContainerPtrToValuePtr<void>(AlphaTextBox));
+	for (int32 Index = 0; Index < ArrayHelper.Num(); ++Index)
+	{
+		if (UWidget* TextWidget = Cast<UWidget>(InnerProperty->GetObjectPropertyValue(ArrayHelper.GetRawPtr(Index))))
+		{
+			TextWidget->SetVisibility(Visibility);
+		}
+	}
+}
+
+UFunction* FindAlphaTextSetDialogTextFunction(USW_UIBase* AlphaTextBox)
+{
+	if (!AlphaTextBox)
+	{
+		return nullptr;
+	}
+
+	for (const FName FunctionName : AlphaTextSetDialogTextFunctionNames)
+	{
+		if (UFunction* Function = AlphaTextBox->FindFunction(FunctionName))
+		{
+			return Function;
+		}
+	}
+
+	return nullptr;
+}
+
+void SetDialogBoxObjectPropertyValue(UObject* Owner, const FName PropertyName, UObject* Value)
+{
+	if (!Owner || !Value)
+	{
+		return;
+	}
+
+	const FObjectPropertyBase* ObjectProperty = FindFProperty<FObjectPropertyBase>(Owner->GetClass(), PropertyName);
+	if (ObjectProperty && Value->IsA(ObjectProperty->PropertyClass))
+	{
+		ObjectProperty->SetObjectPropertyValue_InContainer(Owner, Value);
 	}
 }
 }
 
 void USW_DialogBox::NativeConstruct()
 {
+	if (USW_UIBase* AlphaTextBox = GetAlphaTextBox())
+	{
+		GetAlphaTextThrobber(AlphaTextBox);
+	}
+
 	Super::NativeConstruct();
+
+	if (USW_UIBase* AlphaTextBox = GetAlphaTextBox())
+	{
+		GetAlphaTextThrobber(AlphaTextBox);
+	}
 }
 
-void USW_DialogBox::SetDialogText(FText& Text)
+void USW_DialogBox::SetDialogText(const FText& Text)
 {
 	CurrentDialogText = Text;
+
+	if (USW_UIBase* AlphaTextBox = GetAlphaTextBox())
+	{
+		SetAlphaTextIsReading(AlphaTextBox, true);
+		// Cache the legacy BP variable before invoking its graph; the graph reads it directly.
+		if (UWidget* Throbber = GetAlphaTextThrobber(AlphaTextBox))
+		{
+			Throbber->SetVisibility(ESlateVisibility::Hidden);
+		}
+
+		if (UFunction* SetDialogTextFunction = FindAlphaTextSetDialogTextFunction(AlphaTextBox))
+		{
+			struct FSetDialogTextParams
+			{
+				FText Text;
+			};
+
+			FSetDialogTextParams Params{Text};
+			AlphaTextBox->ProcessEvent(SetDialogTextFunction, &Params);
+		}
+	}
+
 	UpdateDialogText.Broadcast(Text);
 }
 
 bool USW_DialogBox::IsDialogTextRevealing() const
 {
-	const UObject* AlphaTextBox = GetObjectPropertyValue(const_cast<USW_DialogBox*>(this), TEXT("BP_AlphaTextBox"));
-	return GetBoolPropertyValue(AlphaTextBox, TEXT("bIsReading"));
+	return GetAlphaTextIsReading(GetAlphaTextBox());
 }
 
 void USW_DialogBox::CompleteDialogTextReveal()
 {
-	UObject* AlphaTextBox = GetObjectPropertyValue(this, TEXT("BP_AlphaTextBox"));
+	USW_UIBase* AlphaTextBox = GetAlphaTextBox();
 	if (!AlphaTextBox)
 	{
 		return;
 	}
 
-	SetBoolPropertyValue(AlphaTextBox, TEXT("bIsReading"), false);
+	SetAlphaTextIsReading(AlphaTextBox, false);
 
-	if (UWidget* Throbber = Cast<UWidget>(GetObjectPropertyValue(AlphaTextBox, TEXT("Throbber"))))
+	if (UWidget* Throbber = GetAlphaTextThrobber(AlphaTextBox))
 	{
 		Throbber->SetVisibility(ESlateVisibility::Visible);
 	}
 
-	const FArrayProperty* TextWidgetsProperty = FindFProperty<FArrayProperty>(AlphaTextBox->GetClass(), TEXT("BP_AlphaTextSingle"));
-	if (!TextWidgetsProperty)
-	{
-		return;
-	}
-
-	const FObjectPropertyBase* InnerObjectProperty = CastField<FObjectPropertyBase>(TextWidgetsProperty->Inner);
-	if (!InnerObjectProperty)
-	{
-		return;
-	}
-
-	FScriptArrayHelper TextWidgets(TextWidgetsProperty, TextWidgetsProperty->ContainerPtrToValuePtr<void>(AlphaTextBox));
-	for (int32 Index = 0; Index < TextWidgets.Num(); ++Index)
-	{
-		UObject* TextWidgetObject = InnerObjectProperty->GetObjectPropertyValue(TextWidgets.GetRawPtr(Index));
-		if (UWidget* TextWidget = Cast<UWidget>(TextWidgetObject))
-		{
-			TextWidget->SetVisibility(ESlateVisibility::Visible);
-		}
-	}
+	SetAlphaTextChildrenVisibility(AlphaTextBox, ESlateVisibility::Visible);
 }
 
 int32 USW_DialogBox::GetCurrentDialogTextLength() const
 {
 	return CurrentDialogText.ToString().Len();
+}
+
+USW_UIBase* USW_DialogBox::GetAlphaTextBox() const
+{
+	if (USW_UIBase* AlphaTextBox = Cast<USW_UIBase>(GetWidgetFromName(TEXT("BP_AlphaTextBox"))))
+	{
+		SetDialogBoxObjectPropertyValue(const_cast<USW_DialogBox*>(this), TEXT("BP_AlphaTextBox"), AlphaTextBox);
+		return AlphaTextBox;
+	}
+
+	return nullptr;
 }

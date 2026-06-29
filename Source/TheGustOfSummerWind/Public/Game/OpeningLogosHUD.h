@@ -23,5 +23,17 @@ public:
 	UPROPERTY(BlueprintReadOnly,Category="Widget")
 	TObjectPtr<USW_UIBase>OpeningLogos;
 
+	UPROPERTY(EditAnywhere, Category = "Opening Logos")
+	FName MainMenuLevelName = TEXT("MasterMenu");
+
+	UPROPERTY(EditAnywhere, Category = "Opening Logos", meta = (ClampMin = "0.0"))
+	float OpeningLogoDuration = 2.5f;
+
 	virtual void BeginPlay() override;
+
+private:
+	FTimerHandle OpenMainMenuTimerHandle;
+
+	UFUNCTION()
+	void OpenMainMenu();
 };

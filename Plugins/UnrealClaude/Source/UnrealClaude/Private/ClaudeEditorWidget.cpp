@@ -590,7 +590,7 @@ void SClaudeEditorWidget::ClearChat()
 	}
 
 	MessageHistory.Empty();
-	FClaudeCodeSubsystem::Get().ClearHistory();
+	FClaudeCodeSubsystem::Get().ResetSession();
 	LastResponse.Empty();
 	ResetStreamingState();
 
@@ -658,7 +658,7 @@ void SClaudeEditorWidget::NewSession()
 
 	MessageHistory.Empty();
 
-	FClaudeCodeSubsystem::Get().ClearHistory();
+	FClaudeCodeSubsystem::Get().ResetSession();
 
 	LastResponse.Empty();
 	ResetStreamingState();

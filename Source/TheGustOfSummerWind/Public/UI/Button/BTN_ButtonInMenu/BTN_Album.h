@@ -25,8 +25,7 @@ public:
 	FWidgetAnimationDynamicEvent Flashing;
 	FEntrustAlbum Album;
 	
-	UPROPERTY()
-	TObjectPtr<UWidgetSwitcher> ParentSwitcher;
+	// ParentSwitcher inherited from USW_UIBase
 
 	// Function to set the reference to the parent widget
 	void SetParentSwitcher(UWidgetSwitcher* InSwitcher);

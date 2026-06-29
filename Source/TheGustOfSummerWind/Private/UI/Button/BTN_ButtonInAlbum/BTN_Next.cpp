@@ -6,7 +6,10 @@
 void  UBTN_Next::NativeConstruct()
 {
 	Super::NativeConstruct();
-	BTN_Next->OnClicked.AddDynamic(this,&UBTN_Next::DelegatedAgent);
+	if (BTN_Next)
+	{
+		BTN_Next->OnClicked.AddUniqueDynamic(this, &UBTN_Next::DelegatedAgent);
+	}
 }
 
 void UBTN_Next::DelegatedAgent()

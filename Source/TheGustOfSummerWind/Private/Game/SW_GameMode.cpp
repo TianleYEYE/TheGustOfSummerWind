@@ -1,12 +1,25 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "TheGustOfSummerWind\Public\Game\SW_GameMode.h"
+#include "Game/SW_GameMode.h"
 
+#include "Game/SW_HUD.h"
+#include "Game/SW_Pawn.h"
+#include "Game/SW_PlayerController.h"
 #include "Game/SW_SaveGame.h"
+#include "Game/SW_SystemData.h"
 #include "Kismet/GameplayStatics.h"
 #include "UI/ViewModel/MVVM_LoadSlot.h"
 #include "UI/ViewModel/MVVM_System.h"
+
+ASW_GameMode::ASW_GameMode()
+{
+	HUDClass = ASW_HUD::StaticClass();
+	PlayerControllerClass = ASW_PlayerController::StaticClass();
+	DefaultPawnClass = ASW_Pawn::StaticClass();
+	LoadScreenSaveGameClass = USW_SaveGame::StaticClass();
+	SystemSaveGameClass = USW_SystemData::StaticClass();
+}
 
 void ASW_GameMode::SaveSystemData(UMVVM_System* MVVMSystem)
 {

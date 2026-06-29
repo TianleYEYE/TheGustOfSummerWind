@@ -1,92 +1,164 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "UI/InMenuUI/SW_InMenuUI.h"
 
 #include "Components/CanvasPanelSlot.h"
+#include "Game/SW_ScriptManager.h"
 #include "Kismet/GameplayStatics.h"
+#include "Sound/SoundBase.h"
 
 void USW_InMenuUI::NativeConstruct()
 {
 	Super::NativeConstruct();
-	TurnBlack.BindDynamic(this,&USW_InMenuUI::FlashingOver);
-	BindToAnimationFinished(FullScreenBlack,TurnBlack);
-	BP_ButtonOfInMenu->BP_NewGame->NewGame.AddUObject(this,&USW_InMenuUI::PressBTN_NewGame);
-	BP_ButtonOfInMenu->BP_Album->Album.AddUObject(this,&USW_InMenuUI::PressBTN_Album);
-	BP_ButtonOfInMenu->BP_Continue->Continue.AddDynamic(this,&USW_InMenuUI::PressBTN_Continue);
-	BP_ButtonOfInMenu->BP_Setting->Setting.AddUObject(this,&USW_InMenuUI::PressBTN_Setting);
+
+	if (FullScreenBlack)
+	{
+		TurnBlack.BindDynamic(this, &USW_InMenuUI::FlashingOver);
+		BindToAnimationFinished(FullScreenBlack, TurnBlack);
+	}
+
+	if (Fade)
+	{
+		PlayAnimation(Fade);
+	}
+
+	// Bind button delegates
+	if (BP_ButtonOfInMenu)
+	{
+		if (BP_ButtonOfInMenu->BP_NewGame)
+		{
+			BP_ButtonOfInMenu->BP_NewGame->NewGame.AddUObject(this, &USW_InMenuUI::PressBTN_NewGame);
+		}
+		if (BP_ButtonOfInMenu->BP_Album)
+		{
+			BP_ButtonOfInMenu->BP_Album->Album.AddUObject(this, &USW_InMenuUI::PressBTN_Album);
+		}
+		if (BP_ButtonOfInMenu->BP_Continue)
+		{
+			BP_ButtonOfInMenu->BP_Continue->Continue.AddDynamic(this, &USW_InMenuUI::PressBTN_Continue);
+		}
+		if (BP_ButtonOfInMenu->BP_Setting)
+		{
+			BP_ButtonOfInMenu->BP_Setting->Setting.AddUObject(this, &USW_InMenuUI::PressBTN_Setting);
+		}
+	}
 }
 
 void USW_InMenuUI::PressBTN_NewGame()
 {
-	//播放按钮点击声音
 	PlayATapSound();
 
-	//播放按钮闪烁动画
-	BP_ButtonOfInMenu->BP_NewGame->PlayAnimation(BP_ButtonOfInMenu->BP_NewGame->flashing);
-
-	//设置黑屏的显示层级为1，遮挡按钮且防止触发其他键
+	CurrentTransition = ETransitionTarget::NewGame;
 	SetScreenBlackZOrder(3);
-	//播放黑屏动画
-	PlayAnimation(FullScreenBlack);
+	if (FullScreenBlack)
+	{
+		PlayAnimation(FullScreenBlack);
+	}
+	else
+	{
+		OnFullScreenBlackFinished();
+	}
 }
 
 void USW_InMenuUI::PressBTN_Album()
 {
 	PlayATapSound();
 
-	//播放按钮闪烁动画
-	BP_ButtonOfInMenu->BP_Album->PlayAnimation(BP_ButtonOfInMenu->BP_Album->flashing);
-	
-	//设置黑屏的显示层级为1，遮挡按钮且防止触发其他键
+	CurrentTransition = ETransitionTarget::Album;
 	SetScreenBlackZOrder(3);
-	//播放黑屏动画
-	PlayAnimation(FullScreenBlack);
+	if (FullScreenBlack)
+	{
+		PlayAnimation(FullScreenBlack);
+	}
+	else
+	{
+		OnFullScreenBlackFinished();
+	}
 }
 
 void USW_InMenuUI::PressBTN_Continue()
 {
-	
 	PlayATapSound();
 
-	//播放按钮闪烁动画
-	BP_ButtonOfInMenu->BP_Continue->PlayAnimation(BP_ButtonOfInMenu->BP_Continue->flashing);
-	
-	//设置黑屏的显示层级为1，遮挡按钮且防止触发其他键
+	CurrentTransition = ETransitionTarget::Continue;
 	SetScreenBlackZOrder(3);
-	//播放黑屏动画
-	PlayAnimation(FullScreenBlack);
+	if (FullScreenBlack)
+	{
+		PlayAnimation(FullScreenBlack);
+	}
+	else
+	{
+		OnFullScreenBlackFinished();
+	}
 }
 
 void USW_InMenuUI::PressBTN_Setting()
 {
-	
 	PlayATapSound();
 
-	//播放按钮闪烁动画
-	BP_ButtonOfInMenu->BP_Setting->PlayAnimation(BP_ButtonOfInMenu->BP_Setting->flashing);
-	
-	//设置黑屏的显示层级为1，遮挡按钮且防止触发其他键
+	CurrentTransition = ETransitionTarget::Setting;
 	SetScreenBlackZOrder(3);
-	//播放黑屏动画
-	PlayAnimation(FullScreenBlack);
+	if (FullScreenBlack)
+	{
+		PlayAnimation(FullScreenBlack);
+	}
+	else
+	{
+		OnFullScreenBlackFinished();
+	}
 }
 
 void USW_InMenuUI::FlashingOver()
 {
-	UCanvasPanelSlot *slot=Cast<UCanvasPanelSlot>(ScreenBlack->Slot);
-	slot->SetZOrder(0);
+	if (ScreenBlack)
+	{
+		if (UCanvasPanelSlot* CanvasSlot = Cast<UCanvasPanelSlot>(ScreenBlack->Slot))
+		{
+			CanvasSlot->SetZOrder(0);
+		}
+	}
+
+	OnFullScreenBlackFinished();
+}
+
+void USW_InMenuUI::OnFullScreenBlackFinished()
+{
+	switch (CurrentTransition)
+	{
+	case ETransitionTarget::NewGame:
+		OnNewGameTransition.Broadcast();
+		break;
+	case ETransitionTarget::Continue:
+		OnContinueTransition.Broadcast();
+		break;
+	case ETransitionTarget::Album:
+		OnAlbumTransition.Broadcast();
+		break;
+	case ETransitionTarget::Setting:
+		OnSettingTransition.Broadcast();
+		break;
+	default:
+		break;
+	}
+
+	CurrentTransition = ETransitionTarget::None;
 }
 
 void USW_InMenuUI::PlayATapSound()
 {
-	// USoundBase*click=LoadObject<USoundBase>(this,TEXT("/Game/Assets/Audio/Click/switch_button_push_small_06_Cue.switch_button_push_small_06_Cue"));
-	// UGameplayStatics::PlaySound2D(this,click);
+	if (ClickSound)
+	{
+		UGameplayStatics::PlaySound2D(this, ClickSound);
+	}
 }
-
 
 void USW_InMenuUI::SetScreenBlackZOrder(int32 NewZOrder)
 {
-	UCanvasPanelSlot *slot=Cast<UCanvasPanelSlot>(ScreenBlack->Slot);
-	slot->SetZOrder(NewZOrder);
+	if (ScreenBlack)
+	{
+		if (UCanvasPanelSlot* CanvasSlot = Cast<UCanvasPanelSlot>(ScreenBlack->Slot))
+		{
+			CanvasSlot->SetZOrder(NewZOrder);
+		}
+	}
 }

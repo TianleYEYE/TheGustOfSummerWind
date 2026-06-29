@@ -1,11 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "TheGustOfSummerWind\Public\Game\SW_PlayerController.h"
 #include "GameFramework/GameUserSettings.h"
-
 #include "Kismet/GameplayStatics.h"
-
 
 void ASW_PlayerController::SetupInputComponent()
 {
@@ -59,14 +56,21 @@ void ASW_PlayerController::ReturnOrOpenInGameMenuUI()
 		}
 		else if (ScriptManager->WidgetState == AlbumUI)
 		{
-			HUD->AlbumUI->PlayWidgetFade.Broadcast(true);
+			if (HUD && HUD->AlbumUI)
+			{
+				HUD->AlbumUI->PlayWidgetFade.Broadcast(true);
+			}
 		}
 		else if (ScriptManager->WidgetState == SaveOrLoad || ScriptManager->WidgetState == InGameSaveOrLoad)
 		{
-			HUD->ContinueUI->PlayWidgetFade.Broadcast(true);
+			if (HUD && HUD->ContinueUI)
+			{
+				HUD->ContinueUI->PlayWidgetFade.Broadcast(true);
+			}
 		}
 		else if (ScriptManager->WidgetState == InGame)
 		{
+			bIsMenuExist = !bIsMenuExist;
 			InGameMenu.Broadcast(bIsMenuExist);
 		}
 		else if (ScriptManager->WidgetState == BackLog && bIsLogExist)
@@ -119,13 +123,24 @@ bool ASW_PlayerController::CanPressKey()
 
 void ASW_PlayerController::QuitGame()
 {
+	if (!BP_QuitGameUIClass)
+	{
+		BP_QuitGameUIClass = LoadClass<USW_UIBase>(nullptr, TEXT("/Game/Blueprints/UI/QuitGameUI/BP_QuitGameUI.BP_QuitGameUI_C"));
+	}
+
+	if (!BP_QuitGameUIClass)
+	{
+		return;
+	}
+
 	if (QuitGameUI == nullptr)
 	{
 		QuitGameUI = CreateWidget<USW_UIBase>(this, BP_QuitGameUIClass);
 	}
 
-	if (!QuitGameUI->IsInViewport())
+	if (QuitGameUI && !QuitGameUI->IsInViewport())
 	{
 		QuitGameUI->AddToViewport(2);
+		SetInputMode(FInputModeUIOnly());
 	}
 }

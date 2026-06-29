@@ -7,7 +7,10 @@ void UBTN_Return::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	BTN_Return->OnClicked.AddDynamic(this,&UBTN_Return::DelegatedAgent);
+	if (BTN_Return)
+	{
+		BTN_Return->OnClicked.AddUniqueDynamic(this, &UBTN_Return::DelegatedAgent);
+	}
 }
 
 void UBTN_Return::DelegatedAgent()

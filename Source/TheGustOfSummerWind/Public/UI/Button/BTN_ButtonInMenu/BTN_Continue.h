@@ -27,8 +27,7 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FEntrustContinue Continue;
 
-	UPROPERTY()
-	TObjectPtr<UWidgetSwitcher> ParentSwitcher;
+	// ParentSwitcher inherited from USW_UIBase
 
 	virtual void NativeConstruct() override;
 

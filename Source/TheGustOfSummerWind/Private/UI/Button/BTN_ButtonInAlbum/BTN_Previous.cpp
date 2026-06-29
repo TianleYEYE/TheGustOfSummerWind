@@ -5,11 +5,13 @@
 void UBTN_Previous::NativeConstruct()
 {
 	Super::NativeConstruct();
-	BTN_Previous->OnClicked.AddDynamic(this,&UBTN_Previous::DelegatedAgent);
+	if (BTN_Previous)
+	{
+		BTN_Previous->OnClicked.AddUniqueDynamic(this, &UBTN_Previous::DelegatedAgent);
+	}
 }
 
 void UBTN_Previous::DelegatedAgent()
 {
 	Previous.Broadcast();
 }
-

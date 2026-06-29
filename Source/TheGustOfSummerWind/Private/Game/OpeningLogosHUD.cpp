@@ -3,12 +3,36 @@
 
 #include "Game/OpeningLogosHUD.h"
 
+#include "Kismet/GameplayStatics.h"
+#include "TimerManager.h"
+
 void AOpeningLogosHUD::BeginPlay()
 {
 	Super::BeginPlay();
 
-	OpeningLogos = CreateWidget<USW_UIBase>(GetOwningPlayerController(),OpeningLogosClass);
-	OpeningLogos->AddToViewport();
+	if (OpeningLogosClass)
+	{
+		OpeningLogos = CreateWidget<USW_UIBase>(GetOwningPlayerController(), OpeningLogosClass);
+		if (OpeningLogos)
+		{
+			OpeningLogos->AddToViewport();
+		}
+	}
 
-	OpeningLogos->BlueprintInializeWidget();
+	if (OpeningLogoDuration <= 0.0f)
+	{
+		OpenMainMenu();
+	}
+	else if (UWorld* World = GetWorld())
+	{
+		World->GetTimerManager().SetTimer(OpenMainMenuTimerHandle, this, &AOpeningLogosHUD::OpenMainMenu, OpeningLogoDuration, false);
+	}
+}
+
+void AOpeningLogosHUD::OpenMainMenu()
+{
+	if (!MainMenuLevelName.IsNone())
+	{
+		UGameplayStatics::OpenLevel(this, MainMenuLevelName);
+	}
 }

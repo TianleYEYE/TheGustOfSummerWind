@@ -11,6 +11,7 @@
 
 
 class UMVVM_LoadScreen;
+class USW_InGameUI;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnUICollectionInitialized);
 /**
  * 
@@ -20,6 +21,7 @@ class THEGUSTOFSUMMERWIND_API ASW_HUD : public AHUD
 {
 	GENERATED_BODY()
 public:
+	ASW_HUD();
 	
 	virtual void BeginPlay() override;
 
@@ -47,5 +49,37 @@ public:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<USW_InMenuUI>MenuClass;
 
-	
+	UPROPERTY(EditAnywhere, Category = "Widget")
+	TSubclassOf<USW_InGameUI> InGameUIClass;
+
+	UPROPERTY(EditAnywhere, Category = "Widget")
+	TSubclassOf<USW_UIBase> ContinueUIClass;
+
+	UPROPERTY(EditAnywhere, Category = "Widget")
+	TSubclassOf<USW_UIBase> AlbumUIClass;
+
+	UPROPERTY(EditAnywhere, Category = "Widget")
+	TSubclassOf<USW_UIBase> SettingUIClass;
+
+	UFUNCTION()
+	void HandleNewGameTransition();
+
+	UFUNCTION()
+	void HandleContinueTransition();
+
+	UFUNCTION()
+	void HandleAlbumTransition();
+
+	UFUNCTION()
+	void HandleSettingTransition();
+
+	UFUNCTION()
+	void HandleOverlayFadeComplete(bool bIsPlayingAnimation);
+
+private:
+	void InitializeViewModels();
+	void CreateMenu();
+	void BindMenuTransitions();
+	void SetOverlayWidget(TObjectPtr<USW_UIBase>& Storage, TSubclassOf<USW_UIBase> WidgetClass, EWidgetStatus NewWidgetState, int32 ZOrder = 1);
+	ASW_ScriptManager* GetScriptManager() const;
 };

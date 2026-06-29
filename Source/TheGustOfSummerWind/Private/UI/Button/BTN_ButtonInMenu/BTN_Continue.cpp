@@ -8,19 +8,27 @@
 void UBTN_Continue::NativeConstruct()
 {
 	Super::NativeConstruct();
-	BTN_Continue->OnClicked.AddDynamic(this,&UBTN_Continue::DelegatedAgentAndPlayAnimation);
-	Flashing.BindDynamic(this,&UBTN_Continue::UBTN_Continue::FlashingOver);
-	BindToAnimationFinished(flashing,Flashing);
+	if (BTN_Continue)
+	{
+		BTN_Continue->OnClicked.AddUniqueDynamic(this, &UBTN_Continue::DelegatedAgentAndPlayAnimation);
+	}
+	if (flashing)
+	{
+		Flashing.BindDynamic(this, &UBTN_Continue::FlashingOver);
+		BindToAnimationFinished(flashing, Flashing);
+	}
 }
 
 void UBTN_Continue::DelegatedAgentAndPlayAnimation()
 {
 	Continue.Broadcast();
+	if (flashing)
+	{
+		PlayAnimation(flashing);
+	}
 }
 
 void UBTN_Continue::FlashingOver()
 {
 	
 }
-
-

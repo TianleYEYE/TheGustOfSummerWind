@@ -17,5 +17,6 @@ void UBTN_NextDialog::NativeConstruct()
 
 void UBTN_NextDialog::DelegatedAgent()
 {
-	EntrustDelegated.Broadcast(GetScriptManager()->rowDialog);
+	const ASW_ScriptManager* Manager = GetScriptManager();
+	EntrustDelegated.Broadcast(Manager ? Manager->rowDialog : 0);
 }

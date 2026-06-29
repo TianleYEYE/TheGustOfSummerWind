@@ -24,8 +24,7 @@ public:
 	FWidgetAnimationDynamicEvent Flashing;
 	FEntrustSetting Setting;
 
-	UPROPERTY()
-	TObjectPtr<UWidgetSwitcher> ParentSwitcher;
+	// ParentSwitcher inherited from USW_UIBase
 
 	
 

@@ -614,7 +614,7 @@ FString FClaudeCodeRunner::BuildCodexCommandLine(const FClaudeRequestConfig& Con
 	}
 	else
 	{
-		CommandLine += TEXT("--ask-for-approval never ");
+		CommandLine += TEXT("--sandbox danger-full-access ");
 	}
 
 	if (const UUnrealClaudeSettings* Settings = GetDefault<UUnrealClaudeSettings>())
@@ -641,7 +641,10 @@ FString FClaudeCodeRunner::BuildCodexCommandLine(const FClaudeRequestConfig& Con
 	FString TempDir = FPaths::Combine(FPaths::ProjectSavedDir(), TEXT("UnrealClaude"));
 	IFileManager::Get().MakeDirectory(*TempDir, true);
 
-	CodexLastMessageFilePath = FPaths::ConvertRelativePathToFull(FPaths::Combine(TempDir, TEXT("codex-last-message.txt")));
+	CodexLastMessageFilePath = FPaths::ConvertRelativePathToFull(FPaths::Combine(
+		TempDir,
+		FString::Printf(TEXT("codex-last-message-%s.txt"), *FGuid::NewGuid().ToString(EGuidFormats::Digits))));
+	IFileManager::Get().Delete(*CodexLastMessageFilePath, false, true);
 	CommandLine += FString::Printf(TEXT("--output-last-message \"%s\" "), *CodexLastMessageFilePath);
 
 	// Read the full prompt from stdin to avoid command line length limits.

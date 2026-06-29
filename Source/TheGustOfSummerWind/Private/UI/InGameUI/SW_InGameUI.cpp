@@ -1,15 +1,16 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "UI/InGameUI/SW_InGameUI.h"
 #include "Animation/UMGSequencePlayer.h"
 #include "Components/AudioComponent.h"
+#include "Components/Button.h"
 #include "Components/Widget.h"
 #include "Game/SW_GameMode.h"
 #include "Game/SW_HUD.h"
 #include "Game/SW_PlayerController.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundBase.h"
+#include "UI/InGameUI/SW_CharacterPortraits.h"
 #include "UObject/UnrealType.h"
 
 namespace
@@ -27,6 +28,62 @@ UObject* GetInGameUIObjectPropertyValue(UObject* Owner, const FName PropertyName
 
 	const FObjectPropertyBase* ObjectProperty = FindFProperty<FObjectPropertyBase>(Owner->GetClass(), PropertyName);
 	return ObjectProperty ? ObjectProperty->GetObjectPropertyValue_InContainer(Owner) : nullptr;
+}
+
+void SetInGameUIObjectPropertyValue(UObject* Owner, const FName PropertyName, UObject* Value)
+{
+	if (!Owner || !Value)
+	{
+		return;
+	}
+
+	const FObjectPropertyBase* ObjectProperty = FindFProperty<FObjectPropertyBase>(Owner->GetClass(), PropertyName);
+	if (ObjectProperty && Value->IsA(ObjectProperty->PropertyClass))
+	{
+		ObjectProperty->SetObjectPropertyValue_InContainer(Owner, Value);
+	}
+}
+
+UObject* GetInGameUINamedWidget(UObject* Owner, const FName WidgetName)
+{
+	if (UUserWidget* UserWidget = Cast<UUserWidget>(Owner))
+	{
+		return UserWidget->GetWidgetFromName(WidgetName);
+	}
+
+	return nullptr;
+}
+
+UObject* GetInGameUIObjectOrWidgetValue(UObject* Owner, const FName PropertyOrWidgetName)
+{
+	if (UObject* PropertyValue = GetInGameUIObjectPropertyValue(Owner, PropertyOrWidgetName))
+	{
+		return PropertyValue;
+	}
+
+	return GetInGameUINamedWidget(Owner, PropertyOrWidgetName);
+}
+
+UObject* GetInGameUIButtonWidget(UObject* Owner, const FName ButtonWidgetName)
+{
+	UObject* ButtonContainer = GetInGameUIObjectOrWidgetValue(Owner, ButtonContainerPropertyName);
+	if (UObject* ButtonWidget = GetInGameUIObjectOrWidgetValue(ButtonContainer, ButtonWidgetName))
+	{
+		return ButtonWidget;
+	}
+
+	return GetInGameUIObjectOrWidgetValue(Owner, ButtonWidgetName);
+}
+
+UButton* GetButtonFromUserWidget(UObject* Owner, const FName ButtonWidgetName, const FName InnerButtonName)
+{
+	UObject* ButtonWidget = GetInGameUIButtonWidget(Owner, ButtonWidgetName);
+	if (UButton* Button = Cast<UButton>(ButtonWidget))
+	{
+		return Button;
+	}
+
+	return Cast<UButton>(GetInGameUIObjectOrWidgetValue(ButtonWidget, InnerButtonName));
 }
 
 bool GetInGameUIBoolPropertyValue(const UObject* Owner, const FName PropertyName)
@@ -84,22 +141,114 @@ void EmptyBlueprintArrayProperty(UObject* Owner, const FName PropertyName, const
 	ArrayHelper.EmptyValues();
 }
 
+bool AddTextToBlueprintArrayProperty(UObject* Owner, const FName PropertyName, const FText& Text)
+{
+	if (!Owner)
+	{
+		return false;
+	}
+
+	const FArrayProperty* ArrayProperty = FindFProperty<FArrayProperty>(Owner->GetClass(), PropertyName);
+	if (!ArrayProperty || !CastField<FTextProperty>(ArrayProperty->Inner))
+	{
+		return false;
+	}
+
+	FScriptArrayHelper ArrayHelper(ArrayProperty, ArrayProperty->ContainerPtrToValuePtr<void>(Owner));
+	const int32 NewIndex = ArrayHelper.AddValue();
+	CastFieldChecked<FTextProperty>(ArrayProperty->Inner)->SetPropertyValue(ArrayHelper.GetRawPtr(NewIndex), Text);
+	return true;
+}
+
 void ClearLegacyBacklogBlueprintState(UObject* Owner)
 {
 	EmptyBlueprintArrayProperty(Owner, TEXT("readDialogue"), false);
 	EmptyBlueprintArrayProperty(Owner, TEXT("readName"), false);
 	EmptyBlueprintArrayProperty(Owner, TEXT("BP_NameAndDialogueArray"), true);
 }
+
+void CacheLegacyInGameUIBlueprintReferences(USW_InGameUI* InGameUI)
+{
+	if (!InGameUI)
+	{
+		return;
+	}
+
+	if (!InGameUI->BP_DialogBox)
+	{
+		InGameUI->BP_DialogBox = Cast<USW_DialogBox>(GetInGameUINamedWidget(InGameUI, TEXT("BP_DialogBox")));
+	}
+
+	if (!InGameUI->BP_NextDialog)
+	{
+		InGameUI->BP_NextDialog = Cast<UBTN_NextDialog>(GetInGameUINamedWidget(InGameUI, TEXT("BP_NextDialog")));
+	}
+
+	if (!InGameUI->CharacterBox)
+	{
+		InGameUI->CharacterBox = Cast<USW_CharacterBox>(GetInGameUINamedWidget(InGameUI, TEXT("CharacterBox")));
+	}
+
+	SetInGameUIObjectPropertyValue(InGameUI, TEXT("As BP Dialog Box"), InGameUI->BP_DialogBox);
+	SetInGameUIObjectPropertyValue(InGameUI, TEXT("As BP Next Dialog"), InGameUI->BP_NextDialog);
+
+	if (InGameUI->CharacterBox)
+	{
+		InGameUI->CharacterBox->InitializeFromOwnerWidget(InGameUI);
+	}
+
+	if (UObject* BoundPortraitWidget = InGameUI->CharacterBox ? InGameUI->CharacterBox->GetCharacterPortraitAt(0) : nullptr)
+	{
+		SetInGameUIObjectPropertyValue(InGameUI, TEXT("As BP Character Portraits"), BoundPortraitWidget);
+	}
+	else if (UObject* LegacyPortraitWidget = GetInGameUINamedWidget(InGameUI, TEXT("BP_CharacterPortraits")))
+	{
+		SetInGameUIObjectPropertyValue(InGameUI, TEXT("As BP Character Portraits"), LegacyPortraitWidget);
+	}
+
+	if (APlayerController* OwningPlayer = InGameUI->GetOwningPlayer())
+	{
+		SetInGameUIObjectPropertyValue(InGameUI, TEXT("As BP SW Player Controller"), OwningPlayer);
+	}
+}
 }
 
 void USW_InGameUI::NativeConstruct()
 {
+	CacheLegacyInGameUIBlueprintReferences(this);
 	Super::NativeConstruct();
+
+	CacheLegacyInGameUIBlueprintReferences(this);
 	InitializeGame();
+	BindLegacyButtonClicks();
+
+	// --- Bind PlayerController delegates ---
+	if (ASW_PlayerController* PC = Cast<ASW_PlayerController>(GetOwningPlayer()))
+	{
+		PC->InGameMenu.AddDynamic(this, &USW_InGameUI::OnInGameMenuUI);
+		PC->Log.AddDynamic(this, &USW_InGameUI::OnLog);
+	}
+
+	// --- Bind own delegates ---
+	DialogueRecord.AddDynamic(this, &USW_InGameUI::OnDialogueRecord);
+	SetCharacter.AddDynamic(this, &USW_InGameUI::OnSetCharacter);
+
+	// --- Bind fade animation start/finish ---
+	if (Fade)
+	{
+		FWidgetAnimationDynamicEvent FadeStartedEvent;
+		FadeStartedEvent.BindDynamic(this, &USW_InGameUI::OnFadeStarted);
+		BindToAnimationStarted(Fade, FadeStartedEvent);
+
+		FWidgetAnimationDynamicEvent FadeFinishedEvent;
+		FadeFinishedEvent.BindDynamic(this, &USW_InGameUI::OnFadeFinished);
+		BindToAnimationFinished(Fade, FadeFinishedEvent);
+	}
 }
 
 void USW_InGameUI::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
+	CacheLegacyInGameUIBlueprintReferences(this);
 	Super::NativeTick(MyGeometry, InDeltaTime);
 
 	SyncAdvanceModeFromBlueprintButtons();
@@ -126,6 +275,187 @@ void USW_InGameUI::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 		RequestAdvanceDialog(false);
 	}
 }
+
+// --- Animation event callbacks ---
+
+void USW_InGameUI::OnFadeStarted()
+{
+	// Disable input during fade
+	if (APlayerController* PC = GetOwningPlayer())
+	{
+		PC->SetIgnoreLookInput(true);
+		PC->SetIgnoreMoveInput(true);
+	}
+}
+
+void USW_InGameUI::OnFadeFinished()
+{
+	// Re-enable input after fade
+	if (APlayerController* PC = GetOwningPlayer())
+	{
+		PC->SetIgnoreLookInput(false);
+		PC->SetIgnoreMoveInput(false);
+	}
+}
+
+void USW_InGameUI::OnInGameMenuUI(bool bIsMenuExist)
+{
+	UpdateInGameMenuUI(bIsMenuExist);
+}
+
+void USW_InGameUI::OnDialogueRecord(FText readText, FText readName)
+{
+	UpdateTextArray(readText, readName);
+}
+
+void USW_InGameUI::OnLog(bool bIsLogExist)
+{
+	UpdteLogUI(bIsLogExist);
+}
+
+void USW_InGameUI::OnSetCharacter(FDialogStruct InDialogStruct, FDialogStruct InPreviousDialogStruct)
+{
+	DispatchCharacterPortraits(InDialogStruct, InPreviousDialogStruct);
+}
+
+void USW_InGameUI::OnAutoButtonClicked()
+{
+	UpdateAutoState();
+}
+
+void USW_InGameUI::OnSkipButtonClicked()
+{
+	UpdateSkipState();
+}
+
+void USW_InGameUI::OnReadButtonClicked()
+{
+	ReadDialog();
+}
+
+// --- BP functions migrated to C++ ---
+
+void USW_InGameUI::UpdateAutoState()
+{
+	const bool bEnableAuto = !IsBlueprintModeButtonActivated(AutoButtonPropertyName);
+	SetAdvanceMode(bEnableAuto ? EDialogAdvanceMode::Auto : EDialogAdvanceMode::Manual);
+
+	if (bEnableAuto)
+	{
+		ReadDialog();
+	}
+}
+
+void USW_InGameUI::UpdateSkipState()
+{
+	const bool bEnableSkip = !IsBlueprintModeButtonActivated(SkipButtonPropertyName);
+	SetAdvanceMode(bEnableSkip ? EDialogAdvanceMode::Skip : EDialogAdvanceMode::Manual);
+
+	if (bEnableSkip)
+	{
+		ReadDialog();
+	}
+}
+
+void USW_InGameUI::UpdateInGameMenuUI(bool bCondition)
+{
+	bIsInGameMenuUIExist = bCondition;
+
+	if (USW_UIBase* ButtonPanelWidget = GetButtonPanelWidget())
+	{
+		ButtonPanelWidget->SetVisibility(bCondition ? ESlateVisibility::Visible : ESlateVisibility::Collapsed);
+	}
+
+	if (!BP_BackLog)
+	{
+		BP_BackLog = Cast<USW_UIBase>(GetInGameUIObjectPropertyValue(this, TEXT("BP_BackLog")));
+	}
+
+	if (BP_BackLog)
+	{
+		BP_BackLog->SetVisibility(bCondition ? ESlateVisibility::HitTestInvisible : ESlateVisibility::Visible);
+	}
+}
+
+void USW_InGameUI::UpdteLogUI(bool bLogExist)
+{
+	if (!BP_BackLog)
+	{
+		BP_BackLog = Cast<USW_UIBase>(GetInGameUIObjectPropertyValue(this, TEXT("BP_BackLog")));
+		if (!BP_BackLog)
+		{
+			return;
+		}
+	}
+
+	if (bLogExist)
+	{
+		AddBackLogText();
+
+		if (ASW_PlayerController* PC = Cast<ASW_PlayerController>(GetOwningPlayer()))
+		{
+			PC->bIsLogExist = false;
+		}
+
+		BP_BackLog->RemoveFromParent();
+	}
+	else
+	{
+		AddWidgetToViewportOnce(BP_BackLog, 3);
+
+		ScriptManager = GetScriptManager();
+		if (ScriptManager)
+		{
+			ScriptManager->WidgetState = BackLog;
+		}
+
+		if (ASW_PlayerController* PC = Cast<ASW_PlayerController>(GetOwningPlayer()))
+		{
+			PC->bIsLogExist = true;
+		}
+		ConfigureLegacyBacklogEntryWidgetJumps();
+	}
+}
+
+void USW_InGameUI::UpdateTextArray(FText Dialogue, FText Name)
+{
+	AddTextToBlueprintArrayProperty(this, TEXT("readDialogue"), Dialogue);
+	AddTextToBlueprintArrayProperty(this, TEXT("readName"), Name);
+}
+
+void USW_InGameUI::AddBackLogText()
+{
+	// Refresh backlog display - entries are already in BacklogEntries array
+	// The BP_BackLog child widget reads from BacklogEntries
+}
+
+USW_UIBase* USW_InGameUI::UpdateChapter()
+{
+	// Called when chapter switches - returns a CGSwitch widget for animation
+	// The actual chapter switch logic is in TryStartChapterSwitch
+	TryStartChapterSwitch();
+	return nullptr; // CGSwitch widget is handled by the BP side
+}
+
+void USW_InGameUI::AutoActiveEvent()
+{
+	// Called from BP when auto mode becomes active
+	if (BP_DialogBox && !BP_DialogBox->IsDialogTextRevealing())
+	{
+		ReadDialog();
+	}
+}
+
+void USW_InGameUI::SkipActiveEvent()
+{
+	// Called from BP when skip mode becomes active
+	if (BP_DialogBox && !BP_DialogBox->IsDialogTextRevealing())
+	{
+		ReadDialog();
+	}
+}
+
+// --- Core dialog functions ---
 
 void USW_InGameUI::InitializeGame()
 {
@@ -529,15 +859,13 @@ void USW_InGameUI::SyncAdvanceModeFromBlueprintButtons()
 
 bool USW_InGameUI::IsBlueprintModeButtonActivated(const FName ButtonName) const
 {
-	UObject* ButtonContainer = GetInGameUIObjectPropertyValue(const_cast<USW_InGameUI*>(this), ButtonContainerPropertyName);
-	UObject* ButtonWidget = GetInGameUIObjectPropertyValue(ButtonContainer, ButtonName);
+	UObject* ButtonWidget = GetInGameUIButtonWidget(const_cast<USW_InGameUI*>(this), ButtonName);
 	return GetInGameUIBoolPropertyValue(ButtonWidget, TEXT("bIsActivated"));
 }
 
 void USW_InGameUI::SetBlueprintModeButtonActivated(const FName ButtonName, const bool bActivated)
 {
-	UObject* ButtonContainer = GetInGameUIObjectPropertyValue(this, ButtonContainerPropertyName);
-	UObject* ButtonWidget = GetInGameUIObjectPropertyValue(ButtonContainer, ButtonName);
+	UObject* ButtonWidget = GetInGameUIButtonWidget(this, ButtonName);
 	SetInGameUIBoolPropertyValue(ButtonWidget, TEXT("bIsActivated"), bActivated);
 
 	if (UWidget* Widget = Cast<UWidget>(ButtonWidget))
@@ -548,9 +876,8 @@ void USW_InGameUI::SetBlueprintModeButtonActivated(const FName ButtonName, const
 
 void USW_InGameUI::UpdateModeButtonFeedback() const
 {
-	UObject* ButtonContainer = GetInGameUIObjectPropertyValue(const_cast<USW_InGameUI*>(this), ButtonContainerPropertyName);
-	UObject* AutoButton = GetInGameUIObjectPropertyValue(ButtonContainer, AutoButtonPropertyName);
-	UObject* SkipButton = GetInGameUIObjectPropertyValue(ButtonContainer, SkipButtonPropertyName);
+	UObject* AutoButton = GetInGameUIButtonWidget(const_cast<USW_InGameUI*>(this), AutoButtonPropertyName);
+	UObject* SkipButton = GetInGameUIButtonWidget(const_cast<USW_InGameUI*>(this), SkipButtonPropertyName);
 
 	if (UWidget* AutoWidget = Cast<UWidget>(AutoButton))
 	{
@@ -561,6 +888,11 @@ void USW_InGameUI::UpdateModeButtonFeedback() const
 	{
 		SkipWidget->SetRenderOpacity(AdvanceMode == EDialogAdvanceMode::Skip ? 1.0f : 0.55f);
 	}
+}
+
+void USW_InGameUI::UpdateModeButtonVisuals()
+{
+	UpdateModeButtonFeedback();
 }
 
 void USW_InGameUI::ConfigureLegacyBacklogEntryWidgetJumps()
@@ -590,6 +922,60 @@ void USW_InGameUI::ConfigureLegacyBacklogEntryWidgetJumps()
 			EntryWidget->bJumpToBacklogOnMouseDown = true;
 			EntryWidget->BacklogIndex = Index;
 		}
+	}
+}
+
+void USW_InGameUI::DispatchCharacterPortraits(const FDialogStruct& CurrentDialog, const FDialogStruct& PreviousDialog)
+{
+	if (!CharacterBox)
+	{
+		CharacterBox = Cast<USW_CharacterBox>(GetWidgetFromName(TEXT("CharacterBox")));
+	}
+
+	if (CharacterBox)
+	{
+		CharacterBox->InitializeFromOwnerWidget(this);
+		CharacterBox->UpdateCharacters(CurrentDialog, PreviousDialog);
+		return;
+	}
+
+	if (USW_CharacterPortraits* LegacyFirstPortrait = Cast<USW_CharacterPortraits>(GetWidgetFromName(TEXT("BP_CharacterPortraits"))))
+	{
+		LegacyFirstPortrait->UpdateCharacterEvent(CurrentDialog.Character_1, PreviousDialog.Character_1);
+	}
+	if (USW_CharacterPortraits* LegacySecondPortrait = Cast<USW_CharacterPortraits>(GetWidgetFromName(TEXT("BP_CharacterPortraits_1"))))
+	{
+		LegacySecondPortrait->UpdateCharacterEvent(CurrentDialog.Character_2, PreviousDialog.Character_2);
+	}
+	if (USW_CharacterPortraits* LegacyThirdPortrait = Cast<USW_CharacterPortraits>(GetWidgetFromName(TEXT("BP_CharacterPortraits_2"))))
+	{
+		LegacyThirdPortrait->UpdateCharacterEvent(CurrentDialog.Character_3, PreviousDialog.Character_3);
+	}
+}
+
+USW_UIBase* USW_InGameUI::GetButtonPanelWidget() const
+{
+	return Cast<USW_UIBase>(GetWidgetFromName(TEXT("BP_ButtonOfInGameUI")));
+}
+
+void USW_InGameUI::BindLegacyButtonClicks()
+{
+	if (UButton* AutoButton = GetButtonFromUserWidget(this, AutoButtonPropertyName, TEXT("BTN_Auto")))
+	{
+		AutoButton->OnClicked.RemoveDynamic(this, &USW_InGameUI::OnAutoButtonClicked);
+		AutoButton->OnClicked.AddUniqueDynamic(this, &USW_InGameUI::OnAutoButtonClicked);
+	}
+
+	if (UButton* SkipButton = GetButtonFromUserWidget(this, SkipButtonPropertyName, TEXT("BTN_Skip")))
+	{
+		SkipButton->OnClicked.RemoveDynamic(this, &USW_InGameUI::OnSkipButtonClicked);
+		SkipButton->OnClicked.AddUniqueDynamic(this, &USW_InGameUI::OnSkipButtonClicked);
+	}
+
+	if (UButton* ReadButton = GetButtonFromUserWidget(this, TEXT("BP_Read"), TEXT("BTN_Read")))
+	{
+		ReadButton->OnClicked.RemoveDynamic(this, &USW_InGameUI::OnReadButtonClicked);
+		ReadButton->OnClicked.AddUniqueDynamic(this, &USW_InGameUI::OnReadButtonClicked);
 	}
 }
 
@@ -751,20 +1137,29 @@ void USW_InGameUI::SetName(FDialogStruct* dialogRow)
 
 	if (dialogRow->Name.IsEmpty())
 	{
-		NameBoxBackground->SetBrushColor(FColor(0.0f, 0.0f, 0.0f, 0.0f));
-		NameBoxBackground->SetContentColorAndOpacity(FColor(0.0f, 0.0f, 0.0f, 0.0f));
+		if (NameBoxBackground)
+		{
+			NameBoxBackground->SetBrushColor(FLinearColor::Transparent);
+			NameBoxBackground->SetContentColorAndOpacity(FLinearColor::Transparent);
+		}
 	}
 	else
 	{
-		NameBoxBackground->SetBrushColor(FColor(255.0f, 255.0f, 255.0f, 255.0f));
-		NameBoxBackground->SetContentColorAndOpacity(FColor(255.0f, 255.0f, 255.0f, 255.0f));
-		TextBlock_Name->SetText(dialogRow->Name);
+		if (NameBoxBackground)
+		{
+			NameBoxBackground->SetBrushColor(FLinearColor::White);
+			NameBoxBackground->SetContentColorAndOpacity(FLinearColor::White);
+		}
+		if (TextBlock_Name)
+		{
+			TextBlock_Name->SetText(dialogRow->Name);
+		}
 	}
 }
 
 void USW_InGameUI::SetBackground(FDialogStruct* dialogRow)
 {
-	if (dialogRow)
+	if (dialogRow && TEX_Background && dialogRow->Background)
 	{
 		TEX_Background->SetBrushFromTexture(dialogRow->Background, false);
 	}
@@ -772,7 +1167,7 @@ void USW_InGameUI::SetBackground(FDialogStruct* dialogRow)
 
 void USW_InGameUI::SetMusic(FDialogStruct* dialogRow)
 {
-	if (dialogRow && dialogRow->BackgroundSound != nullptr)
+	if (dialogRow && dialogRow->BackgroundSound && ScriptManager && ScriptManager->AudioPlayer)
 	{
 		ScriptManager->BackgroundMusic = dialogRow->BackgroundSound;
 		ScriptManager->AudioPlayer->Stop();
@@ -783,12 +1178,9 @@ void USW_InGameUI::SetMusic(FDialogStruct* dialogRow)
 
 void USW_InGameUI::SetConversationalVoice(FDialogStruct* dialogRow)
 {
-	if (dialogRow && dialogRow->ConversationalVoice != nullptr)
+	if (dialogRow && dialogRow->ConversationalVoice && ScriptManager && ScriptManager->ConversationalVoicePlayer)
 	{
-		if (ScriptManager->ConversationalVoicePlayer != nullptr)
-		{
-			ScriptManager->ConversationalVoicePlayer->Stop();
-		}
+		ScriptManager->ConversationalVoicePlayer->Stop();
 		ScriptManager->ConversationalVoicePlayer->SetSound(dialogRow->ConversationalVoice);
 		ScriptManager->ConversationalVoicePlayer->Play();
 	}

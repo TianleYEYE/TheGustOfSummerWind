@@ -7,6 +7,7 @@
 #include "ScriptExecutionManager.h"
 #include "UnrealClaudeModule.h"
 #include "UnrealClaudeConstants.h"
+#include "UnrealClaudeSettings.h"
 
 // Static cache avoids re-allocating this multi-KB prompt on every SendPrompt call
 static const FString CachedUE57SystemPrompt = TEXT(R"(You are an expert Unreal Engine 5.7 developer assistant integrated directly into the UE Editor.
@@ -252,6 +253,14 @@ FString FClaudeCodeSubsystem::BuildPromptWithHistory(const FString& NewPrompt) c
 	if (History.Num() == 0)
 	{
 		return NewPrompt;
+	}
+
+	if (const UUnrealClaudeSettings* Settings = GetDefault<UUnrealClaudeSettings>())
+	{
+		if (Settings->bUseCodexCli)
+		{
+			return NewPrompt;
+		}
 	}
 
 	FString PromptWithHistory;

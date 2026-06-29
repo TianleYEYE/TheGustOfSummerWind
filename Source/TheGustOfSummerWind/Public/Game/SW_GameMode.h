@@ -19,6 +19,8 @@ class THEGUSTOFSUMMERWIND_API ASW_GameMode : public AGameMode
 {
 	GENERATED_BODY()
 public:
+	ASW_GameMode();
+
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<USaveGame>LoadScreenSaveGameClass;
 

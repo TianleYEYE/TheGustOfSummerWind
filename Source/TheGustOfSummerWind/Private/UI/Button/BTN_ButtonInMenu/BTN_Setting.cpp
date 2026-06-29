@@ -11,18 +11,26 @@ void UBTN_Setting::SetParentSwitcher(UWidgetSwitcher* InSwitcher)
 void  UBTN_Setting::NativeConstruct()
 {
 	Super::NativeConstruct();
-	BTN_Setting->OnClicked.AddDynamic(this,&UBTN_Setting::DelegatedAgentAndPlayAnimation);
-	Flashing.BindDynamic(this,&UBTN_Setting::FlashingOver);
-	BindToAnimationFinished(flashing,Flashing);
+	if (BTN_Setting)
+	{
+		BTN_Setting->OnClicked.AddUniqueDynamic(this, &UBTN_Setting::DelegatedAgentAndPlayAnimation);
+	}
+	if (flashing)
+	{
+		Flashing.BindDynamic(this, &UBTN_Setting::FlashingOver);
+		BindToAnimationFinished(flashing, Flashing);
+	}
 }
 
 void  UBTN_Setting::DelegatedAgentAndPlayAnimation()
 {
 	Setting.Broadcast();
-	PlayAnimation(flashing);
+	if (flashing)
+	{
+		PlayAnimation(flashing);
+	}
 }
 
 void UBTN_Setting::FlashingOver()
 {
 }
-

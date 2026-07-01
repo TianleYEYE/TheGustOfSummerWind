@@ -3,7 +3,9 @@
 #include "UI/InGameUI/SW_DialogBox.h"
 
 #include "Blueprint/WidgetTree.h"
+#include "Components/Border.h"
 #include "Components/Image.h"
+#include "Components/TextBlock.h"
 #include "Components/Widget.h"
 #include "UObject/UnrealType.h"
 
@@ -199,12 +201,18 @@ void USW_DialogBox::NativeConstruct()
 		GetAlphaTextThrobber(AlphaTextBox);
 	}
 
+	GetSpeakerNameTextBlock();
+	GetSpeakerNameBackground();
+
 	Super::NativeConstruct();
 
 	if (USW_UIBase* AlphaTextBox = GetAlphaTextBox())
 	{
 		GetAlphaTextThrobber(AlphaTextBox);
 	}
+
+	GetSpeakerNameTextBlock();
+	GetSpeakerNameBackground();
 }
 
 void USW_DialogBox::SetDialogText(const FText& Text)
@@ -233,6 +241,28 @@ void USW_DialogBox::SetDialogText(const FText& Text)
 	}
 
 	UpdateDialogText.Broadcast(Text);
+}
+
+void USW_DialogBox::SetSpeakerName(const FText& SpeakerName)
+{
+	CurrentSpeakerName = SpeakerName;
+
+	const FString SpeakerNameString = SpeakerName.ToString().TrimStartAndEnd();
+	const bool bHasSpeakerName = !SpeakerNameString.IsEmpty();
+
+	if (UBorder* NameBackground = GetSpeakerNameBackground())
+	{
+		const FLinearColor BackgroundColor = bHasSpeakerName ? FLinearColor::White : FLinearColor::Transparent;
+		NameBackground->SetBrushColor(BackgroundColor);
+		NameBackground->SetContentColorAndOpacity(BackgroundColor);
+		NameBackground->SetVisibility(bHasSpeakerName ? ESlateVisibility::Visible : ESlateVisibility::HitTestInvisible);
+	}
+
+	if (UTextBlock* NameTextBlock = GetSpeakerNameTextBlock())
+	{
+		NameTextBlock->SetText(bHasSpeakerName ? SpeakerName : FText::GetEmpty());
+		NameTextBlock->SetVisibility(bHasSpeakerName ? ESlateVisibility::Visible : ESlateVisibility::HitTestInvisible);
+	}
 }
 
 bool USW_DialogBox::IsDialogTextRevealing() const
@@ -269,6 +299,52 @@ USW_UIBase* USW_DialogBox::GetAlphaTextBox() const
 	{
 		SetDialogBoxObjectPropertyValue(const_cast<USW_DialogBox*>(this), TEXT("BP_AlphaTextBox"), AlphaTextBox);
 		return AlphaTextBox;
+	}
+
+	return nullptr;
+}
+
+UTextBlock* USW_DialogBox::GetSpeakerNameTextBlock() const
+{
+	if (CachedSpeakerNameTextBlock)
+	{
+		return CachedSpeakerNameTextBlock;
+	}
+
+	for (UObject* OuterObject = GetOuter(); OuterObject; OuterObject = OuterObject->GetOuter())
+	{
+		if (UUserWidget* OwningWidget = Cast<UUserWidget>(OuterObject))
+		{
+			if (UTextBlock* NameTextBlock = Cast<UTextBlock>(OwningWidget->GetWidgetFromName(TEXT("TextBlock_Name"))))
+			{
+				const_cast<USW_DialogBox*>(this)->CachedSpeakerNameTextBlock = NameTextBlock;
+				SetDialogBoxObjectPropertyValue(OwningWidget, TEXT("TextBlock_Name"), NameTextBlock);
+				return NameTextBlock;
+			}
+		}
+	}
+
+	return nullptr;
+}
+
+UBorder* USW_DialogBox::GetSpeakerNameBackground() const
+{
+	if (CachedSpeakerNameBackground)
+	{
+		return CachedSpeakerNameBackground;
+	}
+
+	for (UObject* OuterObject = GetOuter(); OuterObject; OuterObject = OuterObject->GetOuter())
+	{
+		if (UUserWidget* OwningWidget = Cast<UUserWidget>(OuterObject))
+		{
+			if (UBorder* NameBackground = Cast<UBorder>(OwningWidget->GetWidgetFromName(TEXT("NameBoxBackground"))))
+			{
+				const_cast<USW_DialogBox*>(this)->CachedSpeakerNameBackground = NameBackground;
+				SetDialogBoxObjectPropertyValue(OwningWidget, TEXT("NameBoxBackground"), NameBackground);
+				return NameBackground;
+			}
+		}
 	}
 
 	return nullptr;

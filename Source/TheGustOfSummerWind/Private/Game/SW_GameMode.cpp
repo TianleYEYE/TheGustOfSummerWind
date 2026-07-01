@@ -61,6 +61,8 @@ void ASW_GameMode::SaveSlotData(UMVVM_LoadSlot* LoadSlot, int32 SlotIndex)
 	LoadScreenSaveGame->DataTable = LoadSlot->GetDataTable();
 	LoadScreenSaveGame->BackgroundMusic = LoadSlot->GetBackgroundMusic();
 	LoadScreenSaveGame->ChapterName = LoadSlot->GetChapterName();
+	LoadScreenSaveGame->SlotName = LoadSlot->GetLoadSlotName();
+	LoadScreenSaveGame->SlotIndex = SlotIndex;
 	LoadScreenSaveGame->RowDialog = FMath::Max(0, LoadSlot->GetRowDialog());
 	LoadScreenSaveGame->DateTime = LoadSlot->GetDateTime();
 	LoadScreenSaveGame->SaveSlotStatus = Load;

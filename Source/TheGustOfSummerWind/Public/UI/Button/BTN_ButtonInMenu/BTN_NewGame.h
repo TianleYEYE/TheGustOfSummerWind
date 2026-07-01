@@ -37,5 +37,8 @@ public:
 	
 	UFUNCTION()
 	virtual void DelegatedAgentAndPlayAnimation()override;
-	
+
+protected:
+	virtual UWidgetAnimation* GetPrimaryActionAnimation() const override { return flashing; }
+	virtual void BroadcastPrimaryAction() override;
 };

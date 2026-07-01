@@ -40,8 +40,8 @@ public:
 
 	// --- BindWidget references ---
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	TObjectPtr<UTextBlock> TextBlock_Name;
+	// UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	// TObjectPtr<UTextBlock> TextBlock_Name;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	TObjectPtr<UImage> TEX_Background;
@@ -55,8 +55,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	TObjectPtr<UBTN_NextDialog> BP_NextDialog;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	TObjectPtr<UBorder> NameBoxBackground;
+	// UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
+	// TObjectPtr<UBorder> NameBoxBackground;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<USW_UIBase> BP_Auto;

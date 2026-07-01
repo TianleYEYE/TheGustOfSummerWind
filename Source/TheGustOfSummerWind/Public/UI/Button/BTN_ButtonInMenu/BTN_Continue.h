@@ -36,5 +36,8 @@ public:
 	
 	UFUNCTION()
 	void FlashingOver();
-	
+
+protected:
+	virtual UWidgetAnimation* GetPrimaryActionAnimation() const override { return flashing; }
+	virtual void BroadcastPrimaryAction() override;
 };

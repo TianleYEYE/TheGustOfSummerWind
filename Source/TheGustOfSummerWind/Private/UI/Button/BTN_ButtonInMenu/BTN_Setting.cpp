@@ -15,22 +15,18 @@ void  UBTN_Setting::NativeConstruct()
 	{
 		BTN_Setting->OnClicked.AddUniqueDynamic(this, &UBTN_Setting::DelegatedAgentAndPlayAnimation);
 	}
-	if (flashing)
-	{
-		Flashing.BindDynamic(this, &UBTN_Setting::FlashingOver);
-		BindToAnimationFinished(flashing, Flashing);
-	}
 }
 
 void  UBTN_Setting::DelegatedAgentAndPlayAnimation()
 {
-	Setting.Broadcast();
-	if (flashing)
-	{
-		PlayAnimation(flashing);
-	}
+	PlayPrimaryActionAnimationOrBroadcast();
 }
 
 void UBTN_Setting::FlashingOver()
 {
+}
+
+void UBTN_Setting::BroadcastPrimaryAction()
+{
+	Setting.Broadcast();
 }

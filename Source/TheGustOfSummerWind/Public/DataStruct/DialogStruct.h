@@ -3,16 +3,55 @@
 #include "CoreMinimal.h"
 #include "DialogStruct.generated.h"
 
+UENUM(BlueprintType)
+enum class ECharacterSlotPosition : uint8
+{
+	Inherit,
+	Left,
+	Center,
+	Right,
+	TrueCenter
+};
+
+UENUM(BlueprintType)
+enum class ECharacterTransitionType : uint8
+{
+	Inherit,
+	None,
+	Fade
+};
+
 USTRUCT(BlueprintType)
 struct THEGUSTOFSUMMERWIND_API FCharacterSprite:public FTableRowBase
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FName CharacterId;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<UTexture2D>CurrentSprite;
 
-	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<UTexture2D>Face;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	ECharacterSlotPosition Position = ECharacterSlotPosition::Inherit;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	ECharacterTransitionType Transition = ECharacterTransitionType::Inherit;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	bool bKeepPrevious = true;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	bool bHide = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	bool bMirror = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	int32 ZOrder = 0;
 };
 
 USTRUCT(BlueprintType)

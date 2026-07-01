@@ -7,6 +7,7 @@
 #include "SW_DialogBox.generated.h"
 
 class UWidget;
+class UBorder;
 class UTextBlock;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FUpdateText, FText, Text);
@@ -37,6 +38,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetDialogText(const FText& Text);
 
+	UFUNCTION(BlueprintCallable, Category = "Dialog")
+	void SetSpeakerName(const FText& SpeakerName);
+
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Dialog")
 	bool IsDialogTextRevealing() const;
 
@@ -54,7 +58,18 @@ public:
 
 private:
 	USW_UIBase* GetAlphaTextBox() const;
+	UTextBlock* GetSpeakerNameTextBlock() const;
+	UBorder* GetSpeakerNameBackground() const;
 
 	UPROPERTY(Transient)
 	FText CurrentDialogText;
+
+	UPROPERTY(Transient)
+	FText CurrentSpeakerName;
+
+	UPROPERTY(Transient)
+	TObjectPtr<UTextBlock> CachedSpeakerNameTextBlock;
+
+	UPROPERTY(Transient)
+	TObjectPtr<UBorder> CachedSpeakerNameBackground;
 };

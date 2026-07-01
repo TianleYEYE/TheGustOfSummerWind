@@ -12,20 +12,16 @@ void UBTN_Continue::NativeConstruct()
 	{
 		BTN_Continue->OnClicked.AddUniqueDynamic(this, &UBTN_Continue::DelegatedAgentAndPlayAnimation);
 	}
-	if (flashing)
-	{
-		Flashing.BindDynamic(this, &UBTN_Continue::FlashingOver);
-		BindToAnimationFinished(flashing, Flashing);
-	}
 }
 
 void UBTN_Continue::DelegatedAgentAndPlayAnimation()
 {
+	PlayPrimaryActionAnimationOrBroadcast();
+}
+
+void UBTN_Continue::BroadcastPrimaryAction()
+{
 	Continue.Broadcast();
-	if (flashing)
-	{
-		PlayAnimation(flashing);
-	}
 }
 
 void UBTN_Continue::FlashingOver()

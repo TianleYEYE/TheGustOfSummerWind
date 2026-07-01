@@ -10,20 +10,11 @@ void UBTN_Album::NativeConstruct()
 	{
 		BTN_Album->OnClicked.AddUniqueDynamic(this, &UBTN_Album::DelegatedAgentAndPlayAnimation);
 	}
-	if (flashing)
-	{
-		Flashing.BindDynamic(this, &UBTN_Album::FlashingOver);
-		BindToAnimationFinished(flashing, Flashing);
-	}
 }
 
 void UBTN_Album::DelegatedAgentAndPlayAnimation()
 {
-	Album.Broadcast();
-	if (flashing)
-	{
-		PlayAnimation(flashing);
-	}
+	PlayPrimaryActionAnimationOrBroadcast();
 }
 
 void UBTN_Album::SetParentSwitcher(UWidgetSwitcher* InSwitcher)
@@ -39,4 +30,9 @@ void UBTN_Album::FlashingOver()
 	// }
 	// ScriptManager = GetScriptManager();
 	// ScriptManager ->WidgetState = AlbumUI;
+}
+
+void UBTN_Album::BroadcastPrimaryAction()
+{
+	Album.Broadcast();
 }

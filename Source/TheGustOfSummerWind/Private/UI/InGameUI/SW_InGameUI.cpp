@@ -1130,30 +1130,14 @@ void USW_InGameUI::UpdateStruct()
 
 void USW_InGameUI::SetName(FDialogStruct* dialogRow)
 {
-	if (!dialogRow)
+	if (!BP_DialogBox)
 	{
-		return;
+		BP_DialogBox = Cast<USW_DialogBox>(GetWidgetFromName(TEXT("BP_DialogBox")));
 	}
 
-	if (dialogRow->Name.IsEmpty())
+	if (BP_DialogBox)
 	{
-		if (NameBoxBackground)
-		{
-			NameBoxBackground->SetBrushColor(FLinearColor::Transparent);
-			NameBoxBackground->SetContentColorAndOpacity(FLinearColor::Transparent);
-		}
-	}
-	else
-	{
-		if (NameBoxBackground)
-		{
-			NameBoxBackground->SetBrushColor(FLinearColor::White);
-			NameBoxBackground->SetContentColorAndOpacity(FLinearColor::White);
-		}
-		if (TextBlock_Name)
-		{
-			TextBlock_Name->SetText(dialogRow->Name);
-		}
+		BP_DialogBox->SetSpeakerName(dialogRow ? dialogRow->Name : FText::GetEmpty());
 	}
 }
 

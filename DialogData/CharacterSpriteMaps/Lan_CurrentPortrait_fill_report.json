@@ -1,0 +1,445 @@
+{
+  "mode": "apply",
+  "backup_dir": "D:\\Unreal Projects\\TheGustOfSummerWind\\DialogData\\_backup_lan_current_portrait_fill_20260630_205128",
+  "current_body": "/Game/Assets/VerticalPainting/Lan/arashi_pose01_relaxed_base_noface.arashi_pose01_relaxed_base_noface",
+  "character_id": "Lan",
+  "updated_files": [
+    {
+      "file": "DialogDataTable_1.CSV",
+      "changed_lan_rows": 7,
+      "header_changed": true
+    },
+    {
+      "file": "DialogDataTable_10.csv",
+      "changed_lan_rows": 5,
+      "header_changed": true
+    },
+    {
+      "file": "DialogDataTable_11.csv",
+      "changed_lan_rows": 0,
+      "header_changed": true
+    },
+    {
+      "file": "DialogDataTable_12.csv",
+      "changed_lan_rows": 8,
+      "header_changed": true
+    },
+    {
+      "file": "DialogDataTable_13.csv",
+      "changed_lan_rows": 7,
+      "header_changed": true
+    },
+    {
+      "file": "DialogDataTable_14.csv",
+      "changed_lan_rows": 0,
+      "header_changed": true
+    },
+    {
+      "file": "DialogDataTable_15.csv",
+      "changed_lan_rows": 0,
+      "header_changed": true
+    },
+    {
+      "file": "DialogDataTable_16.csv",
+      "changed_lan_rows": 0,
+      "header_changed": true
+    },
+    {
+      "file": "DialogDataTable_2.csv",
+      "changed_lan_rows": 5,
+      "header_changed": true
+    },
+    {
+      "file": "DialogDataTable_3.csv",
+      "changed_lan_rows": 2,
+      "header_changed": true
+    },
+    {
+      "file": "DialogDataTable_4.csv",
+      "changed_lan_rows": 8,
+      "header_changed": true
+    },
+    {
+      "file": "DialogDataTable_5.csv",
+      "changed_lan_rows": 5,
+      "header_changed": true
+    },
+    {
+      "file": "DialogDataTable_6.csv",
+      "changed_lan_rows": 3,
+      "header_changed": true
+    },
+    {
+      "file": "DialogDataTable_7.csv",
+      "changed_lan_rows": 7,
+      "header_changed": true
+    },
+    {
+      "file": "DialogDataTable_8.csv",
+      "changed_lan_rows": 4,
+      "header_changed": true
+    },
+    {
+      "file": "DialogDataTable_9.csv",
+      "changed_lan_rows": 10,
+      "header_changed": true
+    }
+  ],
+  "updated_rows": [
+    {
+      "row_id": "57",
+      "dialog": "岚……我的名字",
+      "file": "DialogDataTable_1.CSV"
+    },
+    {
+      "row_id": "59",
+      "dialog": "那本书，我还能再看吗？",
+      "file": "DialogDataTable_1.CSV"
+    },
+    {
+      "row_id": "63",
+      "dialog": "大城市，是不是有很高的房子",
+      "file": "DialogDataTable_1.CSV"
+    },
+    {
+      "row_id": "65",
+      "dialog": "是不是有很多车",
+      "file": "DialogDataTable_1.CSV"
+    },
+    {
+      "row_id": "67",
+      "dialog": "是不是随时都可以洗热水澡",
+      "file": "DialogDataTable_1.CSV"
+    },
+    {
+      "row_id": "69",
+      "dialog": "嗯",
+      "file": "DialogDataTable_1.CSV"
+    },
+    {
+      "row_id": "73",
+      "dialog": "嗯",
+      "file": "DialogDataTable_1.CSV"
+    },
+    {
+      "row_id": "8",
+      "dialog": "要不你帮我补课吧",
+      "file": "DialogDataTable_10.csv"
+    },
+    {
+      "row_id": "46",
+      "dialog": "说我这期期末考还是这个成绩，就要……",
+      "file": "DialogDataTable_10.csv"
+    },
+    {
+      "row_id": "48",
+      "dialog": "还有……",
+      "file": "DialogDataTable_10.csv"
+    },
+    {
+      "row_id": "49",
+      "dialog": "他们觉得这是我谈恋爱引起的……",
+      "file": "DialogDataTable_10.csv"
+    },
+    {
+      "row_id": "51",
+      "dialog": "所以……",
+      "file": "DialogDataTable_10.csv"
+    },
+    {
+      "row_id": "69",
+      "dialog": "喂我做饭不好吃啊！",
+      "file": "DialogDataTable_12.csv"
+    },
+    {
+      "row_id": "71",
+      "dialog": "不过我真的学了怎么做小吃，嘿嘿",
+      "file": "DialogDataTable_12.csv"
+    },
+    {
+      "row_id": "84",
+      "dialog": "其实我也考虑过去职高，毕竟没办法……",
+      "file": "DialogDataTable_12.csv"
+    },
+    {
+      "row_id": "86",
+      "dialog": "这没办法，活在世上很多事都由不得我们",
+      "file": "DialogDataTable_12.csv"
+    },
+    {
+      "row_id": "115",
+      "dialog": "我还是觉得月你应该去更好的学校——来",
+      "file": "DialogDataTable_12.csv"
+    },
+    {
+      "row_id": "132",
+      "dialog": "祝贺阿月考上酒吧舞大学啦！",
+      "file": "DialogDataTable_12.csv"
+    },
+    {
+      "row_id": "134",
+      "dialog": "月我给你准备了礼物，猜猜是什么",
+      "file": "DialogDataTable_12.csv"
+    },
+    {
+      "row_id": "136",
+      "dialog": "邦邦卡邦！",
+      "file": "DialogDataTable_12.csv"
+    },
+    {
+      "row_id": "5",
+      "dialog": "和想象中的不一样！",
+      "file": "DialogDataTable_13.csv"
+    },
+    {
+      "row_id": "20",
+      "dialog": "哇，月的表情好恶心",
+      "file": "DialogDataTable_13.csv"
+    },
+    {
+      "row_id": "22",
+      "dialog": "有吗？",
+      "file": "DialogDataTable_13.csv"
+    },
+    {
+      "row_id": "45",
+      "dialog": "下次再来时，希望你的技术有长进",
+      "file": "DialogDataTable_13.csv"
+    },
+    {
+      "row_id": "57",
+      "dialog": "晚上去哪里吃？",
+      "file": "DialogDataTable_13.csv"
+    },
+    {
+      "row_id": "73",
+      "dialog": "您似乎有个女朋友，这可是个难事",
+      "file": "DialogDataTable_13.csv"
+    },
+    {
+      "row_id": "76",
+      "dialog": "起来——",
+      "file": "DialogDataTable_13.csv"
+    },
+    {
+      "row_id": "5",
+      "dialog": " \"月，爬那么高很危险的\"",
+      "file": "DialogDataTable_2.csv"
+    },
+    {
+      "row_id": "29",
+      "dialog": "那一起去吧。",
+      "file": "DialogDataTable_2.csv"
+    },
+    {
+      "row_id": "33",
+      "dialog": "可是大人们说……",
+      "file": "DialogDataTable_2.csv"
+    },
+    {
+      "row_id": "38",
+      "dialog": "好清凉，感觉没那么热了",
+      "file": "DialogDataTable_2.csv"
+    },
+    {
+      "row_id": "45",
+      "dialog": "呀！",
+      "file": "DialogDataTable_2.csv"
+    },
+    {
+      "row_id": "37",
+      "dialog": "月，有个问题",
+      "file": "DialogDataTable_3.csv"
+    },
+    {
+      "row_id": "53",
+      "dialog": "错过了这次就难有下次了",
+      "file": "DialogDataTable_3.csv"
+    },
+    {
+      "row_id": "24",
+      "dialog": "你还是一个人啊",
+      "file": "DialogDataTable_4.csv"
+    },
+    {
+      "row_id": "34",
+      "dialog": "当然有了",
+      "file": "DialogDataTable_4.csv"
+    },
+    {
+      "row_id": "60",
+      "dialog": "月，那碟片是什么？",
+      "file": "DialogDataTable_4.csv"
+    },
+    {
+      "row_id": "62",
+      "dialog": "不知道啊！",
+      "file": "DialogDataTable_4.csv"
+    },
+    {
+      "row_id": "65",
+      "dialog": "感觉，都是感觉",
+      "file": "DialogDataTable_4.csv"
+    },
+    {
+      "row_id": "67",
+      "dialog": "有吗？",
+      "file": "DialogDataTable_4.csv"
+    },
+    {
+      "row_id": "106",
+      "dialog": "月，我们来做碟片上的那个吧",
+      "file": "DialogDataTable_4.csv"
+    },
+    {
+      "row_id": "108",
+      "dialog": "啊——",
+      "file": "DialogDataTable_4.csv"
+    },
+    {
+      "row_id": "45",
+      "dialog": "听见你的声音我也很开心",
+      "file": "DialogDataTable_5.csv"
+    },
+    {
+      "row_id": "47",
+      "dialog": "我们再多聊一会儿吧",
+      "file": "DialogDataTable_5.csv"
+    },
+    {
+      "row_id": "96",
+      "dialog": "哇，真的能看到诶",
+      "file": "DialogDataTable_5.csv"
+    },
+    {
+      "row_id": "106",
+      "dialog": "喂爷爷",
+      "file": "DialogDataTable_5.csv"
+    },
+    {
+      "row_id": "108",
+      "dialog": "原来你还化妆了啊",
+      "file": "DialogDataTable_5.csv"
+    },
+    {
+      "row_id": "80",
+      "dialog": "是学校附近的旅馆",
+      "file": "DialogDataTable_6.csv"
+    },
+    {
+      "row_id": "82",
+      "dialog": "我父母这些天回来了，只能委屈你一下了",
+      "file": "DialogDataTable_6.csv"
+    },
+    {
+      "row_id": "169",
+      "dialog": "我愿意",
+      "file": "DialogDataTable_6.csv"
+    },
+    {
+      "row_id": "1",
+      "dialog": "所以你还是打算考我这边的高中",
+      "file": "DialogDataTable_7.csv"
+    },
+    {
+      "row_id": "3",
+      "dialog": "毕竟想每天都看见你嘛",
+      "file": "DialogDataTable_7.csv"
+    },
+    {
+      "row_id": "26",
+      "dialog": "好",
+      "file": "DialogDataTable_7.csv"
+    },
+    {
+      "row_id": "86",
+      "dialog": "就是想叫你",
+      "file": "DialogDataTable_7.csv"
+    },
+    {
+      "row_id": "88",
+      "dialog": "其实之前有人向我表白了",
+      "file": "DialogDataTable_7.csv"
+    },
+    {
+      "row_id": "93",
+      "dialog": "说一下嘛",
+      "file": "DialogDataTable_7.csv"
+    },
+    {
+      "row_id": "95",
+      "dialog": "其实在这边我还是蛮受欢迎的",
+      "file": "DialogDataTable_7.csv"
+    },
+    {
+      "row_id": "11",
+      "dialog": "嗯",
+      "file": "DialogDataTable_8.csv"
+    },
+    {
+      "row_id": "33",
+      "dialog": "这不是以防万一嘛",
+      "file": "DialogDataTable_8.csv"
+    },
+    {
+      "row_id": "80",
+      "dialog": "月，你休息好了吗？",
+      "file": "DialogDataTable_8.csv"
+    },
+    {
+      "row_id": "82",
+      "dialog": "嗯",
+      "file": "DialogDataTable_8.csv"
+    },
+    {
+      "row_id": "1",
+      "dialog": "话说，岚你还没有在城市里逛过吧？",
+      "file": "DialogDataTable_9.csv"
+    },
+    {
+      "row_id": "3",
+      "dialog": "好像是哦，来了之后就一直在忙学校方面的事情，还没有好好地欣赏过这个城市",
+      "file": "DialogDataTable_9.csv"
+    },
+    {
+      "row_id": "18",
+      "dialog": "嘿嘿……最喜欢月了……",
+      "file": "DialogDataTable_9.csv"
+    },
+    {
+      "row_id": "20",
+      "dialog": "出发！",
+      "file": "DialogDataTable_9.csv"
+    },
+    {
+      "row_id": "28",
+      "dialog": "慢点儿，我先歇会儿",
+      "file": "DialogDataTable_9.csv"
+    },
+    {
+      "row_id": "37",
+      "dialog": "……",
+      "file": "DialogDataTable_9.csv"
+    },
+    {
+      "row_id": "39",
+      "dialog": "那是什么，我们去玩儿吧！",
+      "file": "DialogDataTable_9.csv"
+    },
+    {
+      "row_id": "61",
+      "dialog": "苦嘛，上次都还是硬着头皮喝完的",
+      "file": "DialogDataTable_9.csv"
+    },
+    {
+      "row_id": "66",
+      "dialog": "看什么呢，笑的这么开心",
+      "file": "DialogDataTable_9.csv"
+    },
+    {
+      "row_id": "73",
+      "dialog": "好喜欢你",
+      "file": "DialogDataTable_9.csv"
+    }
+  ]
+}

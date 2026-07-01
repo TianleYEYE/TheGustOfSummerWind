@@ -14,7 +14,20 @@ class THEGUSTOFSUMMERWIND_API UBTN_ButtonBase : public USW_UIBase
 {
 	GENERATED_BODY()
 public:
+	virtual void NativeConstruct() override;
 	virtual void DelegatedAgentAndPlayAnimation();
 
-	
+protected:
+	virtual UWidgetAnimation* GetPrimaryActionAnimation() const;
+	virtual void BroadcastPrimaryAction();
+	void PlayPrimaryActionAnimationOrBroadcast();
+
+	UFUNCTION()
+	void OnPrimaryActionAnimationFinished();
+
+	UPROPERTY(Transient, BlueprintReadOnly, Category = "Animation")
+	bool bPendingActionBroadcast = false;
+
+	UPROPERTY(Transient)
+	FWidgetAnimationDynamicEvent PrimaryActionAnimationFinishedEvent;
 };

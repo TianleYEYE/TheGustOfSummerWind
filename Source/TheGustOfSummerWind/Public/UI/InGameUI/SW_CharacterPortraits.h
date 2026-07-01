@@ -28,11 +28,35 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	float BlendTickInterval = 0.01f;
 
+	UPROPERTY(Transient, BlueprintReadOnly, Category = "Character")
+	FName ActiveCharacterId;
+
 	UFUNCTION(BlueprintCallable, Category = "Character")
 	void UpdateCharacterEvent(FCharacterSprite CurrentSprite, FCharacterSprite PreviousSprite);
 
 	UFUNCTION(BlueprintCallable, Category = "Character")
 	void UpateSpriteAndExpression(FCharacterSprite CurrentSprite, FCharacterSprite PreviousSprite);
+
+	UFUNCTION(BlueprintCallable, Category = "Character")
+	void ApplyCharacterSprite(const FCharacterSprite& CurrentSprite, const FCharacterSprite& PreviousSprite);
+
+	UFUNCTION(BlueprintCallable, Category = "Character")
+	void SetCharacterPosition(ECharacterSlotPosition Position);
+
+	UFUNCTION(BlueprintCallable, Category = "Character")
+	void SetCharacterMirror(bool bMirror);
+
+	UFUNCTION(BlueprintCallable, Category = "Character")
+	void SetCharacterZOrder(int32 ZOrder);
+
+	UFUNCTION(BlueprintCallable, Category = "Character")
+	void ShowCharacter(ECharacterTransitionType Transition = ECharacterTransitionType::None);
+
+	UFUNCTION(BlueprintCallable, Category = "Character")
+	void HideCharacter(ECharacterTransitionType Transition = ECharacterTransitionType::None);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Character")
+	bool IsCharacterVisible() const;
 
 protected:
 	void BodySwitch();

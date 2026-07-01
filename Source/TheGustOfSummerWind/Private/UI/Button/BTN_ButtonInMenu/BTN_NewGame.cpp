@@ -23,9 +23,10 @@ void UBTN_NewGame::SetParentSwitcher(UWidgetSwitcher* InSwitcher)
 
 void UBTN_NewGame::DelegatedAgentAndPlayAnimation()
 {
+	PlayPrimaryActionAnimationOrBroadcast();
+}
+
+void UBTN_NewGame::BroadcastPrimaryAction()
+{
 	NewGame.Broadcast();
-	if (flashing)
-	{
-		PlayAnimation(flashing);
-	}
 }

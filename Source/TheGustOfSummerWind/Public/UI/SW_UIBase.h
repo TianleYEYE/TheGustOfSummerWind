@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Game/SW_SaveGame.h"
 #include "GameFramework/GameUserSettings.h"
 #include "Game/SW_ScriptManager.h"
 #include "Types/SlateEnums.h"
@@ -16,10 +17,12 @@ class UComboBoxString;
 class UDataTable;
 class UPanelWidget;
 class USlider;
+class UTextBlock;
 class UWidget;
 class UWidgetAnimation;
 class UWidgetSwitcher;
 class ASW_HUD;
+enum class ESWSaveLoadMode : uint8;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayAnimation, bool, bIsPlayingAnimation);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayingAnimation, bool, bIsPlayingAnimation);
@@ -75,6 +78,18 @@ public:
 
 	UPROPERTY(Transient, BlueprintReadOnly, Category = "Animation")
 	bool bRemoveFromParentAfterFade = false;
+
+	UPROPERTY(Transient, BlueprintReadOnly, Category = "Animation")
+	bool bBroadcastFadeFinishedEvent = false;
+
+	UFUNCTION(BlueprintCallable, Category = "Animation")
+	void PlayEnterFadeAnimation();
+
+	UFUNCTION(BlueprintCallable, Category = "Animation")
+	void PlayEnterFadeAnimationAndNotify();
+
+	UFUNCTION(BlueprintCallable, Category = "SaveLoad")
+	void RefreshSaveLoadUiState();
 
 protected:
 	/** Override in subclasses to return the widget-specific fade animation. */
@@ -208,12 +223,37 @@ protected:
 	UFUNCTION()
 	void OnFadeAnimationFinished();
 
+	UFUNCTION()
+	void OnOpenInGameSaveUIClicked();
+
+	UFUNCTION()
+	void OnOpenInGameLoadUIClicked();
+
+	UFUNCTION()
+	void OnOpenInGameSettingClicked();
+
+	UFUNCTION()
+	void OnContinueLoadSlotClicked();
+
+	UFUNCTION()
+	void OnContinueSaveSlotClicked();
+
+	UFUNCTION()
+	void OnContinueConfirmLoadClicked();
+
+	UFUNCTION()
+	void OnContinueConfirmOverwriteClicked();
+
+	UFUNCTION()
+	void OnContinueModalCancelClicked();
+
 private:
 	UObject* FindObjectPropertyOrWidget(UObject* Owner, FName PropertyOrWidgetName) const;
 	void BindCommonReturnButton();
 	void BindCommonQuitButtons();
 	void BindCommonPageSwitcherButtons();
 	void BindCommonSettingButtons();
+	void BindSaveLoadButtons();
 	void InitializeLegacyChildSlots();
 	UButton* FindButtonByPath(const TArray<FName>& WidgetPath, const TArray<FName>& ButtonNames) const;
 	void SetTextDisplaySpeed(float NewSpeed);
@@ -224,4 +264,16 @@ private:
 	void InitializeResolutionComboBox(UComboBoxString* ComboBox);
 	UButton* FindNextPageButton() const;
 	UButton* FindPreviousPageButton() const;
+	bool IsGeneratedFromWidgetBlueprint(const TCHAR* WidgetBlueprintName) const;
+	void ConfigureContinueSlotState(int32 ContinueSlotIndex, UObject* SlotSwitcherWidget) const;
+	void SetSlotIndexOnWidget(UObject* Widget, int32 InSlotIndex) const;
+	int32 ResolveContinueSlotIndex() const;
+	UWidgetSwitcher* FindContinueSlotSwitcher(UObject* SlotSwitcherWidget) const;
+	ESaveSlotStatus GetContinueSlotStatus(int32 ContinueSlotIndex) const;
+	void OpenContinueModal(const TCHAR* WidgetClassPath, int32 ContinueSlotIndex);
+	void CloseContinueModals();
+	bool IsContinueUiSaveMode() const;
+	bool IsContinueUiOpenedFromInGame() const;
+	bool SaveCurrentGameToContinueSlot(int32 ContinueSlotIndex);
+	bool LoadGameFromContinueSlot(int32 ContinueSlotIndex);
 };

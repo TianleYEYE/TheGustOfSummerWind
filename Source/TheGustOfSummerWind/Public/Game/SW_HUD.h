@@ -11,8 +11,40 @@
 
 
 class UMVVM_LoadScreen;
+class UMVVM_LoadSlot;
+class UDataTable;
+class USoundBase;
 class USW_InGameUI;
+class USW_LoadingUI;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnUICollectionInitialized);
+
+UENUM(BlueprintType)
+enum class ESWSaveLoadMode : uint8
+{
+	LoadFromMenu,
+	LoadFromInGame,
+	SaveFromInGame
+};
+
+UENUM()
+enum class ESWPendingInGameTransition : uint8
+{
+	None,
+	NewGame,
+	LoadFromMenu,
+	LoadFromInGame
+};
+
+UENUM()
+enum class ESWTransitionPhase : uint8
+{
+	None,
+	FadingOutContinue,
+	FadingOutMenu,
+	FadingInLoading,
+	FadingOutLoading,
+	FadingInInGame
+};
 /**
  * 
  */
@@ -45,6 +77,8 @@ public:
 	TObjectPtr<USW_UIBase>AlbumUI;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Widget")
 	TObjectPtr<USW_UIBase>SettingUI;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widget")
+	TObjectPtr<USW_LoadingUI> LoadingUI;
 	
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<USW_InMenuUI>MenuClass;
@@ -61,6 +95,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Widget")
 	TSubclassOf<USW_UIBase> SettingUIClass;
 
+	UPROPERTY(EditAnywhere, Category = "Widget")
+	TSubclassOf<USW_LoadingUI> LoadingUIClass;
+
 	UFUNCTION()
 	void HandleNewGameTransition();
 
@@ -76,10 +113,70 @@ public:
 	UFUNCTION()
 	void HandleOverlayFadeComplete(bool bIsPlayingAnimation);
 
+	UFUNCTION(BlueprintCallable, Category = "SaveLoad")
+	void OpenContinueUI(ESWSaveLoadMode InMode);
+
+	UFUNCTION(BlueprintCallable, Category = "SaveLoad")
+	void CloseContinueUI(bool bRestoreUnderlyingState = true);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "SaveLoad")
+	ESWSaveLoadMode GetContinueUIMode() const { return ContinueUIMode; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "SaveLoad")
+	bool IsContinueUISaveMode() const { return ContinueUIMode == ESWSaveLoadMode::SaveFromInGame; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "SaveLoad")
+	bool IsContinueUIOpenedFromInGame() const { return ContinueUIMode != ESWSaveLoadMode::LoadFromMenu; }
+
+	UFUNCTION(BlueprintCallable, Category = "SaveLoad")
+	void SetPendingContinueSlotIndex(int32 InSlotIndex) { PendingContinueSlotIndex = InSlotIndex; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "SaveLoad")
+	int32 GetPendingContinueSlotIndex() const { return PendingContinueSlotIndex; }
+
+	UFUNCTION(BlueprintCallable, Category = "SaveLoad")
+	bool SaveCurrentGameToSlot(int32 SlotIndex);
+
+	UFUNCTION(BlueprintCallable, Category = "SaveLoad")
+	bool LoadGameFromSlot(int32 SlotIndex);
+
 private:
 	void InitializeViewModels();
 	void CreateMenu();
-	void BindMenuTransitions();
+	void BindMenuButtons();
+	void BindFadeCallback(USW_UIBase* Widget);
 	void SetOverlayWidget(TObjectPtr<USW_UIBase>& Storage, TSubclassOf<USW_UIBase> WidgetClass, EWidgetStatus NewWidgetState, int32 ZOrder = 1);
+	void EnsureInGameUI();
+	void EnsureLoadingUI();
+	void RefreshContinueUIState() const;
 	ASW_ScriptManager* GetScriptManager() const;
+	void StartInGameTransition(ESWPendingInGameTransition InTransitionType, int32 InRowDialog, UDataTable* InDataTable, USoundBase* InBackgroundMusic);
+	void ContinuePendingTransition();
+	void BeginLoadingFadeIn();
+	void BeginLoadingFadeOut();
+	void PreparePendingInGameState();
+	void BeginInGameFadeIn();
+	void CompleteInGameTransition();
+	void ClearPendingTransition();
+
+	UPROPERTY(Transient)
+	ESWSaveLoadMode ContinueUIMode = ESWSaveLoadMode::LoadFromMenu;
+
+	UPROPERTY(Transient)
+	int32 PendingContinueSlotIndex = INDEX_NONE;
+
+	UPROPERTY(Transient)
+	ESWPendingInGameTransition PendingInGameTransition = ESWPendingInGameTransition::None;
+
+	UPROPERTY(Transient)
+	ESWTransitionPhase TransitionPhase = ESWTransitionPhase::None;
+
+	UPROPERTY(Transient)
+	int32 PendingRowDialog = 0;
+
+	UPROPERTY(Transient)
+	TObjectPtr<UDataTable> PendingDataTable;
+
+	UPROPERTY(Transient)
+	TObjectPtr<USoundBase> PendingBackgroundMusic;
 };

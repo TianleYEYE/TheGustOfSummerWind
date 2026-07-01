@@ -2,6 +2,7 @@
 
 #include "UI/InGameUI/SW_CharacterPortraits.h"
 
+#include "Components/CanvasPanelSlot.h"
 #include "Materials/MaterialInstanceDynamic.h"
 #include "TimerManager.h"
 
@@ -20,6 +21,11 @@ void USW_CharacterPortraits::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	if (VerticalPainting && ActiveCharacterId.IsNone())
+	{
+		VerticalPainting->SetVisibility(ESlateVisibility::Collapsed);
+	}
+
 	if (!ParentMaterial || !VerticalPainting)
 	{
 		return;
@@ -34,7 +40,7 @@ void USW_CharacterPortraits::NativeConstruct()
 
 void USW_CharacterPortraits::UpdateCharacterEvent(FCharacterSprite CurrentSprite, FCharacterSprite PreviousSprite)
 {
-	UpateSpriteAndExpression(CurrentSprite, PreviousSprite);
+	ApplyCharacterSprite(CurrentSprite, PreviousSprite);
 }
 
 void USW_CharacterPortraits::UpateSpriteAndExpression(FCharacterSprite CurrentSprite, FCharacterSprite PreviousSprite)
@@ -80,6 +86,124 @@ void USW_CharacterPortraits::UpateSpriteAndExpression(FCharacterSprite CurrentSp
 
 	// Start opacity appear animation
 	SpriteAppear();
+}
+
+void USW_CharacterPortraits::ApplyCharacterSprite(const FCharacterSprite& CurrentSprite, const FCharacterSprite& PreviousSprite)
+{
+	if (CurrentSprite.bHide)
+	{
+		HideCharacter(CurrentSprite.Transition);
+		return;
+	}
+
+	if (!CurrentSprite.CharacterId.IsNone())
+	{
+		ActiveCharacterId = CurrentSprite.CharacterId;
+	}
+
+	if (CurrentSprite.Position != ECharacterSlotPosition::Inherit)
+	{
+		SetCharacterPosition(CurrentSprite.Position);
+	}
+
+	SetCharacterMirror(CurrentSprite.bMirror);
+	SetCharacterZOrder(CurrentSprite.ZOrder);
+
+	const bool bHasSpriteUpdate = CurrentSprite.CurrentSprite || CurrentSprite.Face;
+	if (bHasSpriteUpdate || !CurrentSprite.bKeepPrevious)
+	{
+		UpateSpriteAndExpression(CurrentSprite, PreviousSprite);
+	}
+
+	ShowCharacter(CurrentSprite.Transition);
+}
+
+void USW_CharacterPortraits::SetCharacterPosition(const ECharacterSlotPosition Position)
+{
+	if (!VerticalPainting)
+	{
+		return;
+	}
+
+	UCanvasPanelSlot* CanvasSlot = Cast<UCanvasPanelSlot>(VerticalPainting->Slot);
+	if (!CanvasSlot)
+	{
+		return;
+	}
+
+	switch (Position)
+	{
+	case ECharacterSlotPosition::Left:
+		CanvasSlot->SetAnchors(FAnchors(0.25f, 1.0f));
+		CanvasSlot->SetAlignment(FVector2D(0.5f, 1.0f));
+		break;
+	case ECharacterSlotPosition::Center:
+		CanvasSlot->SetAnchors(FAnchors(0.5f, 1.0f));
+		CanvasSlot->SetAlignment(FVector2D(0.5f, 1.0f));
+		break;
+	case ECharacterSlotPosition::Right:
+		CanvasSlot->SetAnchors(FAnchors(0.75f, 1.0f));
+		CanvasSlot->SetAlignment(FVector2D(0.5f, 1.0f));
+		break;
+	case ECharacterSlotPosition::TrueCenter:
+		CanvasSlot->SetAnchors(FAnchors(0.5f, 0.5f));
+		CanvasSlot->SetAlignment(FVector2D(0.5f, 0.5f));
+		break;
+	default:
+		return;
+	}
+
+	CanvasSlot->SetOffsets(FMargin(0.0f));
+}
+
+void USW_CharacterPortraits::SetCharacterMirror(const bool bMirror)
+{
+	if (VerticalPainting)
+	{
+		VerticalPainting->SetRenderScale(FVector2D(bMirror ? -1.0f : 1.0f, 1.0f));
+	}
+}
+
+void USW_CharacterPortraits::SetCharacterZOrder(const int32 ZOrder)
+{
+	if (!VerticalPainting)
+	{
+		return;
+	}
+
+	if (UCanvasPanelSlot* CanvasSlot = Cast<UCanvasPanelSlot>(VerticalPainting->Slot))
+	{
+		CanvasSlot->SetZOrder(ZOrder);
+	}
+}
+
+void USW_CharacterPortraits::ShowCharacter(const ECharacterTransitionType Transition)
+{
+	if (VerticalPainting)
+	{
+		VerticalPainting->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+	}
+
+	if (M_FaceChange && Transition == ECharacterTransitionType::Fade)
+	{
+		M_FaceChange->SetScalarParameterValue(OpacityParamName, 0.0f);
+		SpriteAppear();
+	}
+}
+
+void USW_CharacterPortraits::HideCharacter(const ECharacterTransitionType Transition)
+{
+	ActiveCharacterId = NAME_None;
+
+	if (VerticalPainting)
+	{
+		VerticalPainting->SetVisibility(ESlateVisibility::Collapsed);
+	}
+}
+
+bool USW_CharacterPortraits::IsCharacterVisible() const
+{
+	return VerticalPainting && VerticalPainting->GetVisibility() != ESlateVisibility::Collapsed;
 }
 
 void USW_CharacterPortraits::BodySwitch()

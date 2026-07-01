@@ -6,10 +6,13 @@
 #include "Components/Button.h"
 #include "Components/CanvasPanelSlot.h"
 #include "Components/ComboBoxString.h"
-#include "Components/Widget.h"
 #include "Components/PanelWidget.h"
 #include "Components/Slider.h"
+#include "Components/TextBlock.h"
+#include "Components/Widget.h"
 #include "Components/WidgetSwitcher.h"
+#include "Blueprint/WidgetBlueprintLibrary.h"
+#include "Game/SW_SaveGame.h"
 #include "GameFramework/GameUserSettings.h"
 #include "GameFramework/PlayerController.h"
 #include "Engine/Texture2D.h"
@@ -17,6 +20,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "UI/InGameUI/SW_InGameUI.h"
+#include "UI/ViewModel/MVVM_LoadSlot.h"
 #include "UI/ViewModel/MVVM_SettingSlot.h"
 #include "UI/ViewModel/MVVM_LoadScreen.h"
 #include "UI/ViewModel/MVVM_System.h"
@@ -125,7 +129,9 @@ void USW_UIBase::NativeConstruct()
 	BindCommonQuitButtons();
 	BindCommonPageSwitcherButtons();
 	BindCommonSettingButtons();
+	BindSaveLoadButtons();
 	InitializeLegacyChildSlots();
+	RefreshSaveLoadUiState();
 }
 
 FReply USW_UIBase::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
@@ -285,6 +291,36 @@ void USW_UIBase::AnimationEnd(UPanelWidget* Target)
 	// Child classes can override behavior
 }
 
+void USW_UIBase::PlayEnterFadeAnimation()
+{
+	UWidgetAnimation* FadeAnim = GetFadeAnimation();
+	bRemoveFromParentAfterFade = false;
+
+	if (!FadeAnim)
+	{
+		StartFadeUiAnimation();
+		EndedFadeUiAnimation();
+		return;
+	}
+
+	StopAnimation(FadeAnim);
+	StartFadeUiAnimation();
+	PlayAnimation(FadeAnim, 0.0f, 1, EUMGSequencePlayMode::Reverse);
+}
+
+void USW_UIBase::PlayEnterFadeAnimationAndNotify()
+{
+	bBroadcastFadeFinishedEvent = true;
+	PlayingWidgetFade.Broadcast(true);
+	PlayEnterFadeAnimation();
+
+	if (!GetFadeAnimation())
+	{
+		bBroadcastFadeFinishedEvent = false;
+		PlayingWidgetFade.Broadcast(false);
+	}
+}
+
 void USW_UIBase::OnPlayWidgetFade(bool bIsPlayingAnimation)
 {
 	PlayingWidgetFade.Broadcast(bIsPlayingAnimation);
@@ -303,12 +339,14 @@ void USW_UIBase::OnPlayWidgetFade(bool bIsPlayingAnimation)
 	if (bIsPlayingAnimation)
 	{
 		bRemoveFromParentAfterFade = true;
+		bBroadcastFadeFinishedEvent = true;
 		StartFadeUiAnimation();
 		PlayAnimation(FadeAnim);
 	}
 	else
 	{
 		bRemoveFromParentAfterFade = false;
+		bBroadcastFadeFinishedEvent = false;
 		StopAnimation(FadeAnim);
 	}
 }
@@ -460,7 +498,8 @@ UWidgetSwitcher* USW_UIBase::FindPageSwitcher() const
 		TEXT("PageSwitcher_Root"),
 		TEXT("PageSwitcher"),
 		TEXT("WidgetSwitcher_Root"),
-		TEXT("WidgetSwitcher")
+		TEXT("WidgetSwitcher"),
+		TEXT("Archive_Root")
 	};
 
 	for (const FName& PageSwitcherName : PageSwitcherNames)
@@ -836,6 +875,35 @@ void USW_UIBase::InitializeLegacyChildSlots()
 	}
 }
 
+void USW_UIBase::RefreshSaveLoadUiState()
+{
+	if (IsGeneratedFromWidgetBlueprint(TEXT("BP_ContinueUI")))
+	{
+		UMVVM_LoadScreen* LoadScreenViewModel = nullptr;
+		if (FindLoadScreenViewModel(LoadScreenViewModel) && LoadScreenViewModel)
+		{
+			if (UTextBlock* NumSlotsText = Cast<UTextBlock>(FindObjectPropertyOrWidget(this, TEXT("TextBlock_NumSlots"))))
+			{
+				NumSlotsText->SetText(FText::AsNumber(LoadScreenViewModel->GetNumLoadSlots()));
+			}
+
+			for (int32 ContinueSlotIndex = 0; ContinueSlotIndex < LoadScreenViewModel->GetNumLoadSlots(); ++ContinueSlotIndex)
+			{
+				const FString SlotSuffix = ContinueSlotIndex == 0 ? FString() : FString::Printf(TEXT("_%d"), ContinueSlotIndex);
+				const FName ContinueSlotName(*FString::Printf(TEXT("WBP_LoadSlotWidgetSwitcher%s"), *SlotSuffix));
+				ConfigureContinueSlotState(ContinueSlotIndex, FindObjectPropertyOrWidget(this, ContinueSlotName));
+			}
+		}
+
+		return;
+	}
+
+	if (IsGeneratedFromWidgetBlueprint(TEXT("WBP_LoadSlotWidgetSwitcher")))
+	{
+		ConfigureContinueSlotState(ResolveContinueSlotIndex(), this);
+	}
+}
+
 void USW_UIBase::OnSetAnimationPlaying(bool IsPlaying)
 {
 	IsPlayAnimation = IsPlaying;
@@ -845,14 +913,102 @@ void USW_UIBase::OnFadeAnimationFinished()
 {
 	EndedFadeUiAnimation();
 
+	const bool bShouldBroadcastFadeFinished = bBroadcastFadeFinishedEvent;
+	bBroadcastFadeFinishedEvent = false;
+
 	if (!bRemoveFromParentAfterFade)
 	{
+		if (bShouldBroadcastFadeFinished)
+		{
+			PlayingWidgetFade.Broadcast(false);
+		}
 		return;
 	}
 
 	bRemoveFromParentAfterFade = false;
 	RemoveFromParent();
-	PlayingWidgetFade.Broadcast(false);
+
+	if (bShouldBroadcastFadeFinished)
+	{
+		PlayingWidgetFade.Broadcast(false);
+	}
+}
+
+void USW_UIBase::OnOpenInGameSaveUIClicked()
+{
+	if (ASW_HUD* SWHUD = GetHUD())
+	{
+		SWHUD->OpenContinueUI(ESWSaveLoadMode::SaveFromInGame);
+	}
+}
+
+void USW_UIBase::OnOpenInGameLoadUIClicked()
+{
+	if (ASW_HUD* SWHUD = GetHUD())
+	{
+		SWHUD->OpenContinueUI(ESWSaveLoadMode::LoadFromInGame);
+	}
+}
+
+void USW_UIBase::OnOpenInGameSettingClicked()
+{
+	if (ASW_HUD* SWHUD = GetHUD())
+	{
+		SWHUD->HandleSettingTransition();
+	}
+}
+
+void USW_UIBase::OnContinueLoadSlotClicked()
+{
+	const int32 ContinueSlotIndex = ResolveContinueSlotIndex();
+	if (ContinueSlotIndex == INDEX_NONE)
+	{
+		return;
+	}
+
+	if (IsContinueUiSaveMode())
+	{
+		OpenContinueModal(TEXT("/Game/Blueprints/UI/ContinueUI/BP_Overwrite.BP_Overwrite_C"), ContinueSlotIndex);
+		return;
+	}
+
+	OpenContinueModal(TEXT("/Game/Blueprints/UI/ContinueUI/BP_AreYouSure.BP_AreYouSure_C"), ContinueSlotIndex);
+}
+
+void USW_UIBase::OnContinueSaveSlotClicked()
+{
+	const int32 ContinueSlotIndex = ResolveContinueSlotIndex();
+	if (ContinueSlotIndex == INDEX_NONE || !IsContinueUiSaveMode())
+	{
+		return;
+	}
+
+	SaveCurrentGameToContinueSlot(ContinueSlotIndex);
+}
+
+void USW_UIBase::OnContinueConfirmLoadClicked()
+{
+	if (ASW_HUD* SWHUD = GetHUD())
+	{
+		LoadGameFromContinueSlot(SWHUD->GetPendingContinueSlotIndex());
+	}
+
+	CloseContinueModals();
+}
+
+void USW_UIBase::OnContinueConfirmOverwriteClicked()
+{
+	if (ASW_HUD* SWHUD = GetHUD())
+	{
+		SaveCurrentGameToContinueSlot(SWHUD->GetPendingContinueSlotIndex());
+	}
+
+	CloseContinueModals();
+}
+
+void USW_UIBase::OnContinueModalCancelClicked()
+{
+	CloseContinueModals();
 }
 
 void USW_UIBase::StartFadeUiAnimation_Implementation()
@@ -890,4 +1046,292 @@ bool USW_UIBase::RemoveWidgetFromParentIfValid(UWidget* Widget)
 
 	Widget->RemoveFromParent();
 	return true;
+}
+
+void USW_UIBase::BindSaveLoadButtons()
+{
+	if (IsGeneratedFromWidgetBlueprint(TEXT("BP_SaveGame")))
+	{
+		if (UButton* Button = Cast<UButton>(FindObjectPropertyOrWidget(this, TEXT("BTN_SaveGame"))))
+		{
+			Button->OnClicked.RemoveAll(this);
+			Button->OnClicked.AddUniqueDynamic(this, &USW_UIBase::OnOpenInGameSaveUIClicked);
+		}
+		return;
+	}
+
+	if (IsGeneratedFromWidgetBlueprint(TEXT("BP_LoadGame")))
+	{
+		if (UButton* Button = Cast<UButton>(FindObjectPropertyOrWidget(this, TEXT("BTN_LoadGame"))))
+		{
+			Button->OnClicked.RemoveAll(this);
+			Button->OnClicked.AddUniqueDynamic(this, &USW_UIBase::OnOpenInGameLoadUIClicked);
+		}
+		return;
+	}
+
+	if (IsGeneratedFromWidgetBlueprint(TEXT("BP_InGameSetting")))
+	{
+		if (UButton* Button = Cast<UButton>(FindObjectPropertyOrWidget(this, TEXT("BTN_Setting"))))
+		{
+			Button->OnClicked.RemoveAll(this);
+			Button->OnClicked.AddUniqueDynamic(this, &USW_UIBase::OnOpenInGameSettingClicked);
+		}
+		return;
+	}
+
+	if (IsGeneratedFromWidgetBlueprint(TEXT("BP_LoadSlot")))
+	{
+		if (UButton* Button = Cast<UButton>(FindObjectPropertyOrWidget(this, TEXT("BTN_Load"))))
+		{
+			Button->OnClicked.RemoveAll(this);
+			Button->OnClicked.AddUniqueDynamic(this, &USW_UIBase::OnContinueLoadSlotClicked);
+		}
+		return;
+	}
+
+	if (IsGeneratedFromWidgetBlueprint(TEXT("BP_SaveSlot")))
+	{
+		if (UButton* Button = Cast<UButton>(FindObjectPropertyOrWidget(this, TEXT("BTN_SaveSlot"))))
+		{
+			Button->OnClicked.RemoveAll(this);
+			Button->OnClicked.AddUniqueDynamic(this, &USW_UIBase::OnContinueSaveSlotClicked);
+		}
+		return;
+	}
+
+	if (IsGeneratedFromWidgetBlueprint(TEXT("BP_AreYouSure")))
+	{
+		if (UButton* PlayButton = FindButtonInNamedWidget(TEXT("BP_Play"), {TEXT("BTN_Play"), TEXT("Button")}))
+		{
+			PlayButton->OnClicked.RemoveAll(this);
+			PlayButton->OnClicked.AddUniqueDynamic(this, &USW_UIBase::OnContinueConfirmLoadClicked);
+		}
+
+		if (UButton* CancelButton = FindButtonInNamedWidget(TEXT("BP_Cancel"), {TEXT("BTN_Cancel"), TEXT("Button")}))
+		{
+			CancelButton->OnClicked.RemoveAll(this);
+			CancelButton->OnClicked.AddUniqueDynamic(this, &USW_UIBase::OnContinueModalCancelClicked);
+		}
+		return;
+	}
+
+	if (IsGeneratedFromWidgetBlueprint(TEXT("BP_Overwrite")))
+	{
+		if (UButton* YesButton = FindButtonInNamedWidget(TEXT("BP_YesOverwrite"), {TEXT("BTN_Yes"), TEXT("Button")}))
+		{
+			YesButton->OnClicked.RemoveAll(this);
+			YesButton->OnClicked.AddUniqueDynamic(this, &USW_UIBase::OnContinueConfirmOverwriteClicked);
+		}
+
+		if (UButton* NoButton = FindButtonInNamedWidget(TEXT("BP_NoOverwrite"), {TEXT("BTN_No"), TEXT("Button")}))
+		{
+			NoButton->OnClicked.RemoveAll(this);
+			NoButton->OnClicked.AddUniqueDynamic(this, &USW_UIBase::OnContinueModalCancelClicked);
+		}
+	}
+}
+
+bool USW_UIBase::IsGeneratedFromWidgetBlueprint(const TCHAR* WidgetBlueprintName) const
+{
+	if (!WidgetBlueprintName || !GetClass())
+	{
+		return false;
+	}
+
+	const FString ClassName = GetClass()->GetName();
+	const FString ClassPath = GetClass()->GetPathName();
+	const FString GeneratedClassName = FString::Printf(TEXT("%s_C"), WidgetBlueprintName);
+	return ClassName.Contains(GeneratedClassName) || ClassPath.Contains(WidgetBlueprintName);
+}
+
+void USW_UIBase::ConfigureContinueSlotState(const int32 ContinueSlotIndex, UObject* SlotSwitcherWidget) const
+{
+	if (!SlotSwitcherWidget || ContinueSlotIndex == INDEX_NONE)
+	{
+		return;
+	}
+
+	SetSlotIndexOnWidget(SlotSwitcherWidget, ContinueSlotIndex);
+
+	if (USW_UIBase* SaveSlotWidget = Cast<USW_UIBase>(FindObjectPropertyOrWidget(SlotSwitcherWidget, TEXT("BP_SaveSlot"))))
+	{
+		SetSlotIndexOnWidget(SaveSlotWidget, ContinueSlotIndex);
+		if (UButton* SaveButton = Cast<UButton>(FindObjectPropertyOrWidget(SaveSlotWidget, TEXT("BTN_SaveSlot"))))
+		{
+			SaveButton->SetIsEnabled(IsContinueUiSaveMode());
+		}
+	}
+
+	if (USW_UIBase* LoadSlotWidget = Cast<USW_UIBase>(FindObjectPropertyOrWidget(SlotSwitcherWidget, TEXT("BP_LoadSlot"))))
+	{
+		SetSlotIndexOnWidget(LoadSlotWidget, ContinueSlotIndex);
+		if (UButton* LoadButton = Cast<UButton>(FindObjectPropertyOrWidget(LoadSlotWidget, TEXT("BTN_Load"))))
+		{
+			LoadButton->SetIsEnabled(GetContinueSlotStatus(ContinueSlotIndex) == Load);
+		}
+	}
+
+	if (UWidgetSwitcher* SlotSwitcher = FindContinueSlotSwitcher(SlotSwitcherWidget))
+	{
+		SlotSwitcher->SetActiveWidgetIndex(static_cast<int32>(GetContinueSlotStatus(ContinueSlotIndex)));
+	}
+}
+
+void USW_UIBase::SetSlotIndexOnWidget(UObject* Widget, const int32 InSlotIndex) const
+{
+	if (USW_UIBase* UIWidget = Cast<USW_UIBase>(Widget))
+	{
+		UIWidget->SlotIndex = InSlotIndex;
+	}
+}
+
+int32 USW_UIBase::ResolveContinueSlotIndex() const
+{
+	if (SlotIndex >= 0)
+	{
+		return SlotIndex;
+	}
+
+	for (UObject* OuterObject = GetOuter(); OuterObject; OuterObject = OuterObject->GetOuter())
+	{
+		if (const USW_UIBase* OuterWidget = Cast<USW_UIBase>(OuterObject))
+		{
+			if (OuterWidget->SlotIndex >= 0)
+			{
+				return OuterWidget->SlotIndex;
+			}
+		}
+	}
+
+	return INDEX_NONE;
+}
+
+UWidgetSwitcher* USW_UIBase::FindContinueSlotSwitcher(UObject* SlotSwitcherWidget) const
+{
+	if (UWidgetSwitcher* DirectSwitcher = Cast<UWidgetSwitcher>(SlotSwitcherWidget))
+	{
+		return DirectSwitcher;
+	}
+
+	static const TArray<FName> CandidateNames =
+	{
+		TEXT("Archive_Root"),
+		TEXT("WidgetSwitcher"),
+		TEXT("WidgetSwitcher_Root")
+	};
+
+	for (const FName& CandidateName : CandidateNames)
+	{
+		if (UWidgetSwitcher* Switcher = Cast<UWidgetSwitcher>(FindObjectPropertyOrWidget(SlotSwitcherWidget, CandidateName)))
+		{
+			return Switcher;
+		}
+	}
+
+	return nullptr;
+}
+
+ESaveSlotStatus USW_UIBase::GetContinueSlotStatus(const int32 ContinueSlotIndex) const
+{
+	UMVVM_LoadScreen* LoadScreenViewModel = nullptr;
+	if (!FindLoadScreenViewModel(LoadScreenViewModel) || !LoadScreenViewModel)
+	{
+		return Save;
+	}
+
+	if (UMVVM_LoadSlot* LoadSlotViewModel = LoadScreenViewModel->GetLoadSlotViewModelByIndex(ContinueSlotIndex))
+	{
+		return LoadSlotViewModel->SlotStatus;
+	}
+
+	return Save;
+}
+
+void USW_UIBase::OpenContinueModal(const TCHAR* WidgetClassPath, const int32 ContinueSlotIndex)
+{
+	ASW_HUD* SWHUD = GetHUD();
+	APlayerController* OwningPlayer = GetOwningPlayer();
+	if (!SWHUD || !OwningPlayer || !WidgetClassPath)
+	{
+		return;
+	}
+
+	CloseContinueModals();
+	SWHUD->SetPendingContinueSlotIndex(ContinueSlotIndex);
+
+	if (UClass* ModalClass = LoadClass<USW_UIBase>(nullptr, WidgetClassPath))
+	{
+		if (USW_UIBase* ModalWidget = CreateWidget<USW_UIBase>(OwningPlayer, ModalClass))
+		{
+			ModalWidget->AddToViewport(3);
+			OwningPlayer->SetInputMode(FInputModeUIOnly());
+		}
+	}
+}
+
+void USW_UIBase::CloseContinueModals()
+{
+	TArray<UUserWidget*> Widgets;
+	UWidgetBlueprintLibrary::GetAllWidgetsOfClass(this, Widgets, UUserWidget::StaticClass(), false);
+	for (UUserWidget* Widget : Widgets)
+	{
+		if (!Widget)
+		{
+			continue;
+		}
+
+		const FString WidgetClassName = Widget->GetClass()->GetName();
+		if (WidgetClassName.Contains(TEXT("BP_AreYouSure_C")) || WidgetClassName.Contains(TEXT("BP_Overwrite_C")))
+		{
+			Widget->RemoveFromParent();
+		}
+	}
+
+	if (APlayerController* OwningPlayer = GetOwningPlayer())
+	{
+		OwningPlayer->SetInputMode(FInputModeGameAndUI());
+	}
+}
+
+bool USW_UIBase::IsContinueUiSaveMode() const
+{
+	const ASW_HUD* SWHUD = GetHUD();
+	return SWHUD && SWHUD->IsContinueUISaveMode();
+}
+
+bool USW_UIBase::IsContinueUiOpenedFromInGame() const
+{
+	const ASW_HUD* SWHUD = GetHUD();
+	return SWHUD && SWHUD->IsContinueUIOpenedFromInGame();
+}
+
+bool USW_UIBase::SaveCurrentGameToContinueSlot(const int32 ContinueSlotIndex)
+{
+	if (ASW_HUD* SWHUD = GetHUD())
+	{
+		const bool bSaved = SWHUD->SaveCurrentGameToSlot(ContinueSlotIndex);
+		if (bSaved)
+		{
+			RefreshSaveLoadUiState();
+		}
+		return bSaved;
+	}
+
+	return false;
+}
+
+bool USW_UIBase::LoadGameFromContinueSlot(const int32 ContinueSlotIndex)
+{
+	if (ASW_HUD* SWHUD = GetHUD())
+	{
+		const bool bLoaded = SWHUD->LoadGameFromSlot(ContinueSlotIndex);
+		if (bLoaded)
+		{
+			RefreshSaveLoadUiState();
+		}
+		return bLoaded;
+	}
+
+	return false;
 }
